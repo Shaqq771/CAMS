@@ -4,18 +4,33 @@ Go backend api standard template
 
 ## Intallation
 ``` 
-# cd c:/user/{user}/go/src 
+# cd {your-go-path}/src 
 # git clone https://gitito.nabatisnack.co.id/standardization/go-app-template.git
 # cd go-app-template
 ```
 
-## Run with local machine
+## Branching Git Flow
+``` 
+Run development:
+# git checkout develop
 
->Step by step: 
->- Setup local environment: Go v.1.8, postgres, redis, rabbitmq
->- Rename .env.example to .env in root directory 
->- run : go run cmd/main.go
->
+Run production:
+# git checkout master
+```
+
+## Run with local machine
+``` 
+Step by step:
++ Setup local environment: 
+    - Go version 1.8
+    - Database: Postgres
+    - Caching: Redis
+    - Message Broker: Rabbitmq
+- Rename .env.example to .env in root directory 
+
+Run:
+# go run cmd/main.go
+```
 
 ## API Documentations (Postman)
 
