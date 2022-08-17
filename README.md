@@ -2,7 +2,7 @@
 
 Go backend api standard template
 
-## Intallation
+## Installation
 ``` 
 # cd {your-go-path}/src 
 # git clone https://gitito.nabatisnack.co.id/standardization/go-app-template.git
@@ -36,6 +36,53 @@ Run:
 
 ```  
 https://www.getpostman.com/collections/3c641355a056c17e7ed4
+```
+
+## Folder structure
+``` 
+- cmd 
+- config 
++ delivery 
+    - container 
+    + http 
+        - middleware
+- docs
++ domain
+    + health : 
+        - constant
+        - feature
+        - model
+        - repository
+    + logistik
+        - constant
+        - feature
+        - helper
+        - model
+        - repository
+    + sales
+        - constant
+        - consumer
+        - feature
+        - model
+        - repository
+    + shared
+        - constant
+        - context
+        - error
+        - helper
+        - query
+        - response
++ infrastructure
+    + broker
+        - rabbitmq
+    - database
+    - jwt
+    + logger
+        - logrus
+        - zap
+    + shared
+        - constant
+- migration
 ```
 
 ## Thank you. 
