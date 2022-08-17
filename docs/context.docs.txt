@@ -1,0 +1,3 @@
+reference context timeout:
+
+https://www.sohamkamani.com/golang/context-cancellation-and-values/

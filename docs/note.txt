@@ -1,0 +1,1 @@
+This folder contains anything about docummentations like: Postman collection, swagger, or something like that.
