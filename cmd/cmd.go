@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"backend-nabati/delivery/container"
@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func main() {
+func Execute() {
 	container := container.SetupContainer()
 	handler := http.SetupHandler(container)
 

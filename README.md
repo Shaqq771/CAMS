@@ -24,12 +24,24 @@ Step by step:
 + Setup local environment: 
     - Go version 1.8
     - Database: Postgres
-    - Caching: Redis
     - Message Broker: Rabbitmq
 - Rename .env.example to .env in root directory 
 
 Run:
-# go run cmd/main.go
+# go run main.go
+```
+
+## Run with Docker (still in development)
+``` 
+Step by step:
+- install docker
+
+Run:
+# docker-compose build --no-cache
+# docker-compose up -d
+
+Terminate:
+# docker-compose down
 ```
 
 ## API Documentations (Postman)
@@ -83,6 +95,7 @@ https://www.getpostman.com/collections/3c641355a056c17e7ed4
     + shared
         - constant
 - migration
+main.go
 ```
 
 ## Thank you. 

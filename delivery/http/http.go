@@ -10,13 +10,10 @@ func ServerHttp(handler handler) *fiber.App {
 
 	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("server up!")
-	})
-
 	v1 := app.Group("/v1")
 	{
 		v1.Get("/health", handler.healthHandler.ServiceHealth)
+		v1.Get("/ping", handler.healthHandler.Ping)
 	}
 
 	pubProduct := v1.Group("/product")

@@ -10,6 +10,7 @@ import (
 
 type HealthHandler interface {
 	ServiceHealth(c *fiber.Ctx) error
+	Ping(c *fiber.Ctx) error
 }
 
 type healthHandler struct {
@@ -30,4 +31,8 @@ func (hh healthHandler) ServiceHealth(c *fiber.Ctx) error {
 	}
 
 	return response.ResponseOK(c, "", resp)
+}
+
+func (hh healthHandler) Ping(c *fiber.Ctx) error {
+	return c.JSON("pong!")
 }
