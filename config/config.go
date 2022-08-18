@@ -37,6 +37,15 @@ func LoadENVConfig() (config EnvironmentConfig, err error) {
 		return
 	}
 
+	rmqPort := 0
+	if os.Getenv("RABBITMQ_PORT") != "" {
+		rmqPort, err = strconv.Atoi(os.Getenv("RABBITMQ_PORT"))
+		if err != nil {
+			err = fmt.Errorf(constant.ErrConvertStringToInt, err)
+			return
+		}
+	}
+
 	config = EnvironmentConfig{
 		Env: os.Getenv("ENV"),
 		App: App{
@@ -52,10 +61,10 @@ func LoadENVConfig() (config EnvironmentConfig, err error) {
 			Password: os.Getenv("DB_PASSWORD"),
 		},
 		RabbitMq: rabbitmq.RabbitmqConfig{
-			Host:         "localhost",
-			Username:     "guest",
-			Password:     "guest",
-			Port:         5672,
+			Host:         os.Getenv("RABBITMQ_HOST"),
+			Username:     os.Getenv("RABBITMQ_USERNAME"),
+			Password:     os.Getenv("RABBITMQ_PASSWORD"),
+			Port:         rmqPort,
 			ConsumerName: os.Getenv("RABBITMQ_CONSUMER_NAME"),
 		},
 	}

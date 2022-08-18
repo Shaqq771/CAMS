@@ -31,12 +31,13 @@ Run:
 # go run main.go
 ```
 
-## Run with Docker (still in development)
+## Run with Docker
 ``` 
 Step by step:
 - install docker
 
 Run:
+# docker create network nabati
 # docker-compose build --no-cache
 # docker-compose up -d
 
