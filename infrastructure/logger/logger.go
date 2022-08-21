@@ -1,62 +1,46 @@
 package logger
 
 import (
-	"fmt"
-	"os"
-	"path/filepath"
-	"strings"
-	"time"
-
-	log "github.com/sirupsen/logrus"
+	"backend-nabati/infrastructure/logger/logrus"
+	"backend-nabati/infrastructure/logger/zap"
+	"backend-nabati/infrastructure/shared/constant"
 )
 
-func InitializeLogger() {
-	currentTime := time.Now()
-	date := currentTime.Format("20060102")
-	path := fmt.Sprintf("%s/%s-%s.%s", os.Getenv("LOG_PATH"), os.Getenv("LOG_PREFIX"), date, os.Getenv("LOG_EXT"))
+var useLog string
 
-	log.SetFormatter(&log.JSONFormatter{})
-
-	if strings.ToLower(os.Getenv("ENV")) == "dev" {
-		log.SetOutput(os.Stdout)
+func InitializeLogger(log string) {
+	if log == constant.LOGRUS {
+		logrus.InitializeLogrusLogger()
+		useLog = constant.LOGRUS
+	} else if log == constant.ZAP {
+		zap.InitializeZapLogger()
+		useLog = constant.ZAP
 	} else {
-		err := os.MkdirAll(filepath.Dir(path), 0770)
-		if err == nil {
-			file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-			if err != nil {
-				log.SetOutput(os.Stdout)
-				return
-			}
-			log.SetOutput(file)
-		} else {
-			log.SetOutput(os.Stdout)
-		}
+		logrus.InitializeLogrusLogger()
+		useLog = constant.LOGRUS
 	}
-
 }
 
 func LogInfo(logtype, message string) {
-	log.WithFields(log.Fields{
-		"app_name":    os.Getenv("APP_NAME"),
-		"app_version": os.Getenv("APP_VERSION"),
-		"log_type":    logtype,
-	}).Info(message)
+	if useLog == constant.LOGRUS {
+		logrus.LogInfo(useLog, logtype, message)
+	} else if useLog == constant.ZAP {
+		zap.LogInfo(useLog, logtype, message)
+	}
 }
 
 func LogInfoWithData(data interface{}, logtype, message string) {
-	log.WithFields(log.Fields{
-		"app_name":    os.Getenv("APP_NAME"),
-		"app_version": os.Getenv("APP_VERSION"),
-		"data":        data,
-		"log_type":    logtype,
-	}).Info(message)
+	if useLog == constant.LOGRUS {
+		logrus.LogInfoWithData(useLog, data, logtype, message)
+	} else if useLog == constant.ZAP {
+		zap.LogInfoWithData(useLog, data, logtype, message)
+	}
 }
 
 func LogError(logtype, errtype, message string) {
-	log.WithFields(log.Fields{
-		"app_name":    os.Getenv("APP_NAME"),
-		"app_version": os.Getenv("APP_VERSION"),
-		"error_type":  errtype,
-		"log_type":    logtype,
-	}).Error(message)
+	if useLog == constant.LOGRUS {
+		logrus.LogError(useLog, logtype, errtype, message)
+	} else if useLog == constant.ZAP {
+		zap.LogInfoWithData(useLog, logtype, errtype, message)
+	}
 }

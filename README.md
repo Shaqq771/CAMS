@@ -99,4 +99,20 @@ https://www.getpostman.com/collections/3c641355a056c17e7ed4
 main.go
 ```
 
+## Example Log (ZAP)
+
+```  
+{"level":"info","msg":"SELECT * FROM product where id = $1 AND deleted_at IS NULL LIMIT 1","app_name":"Backend-Nabati","app_version":"0.1.0","log_type":"query","time":"2022-08-21T23:36:50+07:00","log":"zap"}
+{"level":"info","msg":"product id not found0","app_name":"Backend-Nabati","app_version":"0.1.0","data":"error","log_type":"general error","time":"2022-08-21T23:36:50+07:00","log":"zap"}
+{"level":"info","msg":"product id not found: 0","app_name":"Backend-Nabati","app_version":"0.1.0","data":"response","log_type":"general error","time":"2022-08-21T23:36:50+07:00","log":"zap"}
+```
+
+## Example Log (LOGRUS)
+
+```  
+{"app_name":"Backend-Nabati","app_version":"0.1.0","level":"info","log":"logrus","log_type":"query","msg":"SELECT * FROM product where id = $1 AND deleted_at IS NULL LIMIT 1","time":"2022-08-21T23:38:11+07:00"}
+{"app_name":"Backend-Nabati","app_version":"0.1.0","error_type":"general error","level":"error","log":"logrus","log_type":"error","msg":"product id not found0","time":"2022-08-21T23:38:11+07:00"}
+{"app_name":"Backend-Nabati","app_version":"0.1.0","error_type":"general error","level":"error","log":"logrus","log_type":"response","msg":"product id not found: 0","time":"2022-08-21T23:38:11+07:00"}
+```
+
 ## Thank you. 

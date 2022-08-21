@@ -12,6 +12,7 @@ import (
 	"backend-nabati/infrastructure/broker/rabbitmq"
 	"backend-nabati/infrastructure/database"
 	"backend-nabati/infrastructure/logger"
+	"backend-nabati/infrastructure/shared/constant"
 	"fmt"
 	"log"
 )
@@ -33,7 +34,7 @@ func SetupContainer() Container {
 		log.Panic(err)
 	}
 
-	logger.InitializeLogger()
+	logger.InitializeLogger(constant.LOGRUS) // choose which log, ZAP or LOGRUS. Default: LOGRUS
 
 	fmt.Println("Loading database...")
 	db, err := database.LoadDatabase(config.Database)
