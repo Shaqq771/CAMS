@@ -8,12 +8,11 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func (c *Connection) Consume(context context.Context, topic string) (msgs <-chan amqp.Delivery, err error) {
+func (c *rabbitMQ) Consume(context context.Context, topic string) (msgs <-chan amqp.Delivery, err error) {
 
 	select {
 	case err := <-c.err:
 		if err != nil {
-			fmt.Println(c.err)
 			c.Reconnect()
 		}
 	default:

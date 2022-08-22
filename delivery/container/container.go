@@ -19,7 +19,7 @@ import (
 
 type Container struct {
 	EnvironmentConfig config.EnvironmentConfig
-	RabbitMQ          *rabbitmq.Connection
+	RabbitMQ          rabbitmq.RabbitMQ
 	HealthFeature     health_feature.HealthFeature
 	LogistikFeature   logistik_feature.LogistikFeature
 	SalesFeature      sales_feature.SalesFeature

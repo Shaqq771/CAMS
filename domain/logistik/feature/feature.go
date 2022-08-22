@@ -17,10 +17,10 @@ type LogistikFeature interface {
 
 type logistikFeature struct {
 	logistikRepo repository.LogistikRepository
-	rabbitmq     *rabbitmq.Connection
+	rabbitmq     rabbitmq.RabbitMQ
 }
 
-func NewLogistikFeature(logistikRepo repository.LogistikRepository, rabbitmq *rabbitmq.Connection) LogistikFeature {
+func NewLogistikFeature(logistikRepo repository.LogistikRepository, rabbitmq rabbitmq.RabbitMQ) LogistikFeature {
 	return &logistikFeature{
 		logistikRepo: logistikRepo,
 		rabbitmq:     rabbitmq,

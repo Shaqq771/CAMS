@@ -15,10 +15,10 @@ type HealthFeature interface {
 type healthFeature struct {
 	config           config.EnvironmentConfig
 	healthRepository repository.HealthRepository
-	rabbitmq         *rabbitmq.Connection
+	rabbitmq         rabbitmq.RabbitMQ
 }
 
-func NewHealthFeature(config config.EnvironmentConfig, healthRepo repository.HealthRepository, rabbitmq *rabbitmq.Connection) HealthFeature {
+func NewHealthFeature(config config.EnvironmentConfig, healthRepo repository.HealthRepository, rabbitmq rabbitmq.RabbitMQ) HealthFeature {
 	return &healthFeature{
 		config:           config,
 		healthRepository: healthRepo,

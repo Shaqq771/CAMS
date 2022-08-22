@@ -10,12 +10,11 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func (c *Connection) Publish(context context.Context, routingKey string, event interface{}) (status bool, err error) {
+func (c *rabbitMQ) Publish(context context.Context, routingKey string, event interface{}) (status bool, err error) {
 
 	select {
 	case err := <-c.err:
 		if err != nil {
-			fmt.Println(c.err)
 			c.Reconnect()
 		}
 	default:

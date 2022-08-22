@@ -2,6 +2,7 @@ package rabbitmq
 
 import (
 	"backend-nabati/infrastructure/shared/constant"
+	"context"
 	"fmt"
 
 	"github.com/streadway/amqp"
@@ -15,7 +16,15 @@ type RabbitmqConfig struct {
 	ConsumerName string
 }
 
-type Connection struct {
+type RabbitMQ interface {
+	Connect() (err error)
+	Close()
+	Reconnect() error
+	Publish(context context.Context, routingKey string, event interface{}) (status bool, err error)
+	Consume(context context.Context, topic string) (msgs <-chan amqp.Delivery, err error)
+}
+
+type rabbitMQ struct {
 	name    string
 	conn    *amqp.Connection
 	channel *amqp.Channel
@@ -24,14 +33,14 @@ type Connection struct {
 }
 
 var (
-	connectionPool = make(map[string]*Connection)
+	connectionPool = make(map[string]*rabbitMQ)
 )
 
-func NewConnection(name string, config RabbitmqConfig) *Connection {
+func NewConnection(name string, config RabbitmqConfig) RabbitMQ {
 	if c, ok := connectionPool[name]; ok {
 		return c
 	}
-	c := &Connection{
+	c := &rabbitMQ{
 		config: config,
 		err:    make(chan error),
 	}
@@ -39,29 +48,18 @@ func NewConnection(name string, config RabbitmqConfig) *Connection {
 	return c
 }
 
-func GetConnection(name string) *Connection {
-	return connectionPool[name]
-}
-
-func (c *Connection) Connect() (err error) {
+func (c *rabbitMQ) Connect() (err error) {
 	connPattern := "amqp://%v:%v@%v:%v"
+	if c.config.Username == "" {
+		connPattern = "amqp://%s%s%v:%v"
+	}
+
 	clientUrl := fmt.Sprintf(connPattern,
 		c.config.Username,
 		c.config.Password,
 		c.config.Host,
 		c.config.Port,
 	)
-
-	if c.config.Port == 0 {
-		connPattern = "amqp://%v:%v@%v"
-		clientUrl = fmt.Sprintf(connPattern,
-			c.config.Username,
-			c.config.Password,
-			c.config.Host,
-		)
-	} else if c.config.Username == "" {
-		connPattern = "amqp://%s%s%v:%v"
-	}
 
 	c.conn, err = amqp.Dial(clientUrl)
 	if err != nil {
@@ -101,11 +99,11 @@ func (c *Connection) Connect() (err error) {
 	return
 }
 
-func (c *Connection) Close() {
+func (c *rabbitMQ) Close() {
 	c.conn.Close()
 }
 
-func (c *Connection) Reconnect() error {
+func (c *rabbitMQ) Reconnect() error {
 	if err := c.Connect(); err != nil {
 		return err
 	}

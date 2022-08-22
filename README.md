@@ -26,6 +26,7 @@ Step by step:
     - Database: Postgres
     - Message Broker: Rabbitmq
 - Rename .env.example to .env in root directory 
+- Setup value in .env (fill in according to your settings)
 
 Run:
 # go run main.go
@@ -51,7 +52,7 @@ Terminate:
 https://www.getpostman.com/collections/3c641355a056c17e7ed4
 ```
 
-## Folder structure
+## Folder Tree Structure
 ``` 
 - cmd 
 - config 

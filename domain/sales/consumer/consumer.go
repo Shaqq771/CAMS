@@ -13,11 +13,11 @@ type SalesConsumer interface {
 }
 
 type salesConsumer struct {
-	rabbitmq     *rabbitmq.Connection
+	rabbitmq     rabbitmq.RabbitMQ
 	salesFeature feature.SalesFeature
 }
 
-func NewSalesConsumer(rabbitmq *rabbitmq.Connection, salesFeature feature.SalesFeature) SalesConsumer {
+func NewSalesConsumer(rabbitmq rabbitmq.RabbitMQ, salesFeature feature.SalesFeature) SalesConsumer {
 	return &salesConsumer{
 		rabbitmq:     rabbitmq,
 		salesFeature: salesFeature,
