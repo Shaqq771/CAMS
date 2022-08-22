@@ -2,7 +2,8 @@
 
 Go backend api standard template
 
-## Installation
+# Installation
+## Clone Package from Git
 ``` 
 # cd {your-go-path}/src 
 # git clone https://gitito.nabatisnack.co.id/standardization/go-app-template.git
@@ -20,6 +21,7 @@ Run production:
 # git checkout master
 ```
 
+# Run Package 
 ## Run with local machine
 
 Step by step:
@@ -50,6 +52,7 @@ Step by step:
 # docker-compose down
 ```
 
+# Documentations
 ## API Documentations (Postman)
 
 ```  
@@ -104,6 +107,7 @@ https://www.getpostman.com/collections/3c641355a056c17e7ed4
 main.go
 ```
 
+# Logs
 ## Example Log (ZAP)
 
 ```  
@@ -120,7 +124,8 @@ main.go
 {"app_name":"Backend-Nabati","app_version":"0.1.0","error_type":"general error","level":"error","log":"logrus","log_type":"response","msg":"product id not found: 0","time":"2022-08-21T23:38:11+07:00"}
 ```
 
-## Create Mock Interface (For Testing)
+# Unit Test
+## Create Mock Interface For Unit Test
 
 Step by step:
 - Open Makefile
@@ -140,5 +145,19 @@ mockgen -source="./domain/logistik/feature/feature.go" -destination="./domain/lo
 ```
 - After complete, please check your mock in the destination folder/file.
 
+
+## Running Unit Test 
+
+```
+# go test -cover ./YOUR_GO_FOLDER
+```
+Example:
+```
+# go test -cover ./domain/logistik/feature
+```
+Results:
+```
+ok  backend-nabati/domain/logistik/feature  0.257s  coverage: 77.9% of statements
+```
 
 ## Thank you. 
