@@ -128,6 +128,10 @@ main.go
 ## Create Mock Interface For Unit Test
 
 Step by step:
+- Install mockgen
+```
+go install github.com/golang/mock/mockgen@v1.6.0
+```
 - Open Makefile
 - Add this code section mock:
 
