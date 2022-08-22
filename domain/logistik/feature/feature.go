@@ -2,7 +2,7 @@ package feature
 
 import (
 	"backend-nabati/domain/logistik/model"
-	repository "backend-nabati/domain/logistik/repostory"
+	repository "backend-nabati/domain/logistik/repository"
 	"backend-nabati/infrastructure/broker/rabbitmq"
 	"context"
 )

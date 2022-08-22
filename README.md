@@ -10,16 +10,18 @@ Go backend api standard template
 ```
 
 ## Branching Git Flow
-``` 
-Run development:
-# git checkout develop
 
+Run development:
+``` 
+# git checkout develop
+``` 
 Run production:
+``` 
 # git checkout master
 ```
 
 ## Run with local machine
-``` 
+
 Step by step:
 + Setup local environment: 
     - Go version 1.8
@@ -28,21 +30,23 @@ Step by step:
 - Rename .env.example to .env in root directory 
 - Setup value in .env (fill in according to your settings)
 
-Run:
+- Run:
+``` 
 # go run main.go
 ```
 
 ## Run with Docker
-``` 
+
 Step by step:
 - install docker
-
-Run:
+- Run:
+``` 
 # docker create network nabati
 # docker-compose build --no-cache
 # docker-compose up -d
-
-Terminate:
+``` 
+- Terminate/stop docker container:
+``` 
 # docker-compose down
 ```
 
@@ -115,5 +119,26 @@ main.go
 {"app_name":"Backend-Nabati","app_version":"0.1.0","error_type":"general error","level":"error","log":"logrus","log_type":"error","msg":"product id not found0","time":"2022-08-21T23:38:11+07:00"}
 {"app_name":"Backend-Nabati","app_version":"0.1.0","error_type":"general error","level":"error","log":"logrus","log_type":"response","msg":"product id not found: 0","time":"2022-08-21T23:38:11+07:00"}
 ```
+
+## Create Mock Interface (For Testing)
+
+Step by step:
+- Open Makefile
+- Add this code section mock:
+
+```
+mockgen -source="YOUR_GO_INTERFACE" -destination="YOUR_MOCK_DESTINATION"
+```
+
+Example:
+```
+mockgen -source="./domain/logistik/feature/feature.go" -destination="./domain/logistik/feature/mocks/feature_mock.go"
+```
+- Execute Makefile: 
+```
+# make mock 
+```
+- After complete, please check your mock in the destination folder/file.
+
 
 ## Thank you. 

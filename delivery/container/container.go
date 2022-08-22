@@ -5,7 +5,7 @@ import (
 	health_feature "backend-nabati/domain/health/feature"
 	health_repository "backend-nabati/domain/health/repository"
 	logistik_feature "backend-nabati/domain/logistik/feature"
-	logistik_repository "backend-nabati/domain/logistik/repostory"
+	logistik_repository "backend-nabati/domain/logistik/repository"
 	"backend-nabati/domain/sales/consumer"
 	sales_feature "backend-nabati/domain/sales/feature"
 	sales_repository "backend-nabati/domain/sales/repository"
