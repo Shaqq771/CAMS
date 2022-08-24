@@ -4,11 +4,11 @@ WORKDIR /backend
 
 COPY go.mod ./
 COPY go.sum ./
-COPY .env.example .env
 
 RUN go mod download
 
 COPY . ./
+COPY .env.docker.example .env
 
 RUN go mod tidy
 

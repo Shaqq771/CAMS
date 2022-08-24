@@ -61,6 +61,17 @@ func (c *rabbitMQ) Connect() (err error) {
 		c.config.Port,
 	)
 
+	if c.config.Port == 0 {
+		connPattern = "amqp://%v:%v@%v"
+		clientUrl = fmt.Sprintf(connPattern,
+			c.config.Username,
+			c.config.Password,
+			c.config.Host,
+		)
+	} else if c.config.Username == "" {
+		connPattern = "amqp://%s%s%v:%v"
+	}
+
 	c.conn, err = amqp.Dial(clientUrl)
 	if err != nil {
 		err = fmt.Errorf(constant.ErrConnectToBroker, err)

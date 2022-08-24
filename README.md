@@ -29,12 +29,10 @@ Step by step:
     - Go version 1.8
     - Database: Postgres
     - Message Broker: Rabbitmq
-- Rename .env.example to .env in root directory 
-- Setup value in .env (fill in according to your settings)
-
+- Setup value in .env.example (fill in according to your settings)
 - Run:
 ``` 
-# go run main.go
+# make run_local
 ```
 
 ## Run with Docker
@@ -43,20 +41,18 @@ Step by step:
 - install docker
 - Run:
 ``` 
-# docker create network nabati
-# docker-compose build --no-cache
-# docker-compose up -d
+# make run_docker
 ``` 
 - Terminate/stop docker container:
 ``` 
-# docker-compose down
+# make stop_docker
 ```
 
 # Documentations
 ## API Documentations (Postman)
 
 ```  
-https://www.getpostman.com/collections/3c641355a056c17e7ed4
+Check in docs folder
 ```
 
 ## Folder Tree Structure
@@ -109,15 +105,14 @@ main.go
 
 # Logs
 ## Example Log (ZAP)
-
 ```  
 {"level":"info","msg":"SELECT * FROM product where id = $1 AND deleted_at IS NULL LIMIT 1","app_name":"Backend-Nabati","app_version":"0.1.0","log_type":"query","time":"2022-08-21T23:36:50+07:00","log":"zap"}
 {"level":"info","msg":"product id not found0","app_name":"Backend-Nabati","app_version":"0.1.0","data":"error","log_type":"general error","time":"2022-08-21T23:36:50+07:00","log":"zap"}
 {"level":"info","msg":"product id not found: 0","app_name":"Backend-Nabati","app_version":"0.1.0","data":"response","log_type":"general error","time":"2022-08-21T23:36:50+07:00","log":"zap"}
 ```
 
-## Example Log (LOGRUS)
-
+## Example Log (LOGRUS) (DEFAULT)
+Default using Logrus: Because logrus more fleksible to customize the logs structure and easy to read.
 ```  
 {"app_name":"Backend-Nabati","app_version":"0.1.0","level":"info","log":"logrus","log_type":"query","msg":"SELECT * FROM product where id = $1 AND deleted_at IS NULL LIMIT 1","time":"2022-08-21T23:38:11+07:00"}
 {"app_name":"Backend-Nabati","app_version":"0.1.0","error_type":"general error","level":"error","log":"logrus","log_type":"error","msg":"product id not found0","time":"2022-08-21T23:38:11+07:00"}
@@ -151,13 +146,18 @@ mockgen -source="./domain/logistik/feature/feature.go" -destination="./domain/lo
 
 
 ## Running Unit Test 
-
+- Open Makefile
+- Add this code section test:
 ```
 # go test -cover ./YOUR_GO_FOLDER
 ```
 Example:
 ```
 # go test -cover ./domain/logistik/feature
+```
+- Run Unit Test
+```
+make test
 ```
 Results:
 ```
