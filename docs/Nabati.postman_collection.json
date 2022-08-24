@@ -1,0 +1,245 @@
+{
+	"info": {
+		"_postman_id": "559c5bdc-3982-4611-bfb2-e73c1036eb5e",
+		"name": "Nabati",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19793603"
+	},
+	"item": [
+		{
+			"name": "internal",
+			"item": [
+				{
+					"name": "Add Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTIzNzc0NzIsImlzcyI6ImFwcHMxLjAiLCJpZCI6IjQwMzFmMDJiLTI2OWItNGMzYy1hZTcxLWY3ZDcwNmQ5NDUyYSIsInVzZXJuYW1lIjoiZmFyaWR6MDciLCJlbWFpbCI6ImZhcmlkenJleWdhMDdAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIn0.Z6bwsiVhh2XCRESV-gj7xV4idNnSHhU8M4UZDZV57jU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" :\"Wafer 100gram\", \r\n    \"sku\" :\"WFR100G11\", \r\n    \"price\" : 1500, \r\n    \"uom\" :\"pcs\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local_url_v1}}/product/add",
+							"host": [
+								"{{local_url_v1}}"
+							],
+							"path": [
+								"product",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product [SOFT]",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTIzNzc0NzIsImlzcyI6ImFwcHMxLjAiLCJpZCI6IjQwMzFmMDJiLTI2OWItNGMzYy1hZTcxLWY3ZDcwNmQ5NDUyYSIsInVzZXJuYW1lIjoiZmFyaWR6MDciLCJlbWFpbCI6ImZhcmlkenJleWdhMDdAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIn0.Z6bwsiVhh2XCRESV-gj7xV4idNnSHhU8M4UZDZV57jU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{local_url_v1}}/product/delete/4",
+							"host": [
+								"{{local_url_v1}}"
+							],
+							"path": [
+								"product",
+								"delete",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product [Hybrid]",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTIzNzc0NzIsImlzcyI6ImFwcHMxLjAiLCJpZCI6IjQwMzFmMDJiLTI2OWItNGMzYy1hZTcxLWY3ZDcwNmQ5NDUyYSIsInVzZXJuYW1lIjoiZmFyaWR6MDciLCJlbWFpbCI6ImZhcmlkenJleWdhMDdAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIn0.Z6bwsiVhh2XCRESV-gj7xV4idNnSHhU8M4UZDZV57jU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" :\"Wafer 100gram\", \r\n    \"sku\" :\"WFR100G2\", \r\n    \"price\" : 2000, \r\n    \"uom\" :\"bungkus\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local_url_v1}}/product/update/2",
+							"host": [
+								"{{local_url_v1}}"
+							],
+							"path": [
+								"product",
+								"update",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "public",
+			"item": [
+				{
+					"name": "Get Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_url_v1}}/product/get/4",
+							"host": [
+								"{{local_url_v1}}"
+							],
+							"path": [
+								"product",
+								"get",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List Product",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_url_v1}}/product/lists?limit=10&page=1",
+							"host": [
+								"{{local_url_v1}}"
+							],
+							"path": [
+								"product",
+								"lists"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "sort_by",
+									"value": "[\"id asc\", \"name desc\"]",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "[\"id=1,2,3,4,5\", \"sku=WFR100G2,WFR1000G1\"]",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local_url_v1}}/health",
+					"host": [
+						"{{local_url_v1}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local_url_v1}}/ping",
+					"host": [
+						"{{local_url_v1}}"
+					],
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "local_url_v1",
+			"value": "localhost:9000/v1",
+			"type": "string"
+		}
+	]
+}
