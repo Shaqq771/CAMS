@@ -26,3 +26,8 @@ func SearchQuery(conditions string) string {
 
 	return " AND " + strings.Join(tempConditions, " AND ")
 }
+
+func Query(cmd string) (query string) {
+
+	return
+}
