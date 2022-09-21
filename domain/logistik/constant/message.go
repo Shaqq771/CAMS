@@ -7,3 +7,7 @@ const (
 	MsgDeleteProductSuccess = "delete product success"
 	MsgUpdateProductSuccess = "update product success"
 )
+
+const (
+	SUCCESS = "success"
+)

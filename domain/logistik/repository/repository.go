@@ -17,6 +17,10 @@ type LogistikRepository interface {
 	CheckProductIdRepository(ctx context.Context, id int) (exist bool, err error)
 	CheckProductSKURepository(ctx context.Context, sku string) (exist bool, err error)
 	GetTotalProductWithConditionsRepository(ctx context.Context, conditions string) (count int, err error)
+	BulkInsertCounter(ctx context.Context, size int) (err error)
+	GetLastCounter(ctx context.Context) (number string, err error)
+	GetDocNumberRange(ctx context.Context) (data model.NumberRange, err error)
+	UpdateLastNumber(ctx context.Context, number string) (err error)
 }
 
 type logistikRepository struct {

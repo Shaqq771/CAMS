@@ -16,6 +16,11 @@ func ServerHttp(handler handler) *fiber.App {
 		v1.Get("/ping", handler.healthHandler.Ping)
 	}
 
+	test := v1.Group("test")
+	{
+		test.Post("/bulk-insert-counter", handler.logistikHandler.BulkCounter)
+	}
+
 	pubProduct := v1.Group("/product")
 	{
 		pubProduct.Get("/get/:id", handler.logistikHandler.GetProductHandler)
