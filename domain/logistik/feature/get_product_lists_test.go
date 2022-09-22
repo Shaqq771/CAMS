@@ -5,6 +5,7 @@ import (
 	"backend-nabati/domain/logistik/model"
 	mock_repository "backend-nabati/domain/logistik/repository/mocks"
 	"backend-nabati/domain/shared/helper"
+	shared_model "backend-nabati/domain/shared/model"
 	mock_rabbitmq "backend-nabati/infrastructure/broker/rabbitmq/mocks"
 	"context"
 	"testing"
@@ -25,7 +26,7 @@ func Test_GetProductListsFeature(t *testing.T) {
 	t.Run("Get Lists Product Success", func(t *testing.T) {
 		ctx := context.Background()
 
-		mockQueryRequest := model.QueryRequest{
+		mockQueryRequest := shared_model.QueryRequest{
 			Page:  1,
 			Limit: 5,
 		}
@@ -78,7 +79,7 @@ func Test_GetProductListsFeature(t *testing.T) {
 		mockRepository.EXPECT().GetProductListsRepository(ctx, mockQueryRequest.Limit, offset, mockSortBy, mockSearch).Return(mockResultsProduct, nil)
 
 		expectResponse := model.ProductLists{
-			Pagination: model.Pagination{
+			Pagination: shared_model.Pagination{
 				Limit:     mockQueryRequest.Limit,
 				TotalPage: total_page,
 				TotalRows: mockTotal,

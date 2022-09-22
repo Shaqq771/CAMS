@@ -6,6 +6,7 @@ package mock_feature
 
 import (
 	model "backend-nabati/domain/logistik/model"
+	model0 "backend-nabati/domain/shared/model"
 	context "context"
 	reflect "reflect"
 
@@ -95,7 +96,7 @@ func (mr *MockLogistikFeatureMockRecorder) GetProductFeature(ctx, id interface{}
 }
 
 // GetProductListsFeature mocks base method.
-func (m *MockLogistikFeature) GetProductListsFeature(ctx context.Context, queryRequest model.QueryRequest) (model.ProductLists, error) {
+func (m *MockLogistikFeature) GetProductListsFeature(ctx context.Context, queryRequest model0.QueryRequest) (model.ProductLists, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetProductListsFeature", ctx, queryRequest)
 	ret0, _ := ret[0].(model.ProductLists)

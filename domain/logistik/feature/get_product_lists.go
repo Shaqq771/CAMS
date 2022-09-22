@@ -5,11 +5,12 @@ import (
 	"backend-nabati/domain/logistik/model"
 	Error "backend-nabati/domain/shared/error"
 	"backend-nabati/domain/shared/helper"
+	shared_model "backend-nabati/domain/shared/model"
 	"context"
 	"strings"
 )
 
-func (lf logistikFeature) GetProductListsFeature(ctx context.Context, queryRequest model.QueryRequest) (productList model.ProductLists, err error) {
+func (lf logistikFeature) GetProductListsFeature(ctx context.Context, queryRequest shared_model.QueryRequest) (productList model.ProductLists, err error) {
 
 	// Cleaning & Set Sort query
 	var (
@@ -59,7 +60,7 @@ func (lf logistikFeature) GetProductListsFeature(ctx context.Context, queryReque
 	}
 
 	productList = model.ProductLists{
-		Pagination: model.Pagination{
+		Pagination: shared_model.Pagination{
 			Limit:     queryRequest.Limit,
 			TotalPage: total_page,
 			TotalRows: totalProducts,

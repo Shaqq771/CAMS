@@ -6,6 +6,7 @@ import (
 	"backend-nabati/domain/logistik/model"
 	"backend-nabati/domain/shared/context"
 	Error "backend-nabati/domain/shared/error"
+	shared_model "backend-nabati/domain/shared/model"
 	"backend-nabati/domain/shared/response"
 	"fmt"
 	"strconv"
@@ -95,7 +96,7 @@ func (lh logistikHandler) GetProductListsHandler(c *fiber.Ctx) error {
 	sortBy := strings.TrimSpace(c.Query(constant.SORT_BY))
 	search := strings.TrimSpace(c.Query(constant.SEARCH))
 
-	queryRequest := model.QueryRequest{
+	queryRequest := shared_model.QueryRequest{
 		Page:   page,
 		Limit:  limit,
 		SortBy: sortBy,
