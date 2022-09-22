@@ -10,6 +10,6 @@ func Execute() {
 	container := container.SetupContainer()
 	handler := http.SetupHandler(container)
 
-	http := http.ServerHttp(handler)
+	http := http.ServeHttp(handler)
 	http.Listen(fmt.Sprintf(":%d", container.EnvironmentConfig.App.Port))
 }

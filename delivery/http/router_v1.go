@@ -6,9 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func ServerHttp(handler handler) *fiber.App {
-
-	app := fiber.New()
+func RouterGroupV1(app *fiber.App, handler handler) {
 
 	v1 := app.Group("/v1")
 	{
@@ -40,5 +38,4 @@ func ServerHttp(handler handler) *fiber.App {
 		sales.Get("/health", handler.salesHandler.HealthCheck)
 	}
 
-	return app
 }
