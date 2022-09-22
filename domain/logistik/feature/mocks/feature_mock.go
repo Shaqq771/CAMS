@@ -51,18 +51,18 @@ func (mr *MockLogistikFeatureMockRecorder) AddProductFeature(ctx, request interf
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddProductFeature", reflect.TypeOf((*MockLogistikFeature)(nil).AddProductFeature), ctx, request)
 }
 
-// BulkCounter mocks base method.
-func (m *MockLogistikFeature) BulkCounter(ctx context.Context) error {
+// BulkCounterFeature mocks base method.
+func (m *MockLogistikFeature) BulkCounterFeature(ctx context.Context) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "BulkCounter", ctx)
+	ret := m.ctrl.Call(m, "BulkCounterFeature", ctx)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// BulkCounter indicates an expected call of BulkCounter.
-func (mr *MockLogistikFeatureMockRecorder) BulkCounter(ctx interface{}) *gomock.Call {
+// BulkCounterFeature indicates an expected call of BulkCounterFeature.
+func (mr *MockLogistikFeatureMockRecorder) BulkCounterFeature(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BulkCounter", reflect.TypeOf((*MockLogistikFeature)(nil).BulkCounter), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BulkCounterFeature", reflect.TypeOf((*MockLogistikFeature)(nil).BulkCounterFeature), ctx)
 }
 
 // DeleteProductFeature mocks base method.

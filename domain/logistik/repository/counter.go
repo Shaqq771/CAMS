@@ -14,13 +14,13 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func (lr logistikRepository) BulkInsertCounter(ctx context.Context, limit int) (err error) {
+func (lr logistikRepository) BulkInsertCounterRepository(ctx context.Context, limit int) (err error) {
 	var wg sync.WaitGroup
 	for i := 0; i < limit; i++ {
 		wg.Add(1)
 		go func(wg *sync.WaitGroup, ctx context.Context, db *sqlx.DB) {
 
-			lastNumber, err := lr.GetAndUpdateNumberNext(ctx)
+			lastNumber, err := lr.GetAndUpdateNumberNextRepository(ctx)
 			if err != nil {
 				wg.Done()
 				return
@@ -77,7 +77,7 @@ func (lr logistikRepository) BulkInsertCounter(ctx context.Context, limit int) (
 	return
 }
 
-func (lr logistikRepository) GetLastCounter(ctx context.Context) (number string, err error) {
+func (lr logistikRepository) GetLastCounterRepository(ctx context.Context) (number string, err error) {
 
 	query := "SELECT number FROM counter order by number desc limit 1"
 	rows, err := lr.Database.Query(query)
@@ -107,7 +107,7 @@ func (lr logistikRepository) GetLastCounter(ctx context.Context) (number string,
 	return
 }
 
-func (lr logistikRepository) GetDocNumberRange(ctx context.Context) (data model.NumberRange, err error) {
+func (lr logistikRepository) GetDocNumberRangeRepository(ctx context.Context) (data model.NumberRange, err error) {
 
 	query := "SELECT doc_type, plant_id, from_number, to_number, last_number, skip FROM nds_number_range WHERE doc_type = '1001' limit 1 FOR UPDATE;"
 	rows, err := lr.Database.Queryx(query)
@@ -144,7 +144,7 @@ func (lr logistikRepository) GetDocNumberRange(ctx context.Context) (data model.
 	return
 }
 
-func (lr logistikRepository) GetAndUpdateNumberNext(ctx context.Context) (number string, err error) {
+func (lr logistikRepository) GetAndUpdateNumberNextRepository(ctx context.Context) (number string, err error) {
 	data := model.NumberRange{}
 
 	query := "SELECT doc_type, plant_id, from_number, to_number, last_number, skip FROM nds_number_range WHERE doc_type = '1001' limit 1 FOR UPDATE;"

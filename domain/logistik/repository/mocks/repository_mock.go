@@ -35,18 +35,18 @@ func (m *MockLogistikRepository) EXPECT() *MockLogistikRepositoryMockRecorder {
 	return m.recorder
 }
 
-// BulkInsertCounter mocks base method.
-func (m *MockLogistikRepository) BulkInsertCounter(ctx context.Context, size int) error {
+// BulkInsertCounterRepository mocks base method.
+func (m *MockLogistikRepository) BulkInsertCounterRepository(ctx context.Context, size int) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "BulkInsertCounter", ctx, size)
+	ret := m.ctrl.Call(m, "BulkInsertCounterRepository", ctx, size)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// BulkInsertCounter indicates an expected call of BulkInsertCounter.
-func (mr *MockLogistikRepositoryMockRecorder) BulkInsertCounter(ctx, size interface{}) *gomock.Call {
+// BulkInsertCounterRepository indicates an expected call of BulkInsertCounterRepository.
+func (mr *MockLogistikRepositoryMockRecorder) BulkInsertCounterRepository(ctx, size interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BulkInsertCounter", reflect.TypeOf((*MockLogistikRepository)(nil).BulkInsertCounter), ctx, size)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BulkInsertCounterRepository", reflect.TypeOf((*MockLogistikRepository)(nil).BulkInsertCounterRepository), ctx, size)
 }
 
 // CheckProductIdRepository mocks base method.
@@ -93,49 +93,49 @@ func (mr *MockLogistikRepositoryMockRecorder) DeleteProductRepository(ctx, id in
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteProductRepository", reflect.TypeOf((*MockLogistikRepository)(nil).DeleteProductRepository), ctx, id)
 }
 
-// GetAndUpdateNumberNext mocks base method.
-func (m *MockLogistikRepository) GetAndUpdateNumberNext(ctx context.Context) (string, error) {
+// GetAndUpdateNumberNextRepository mocks base method.
+func (m *MockLogistikRepository) GetAndUpdateNumberNextRepository(ctx context.Context) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAndUpdateNumberNext", ctx)
+	ret := m.ctrl.Call(m, "GetAndUpdateNumberNextRepository", ctx)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetAndUpdateNumberNext indicates an expected call of GetAndUpdateNumberNext.
-func (mr *MockLogistikRepositoryMockRecorder) GetAndUpdateNumberNext(ctx interface{}) *gomock.Call {
+// GetAndUpdateNumberNextRepository indicates an expected call of GetAndUpdateNumberNextRepository.
+func (mr *MockLogistikRepositoryMockRecorder) GetAndUpdateNumberNextRepository(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAndUpdateNumberNext", reflect.TypeOf((*MockLogistikRepository)(nil).GetAndUpdateNumberNext), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAndUpdateNumberNextRepository", reflect.TypeOf((*MockLogistikRepository)(nil).GetAndUpdateNumberNextRepository), ctx)
 }
 
-// GetDocNumberRange mocks base method.
-func (m *MockLogistikRepository) GetDocNumberRange(ctx context.Context) (model.NumberRange, error) {
+// GetDocNumberRangeRepository mocks base method.
+func (m *MockLogistikRepository) GetDocNumberRangeRepository(ctx context.Context) (model.NumberRange, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetDocNumberRange", ctx)
+	ret := m.ctrl.Call(m, "GetDocNumberRangeRepository", ctx)
 	ret0, _ := ret[0].(model.NumberRange)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetDocNumberRange indicates an expected call of GetDocNumberRange.
-func (mr *MockLogistikRepositoryMockRecorder) GetDocNumberRange(ctx interface{}) *gomock.Call {
+// GetDocNumberRangeRepository indicates an expected call of GetDocNumberRangeRepository.
+func (mr *MockLogistikRepositoryMockRecorder) GetDocNumberRangeRepository(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDocNumberRange", reflect.TypeOf((*MockLogistikRepository)(nil).GetDocNumberRange), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDocNumberRangeRepository", reflect.TypeOf((*MockLogistikRepository)(nil).GetDocNumberRangeRepository), ctx)
 }
 
-// GetLastCounter mocks base method.
-func (m *MockLogistikRepository) GetLastCounter(ctx context.Context) (string, error) {
+// GetLastCounterRepository mocks base method.
+func (m *MockLogistikRepository) GetLastCounterRepository(ctx context.Context) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetLastCounter", ctx)
+	ret := m.ctrl.Call(m, "GetLastCounterRepository", ctx)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetLastCounter indicates an expected call of GetLastCounter.
-func (mr *MockLogistikRepositoryMockRecorder) GetLastCounter(ctx interface{}) *gomock.Call {
+// GetLastCounterRepository indicates an expected call of GetLastCounterRepository.
+func (mr *MockLogistikRepositoryMockRecorder) GetLastCounterRepository(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLastCounter", reflect.TypeOf((*MockLogistikRepository)(nil).GetLastCounter), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLastCounterRepository", reflect.TypeOf((*MockLogistikRepository)(nil).GetLastCounterRepository), ctx)
 }
 
 // GetProductByIdRepository mocks base method.
