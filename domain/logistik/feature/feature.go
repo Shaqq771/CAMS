@@ -15,6 +15,7 @@ type LogistikFeature interface {
 	DeleteProductFeature(ctx context.Context, id string) (response model.DeletedProductResponse, err error)
 	UpdateProductFeature(ctx context.Context, id string, request *model.UpdateProductRequest) (response model.Product, err error)
 	BulkCounterFeature(ctx context.Context) (err error)
+	GetListsProductWithFilters(ctx context.Context, filter *shared_model.Filter) (productList model.ProductListsByFilter, err error)
 }
 
 type logistikFeature struct {

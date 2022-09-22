@@ -4,6 +4,7 @@ import (
 	"backend-nabati/domain/logistik/model"
 	"backend-nabati/domain/shared/constant"
 	Error "backend-nabati/domain/shared/error"
+	shared_model "backend-nabati/domain/shared/model"
 	"backend-nabati/domain/shared/query"
 	"backend-nabati/infrastructure/logger"
 	"context"
@@ -106,10 +107,49 @@ func (lr logistikRepository) GetTotalProductRepository(ctx context.Context) (cou
 func (lr logistikRepository) GetTotalProductWithConditionsRepository(ctx context.Context, conditions string) (count int, err error) {
 
 	if conditions != "" {
-		conditions = query.SearchQuery(conditions)
+		conditions = query.SearchQueryBuilder(conditions)
 	}
 
 	query := fmt.Sprintf("SELECT COUNT(*) FROM product WHERE deleted_at IS NULL %s", conditions)
+	logger.LogInfo(constant.QUERY, query)
+
+	rows, err := lr.Database.Query(query)
+	if err != nil {
+		if err == context.DeadlineExceeded {
+			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
+			return
+		}
+
+		if err == sql.ErrNoRows {
+			return 0, nil
+		}
+
+		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
+		return
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&count)
+		if err != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, err)
+			break
+		}
+	}
+
+	return
+}
+
+func (lr logistikRepository) GetTotalProductWithFiltersRepository(ctx context.Context, filter *shared_model.Filter) (count int, err error) {
+
+	var (
+		conditions string
+	)
+
+	if filter != nil {
+		conditions = query.ConditionsBuilder(filter)
+	}
+
+	query := fmt.Sprintf("SELECT COUNT(*) FROM product WHERE deleted_at IS NULL AND %s", conditions)
 	logger.LogInfo(constant.QUERY, query)
 
 	rows, err := lr.Database.Query(query)

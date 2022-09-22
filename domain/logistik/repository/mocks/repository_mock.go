@@ -6,6 +6,7 @@ package mock_repository
 
 import (
 	model "backend-nabati/domain/logistik/model"
+	model0 "backend-nabati/domain/shared/model"
 	context "context"
 	reflect "reflect"
 
@@ -183,6 +184,21 @@ func (mr *MockLogistikRepositoryMockRecorder) GetProductListsRepository(ctx, lim
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProductListsRepository", reflect.TypeOf((*MockLogistikRepository)(nil).GetProductListsRepository), ctx, limit, offset, sortby, search)
 }
 
+// GetProductListsWithFiltersRepository mocks base method.
+func (m *MockLogistikRepository) GetProductListsWithFiltersRepository(ctx context.Context, filter *model0.Filter, offset int) ([]model.Product, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetProductListsWithFiltersRepository", ctx, filter, offset)
+	ret0, _ := ret[0].([]model.Product)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetProductListsWithFiltersRepository indicates an expected call of GetProductListsWithFiltersRepository.
+func (mr *MockLogistikRepositoryMockRecorder) GetProductListsWithFiltersRepository(ctx, filter, offset interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProductListsWithFiltersRepository", reflect.TypeOf((*MockLogistikRepository)(nil).GetProductListsWithFiltersRepository), ctx, filter, offset)
+}
+
 // GetTotalProductRepository mocks base method.
 func (m *MockLogistikRepository) GetTotalProductRepository(ctx context.Context) (int, error) {
 	m.ctrl.T.Helper()
@@ -211,6 +227,21 @@ func (m *MockLogistikRepository) GetTotalProductWithConditionsRepository(ctx con
 func (mr *MockLogistikRepositoryMockRecorder) GetTotalProductWithConditionsRepository(ctx, conditions interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTotalProductWithConditionsRepository", reflect.TypeOf((*MockLogistikRepository)(nil).GetTotalProductWithConditionsRepository), ctx, conditions)
+}
+
+// GetTotalProductWithFiltersRepository mocks base method.
+func (m *MockLogistikRepository) GetTotalProductWithFiltersRepository(ctx context.Context, filter *model0.Filter) (int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTotalProductWithFiltersRepository", ctx, filter)
+	ret0, _ := ret[0].(int)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetTotalProductWithFiltersRepository indicates an expected call of GetTotalProductWithFiltersRepository.
+func (mr *MockLogistikRepositoryMockRecorder) GetTotalProductWithFiltersRepository(ctx, filter interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTotalProductWithFiltersRepository", reflect.TypeOf((*MockLogistikRepository)(nil).GetTotalProductWithFiltersRepository), ctx, filter)
 }
 
 // InsertProductRepository mocks base method.

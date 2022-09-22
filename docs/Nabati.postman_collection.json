@@ -26,7 +26,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\" :\"Wafer 100gram\", \r\n    \"sku\" :\"WFR100G11\", \r\n    \"price\" : 1500, \r\n    \"uom\" :\"pcs\"\r\n}",
+							"raw": "{\r\n    \"name\" :\"Wafer 1000gram\", \r\n    \"sku\" :\"WFR1000G11\", \r\n    \"price\" : 14000, \r\n    \"uom\" :\"pcs\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -146,7 +146,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{local_url_v1}}/product/lists?limit=10&page=1",
+							"raw": "{{local_url_v1}}/product/lists?fieldname=qty&fieldname=id",
 							"host": [
 								"{{local_url_v1}}"
 							],
@@ -157,11 +157,13 @@
 							"query": [
 								{
 									"key": "limit",
-									"value": "10"
+									"value": "10",
+									"disabled": true
 								},
 								{
 									"key": "page",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								},
 								{
 									"key": "sort_by",
@@ -172,6 +174,14 @@
 									"key": "search",
 									"value": "[\"id=1,2,3,4,5\", \"sku=WFR100G2,WFR1000G1\"]",
 									"disabled": true
+								},
+								{
+									"key": "fieldname",
+									"value": "qty"
+								},
+								{
+									"key": "fieldname",
+									"value": "id"
 								}
 							]
 						}
@@ -210,6 +220,73 @@
 					"path": [
 						"ping"
 					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bulk Insert Counter",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:9000/v1/test/bulk-insert-counter",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"test",
+						"bulk-insert-counter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter Selection",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"filters\": [\r\n        {\r\n            \"field\": \"name\",\r\n            \"option\": \"CP\",\r\n            \"from_value\": \"Wafer%\",\r\n            \"data_type\": \"S\"\r\n        }\r\n    ],\r\n    \"limit\": 50,\r\n    \"page\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local_url_v1}}/test/get-list-product",
+					"host": [
+						"{{local_url_v1}}"
+					],
+					"path": [
+						"test",
+						"get-list-product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sample Filter",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"filters\": [\r\n        {\r\n            \"field\": \"product_id\",\r\n            \"option\": \"EQ\",\r\n            \"from_value\": 123,\r\n            \"data_type\": \"N\"\r\n        },\r\n        {\r\n            \"field\": \"product_id\",\r\n            \"option\": \"EQ\",\r\n            \"from_value\": \"456\",\r\n            \"data_type\": \"S\"\r\n        },\r\n        {\r\n            \"field\": \"qty\",\r\n            \"option\": \"BT\",\r\n            \"from_value\": 100,\r\n            \"to_value\": 500,\r\n            \"data_type\": \"N\"\r\n        },\r\n        {\r\n            \"field\": \"created_at\",\r\n            \"option\": \"BT\",\r\n            \"from_value\": \"2022-09-22\",\r\n            \"to_value\": \"2022-09-22\",\r\n            \"data_type\": \"D\"\r\n        },\r\n        {\r\n            \"field\": \"product_name\",\r\n            \"option\": \"CP\",\r\n            \"from_value\": \"Z%\",\r\n            \"data_type\": \"S\"\r\n        },\r\n        {\r\n            \"field\": \"qty\",\r\n            \"option\": \"LT\",\r\n            \"from_value\": 5000,\r\n            \"data_type\": \"N\"\r\n        },\r\n        {\r\n            \"field\": \"qty\",\r\n            \"option\": \"GT\",\r\n            \"from_value\": 1000,\r\n            \"data_type\": \"N\"\r\n        },\r\n        {\r\n            \"field\": \"product_name\",\r\n            \"option\": \"NE\",\r\n            \"from_value\": \"wafer\",\r\n            \"data_type\": \"S\"\r\n        },\r\n        {\r\n            \"field\": \"price\",\r\n            \"option\": \"NB\",\r\n            \"from_value\": 100000,\r\n            \"to_value\": 50000,\r\n            \"data_type\": \"N\"\r\n        },\r\n        {\r\n            \"field\": \"product_name\",\r\n            \"option\": \"CP\",\r\n            \"from_value\": \"XA%\",\r\n            \"data_type\": \"S\"\r\n        }\r\n    ],\r\n    \"limit\": 50,\r\n    \"page\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": ""
 				}
 			},
 			"response": []

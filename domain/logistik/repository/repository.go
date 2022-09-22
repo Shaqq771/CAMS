@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backend-nabati/domain/logistik/model"
+	shared_model "backend-nabati/domain/shared/model"
 	"backend-nabati/infrastructure/database"
 	"context"
 )
@@ -21,6 +22,8 @@ type LogistikRepository interface {
 	GetLastCounterRepository(ctx context.Context) (number string, err error)
 	GetDocNumberRangeRepository(ctx context.Context) (data model.NumberRange, err error)
 	GetAndUpdateNumberNextRepository(ctx context.Context) (number string, err error)
+	GetTotalProductWithFiltersRepository(ctx context.Context, filter *shared_model.Filter) (count int, err error)
+	GetProductListsWithFiltersRepository(ctx context.Context, filter *shared_model.Filter, offset int) (products []model.Product, err error)
 }
 
 type logistikRepository struct {

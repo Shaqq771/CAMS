@@ -73,3 +73,34 @@ func (lf logistikFeature) GetProductListsFeature(ctx context.Context, queryReque
 
 	return
 }
+
+func (lf logistikFeature) GetListsProductWithFilters(ctx context.Context, filter *shared_model.Filter) (productList model.ProductListsByFilter, err error) {
+
+	// Get Total Product Now
+	totalProducts, err := lf.logistikRepo.GetTotalProductWithFiltersRepository(ctx, filter)
+	if err != nil {
+		return
+	}
+
+	// Set Paginations for product lists
+	offset, total_page := helper.GetPaginations(totalProducts, filter.Limit, filter.Page)
+
+	// Get Lists Product
+	products, err := lf.logistikRepo.GetProductListsWithFiltersRepository(ctx, filter, offset)
+	if err != nil {
+		return
+	}
+
+	productList = model.ProductListsByFilter{
+		Pagination: shared_model.Pagination{
+			Limit:     filter.Limit,
+			TotalPage: total_page,
+			TotalRows: totalProducts,
+			Page:      filter.Page,
+		},
+		Product: products,
+		Filters: filter.Filters,
+	}
+
+	return
+}

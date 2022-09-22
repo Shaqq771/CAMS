@@ -17,6 +17,7 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 	test := v1.Group("test")
 	{
 		test.Post("/bulk-insert-counter", handler.logistikHandler.BulkCounterHandler)
+		test.Post("/get-list-product", handler.logistikHandler.GetProductListsWithFilterHandler)
 	}
 
 	pubProduct := v1.Group("/product")

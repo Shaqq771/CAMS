@@ -2,13 +2,11 @@ package query
 
 import (
 	"backend-nabati/domain/shared/constant"
+	Error "backend-nabati/domain/shared/error"
 	"context"
 	"fmt"
 
-	Error "backend-nabati/domain/shared/error"
-
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 )
 
 func BulkInsert(ctx context.Context, db *sqlx.DB, query string, lastCounter, limit int) (err error) {

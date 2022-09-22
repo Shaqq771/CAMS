@@ -9,12 +9,6 @@ import (
 	Error "backend-nabati/domain/shared/error"
 )
 
-func GetPaginations(count, limit, page int) (offset, totalPage int) {
-	totalPage = ((count - 1) / limit) + 1
-	offset = limit * (page - 1)
-	return
-}
-
 func StringToArrString(str string) (arrString []string, err error) {
 	if err = json.Unmarshal([]byte(str), &arrString); err != nil {
 		return
@@ -26,12 +20,6 @@ func StringToArrString(str string) (arrString []string, err error) {
 func ArrStringToString(arrString []string, sep string) (str string) {
 	str = strings.Join(arrString, sep)
 	str = strings.Trim(str, " ")
-	return
-}
-
-func ValueQueryBuilder(str string) (builder string) {
-	str = strings.Trim(str, " ")
-	builder = `'` + str + `'`
 	return
 }
 

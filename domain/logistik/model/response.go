@@ -17,3 +17,9 @@ type ProductLists struct {
 	Sort       []string         `json:"sort,omitempty"`
 	Filter     []string         `json:"filter,omitempty"`
 }
+
+type ProductListsByFilter struct {
+	Pagination model.Pagination `json:"pagination"`
+	Product    []Product        `json:"products"`
+	Filters    []model.Fields   `json:"filters,omitempty"`
+}

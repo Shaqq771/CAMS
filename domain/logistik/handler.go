@@ -22,6 +22,7 @@ type LogistikHandler interface {
 	UpdateProductHandler(c *fiber.Ctx) error
 	DeleteProductHandler(c *fiber.Ctx) error
 	BulkCounterHandler(c *fiber.Ctx) error
+	GetProductListsWithFilterHandler(c *fiber.Ctx) error
 }
 
 type logistikHandler struct {
@@ -168,4 +169,23 @@ func (lh logistikHandler) BulkCounterHandler(c *fiber.Ctx) error {
 	}
 
 	return response.ResponseOK(c, constant.SUCCESS, "request being processed")
+}
+
+func (lh logistikHandler) GetProductListsWithFilterHandler(c *fiber.Ctx) error {
+
+	ctx := context.CreateContext()
+	ctx = context.SetValueToContext(ctx, c)
+
+	filterRequest := new(shared_model.Filter)
+	if err := c.BodyParser(filterRequest); err != nil {
+		err := Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, err)
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	resp, err := lh.feature.GetListsProductWithFilters(ctx, filterRequest)
+	if err != nil {
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	return response.ResponseOK(c, constant.SUCCESS, resp)
 }
