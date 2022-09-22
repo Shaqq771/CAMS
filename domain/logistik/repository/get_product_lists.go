@@ -44,18 +44,19 @@ func (lr logistikRepository) GetProductListsRepository(ctx context.Context, limi
 
 func (lr logistikRepository) GetProductListsWithFiltersRepository(ctx context.Context, filter *shared_model.Filter, offset int) (products []model.Product, err error) {
 
-	var (
-		condition string
-	)
-
-	if filter != nil {
-		condition = query.ConditionsBuilder(filter)
+	query, err := query.SelectStatementBuilder(model.Product{}, "product", filter)
+	if err != nil {
+		err = Error.New(constant.ErrDatabase, "error when create select statements", err)
+		return
 	}
 
-	query := fmt.Sprintf("SELECT * FROM Product WHERE deleted_at IS NULL AND %s ORDER BY created_at asc LIMIT $1 OFFSET $2", condition)
 	logger.LogInfo(constant.QUERY, query)
+	if len(filter.Filters) > 0 {
+		err = lr.Database.DB.SelectContext(ctx, &products, query, offset)
+	} else {
+		err = lr.Database.DB.SelectContext(ctx, &products, query)
+	}
 
-	err = lr.Database.DB.SelectContext(ctx, &products, query, filter.Limit, offset)
 	if err != nil {
 		if err == context.DeadlineExceeded {
 			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)

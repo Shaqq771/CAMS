@@ -149,9 +149,12 @@ func (lr logistikRepository) GetTotalProductWithFiltersRepository(ctx context.Co
 		conditions = query.ConditionsBuilder(filter)
 	}
 
-	query := fmt.Sprintf("SELECT COUNT(*) FROM product WHERE deleted_at IS NULL AND %s", conditions)
-	logger.LogInfo(constant.QUERY, query)
+	query := fmt.Sprintf("SELECT COUNT(*) FROM product WHERE deleted_at IS NULL")
+	if len(filter.Filters) > 0 {
+		query = fmt.Sprintf("SELECT COUNT(*) FROM product WHERE deleted_at IS NULL AND %s", conditions)
+	}
 
+	logger.LogInfo(constant.QUERY, query)
 	rows, err := lr.Database.Query(query)
 	if err != nil {
 		if err == context.DeadlineExceeded {
