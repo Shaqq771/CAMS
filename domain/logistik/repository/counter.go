@@ -17,6 +17,7 @@ import (
 func (lr logistikRepository) BulkInsertCounter(ctx context.Context, limit int) (err error) {
 	var wg sync.WaitGroup
 	for i := 0; i < limit; i++ {
+		wg.Add(1)
 		go func(wg *sync.WaitGroup, ctx context.Context, db *sqlx.DB) {
 
 			lastNumber, err := lr.GetAndUpdateNumberNext(ctx)
