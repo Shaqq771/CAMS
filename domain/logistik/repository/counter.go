@@ -8,7 +8,6 @@ import (
 	"backend-nabati/infrastructure/logger"
 	"context"
 	"database/sql"
-	"fmt"
 	"strconv"
 	"sync"
 
@@ -18,27 +17,10 @@ import (
 func (lr logistikRepository) BulkInsertCounter(ctx context.Context, limit int) (err error) {
 	var wg sync.WaitGroup
 	for i := 0; i < limit; i++ {
-		wg.Add(1)
 		go func(wg *sync.WaitGroup, ctx context.Context, db *sqlx.DB) {
-			data, err := lr.GetDocNumberRange(ctx)
-			if err != nil {
-				err = Error.New(constant.ErrDatabase, constant.ErrWhenSelectDB, err)
-				return
-			}
 
-			fmt.Println(data)
-			lastNumber := helper.LastDocNumber(data.LastNumber, data.FromNumber, data.ToNumber, data.SkipNumber)
-			fmt.Println(lastNumber)
-			if lastNumber == 0 {
-				logger.LogInfo(constant.QUERY, "skip transaction: "+data.LastNumber)
-				wg.Done()
-				return
-			}
-
-			strLastNumber := strconv.Itoa(lastNumber)
-			err = lr.UpdateLastNumber(ctx, strLastNumber)
+			lastNumber, err := lr.GetAndUpdateNumberNext(ctx)
 			if err != nil {
-				Error.New(constant.ErrDatabase, fmt.Sprintf(constant.ErrRollBack, strLastNumber), err)
 				wg.Done()
 				return
 			}
@@ -87,7 +69,6 @@ func (lr logistikRepository) BulkInsertCounter(ctx context.Context, limit int) (
 				return
 			}
 
-			fmt.Println(fmt.Sprintf("number %d created", lastNumber))
 			wg.Done()
 		}(&wg, ctx, lr.Database.DB)
 		wg.Wait()
@@ -162,7 +143,46 @@ func (lr logistikRepository) GetDocNumberRange(ctx context.Context) (data model.
 	return
 }
 
-func (lr logistikRepository) UpdateLastNumber(ctx context.Context, number string) (err error) {
+func (lr logistikRepository) GetAndUpdateNumberNext(ctx context.Context) (number string, err error) {
+	data := model.NumberRange{}
+
+	query := "SELECT doc_type, plant_id, from_number, to_number, last_number, skip FROM nds_number_range WHERE doc_type = '1001' limit 1 FOR UPDATE;"
+	rows, err := lr.Database.Queryx(query)
+	defer rows.Close()
+	logger.LogInfo(constant.QUERY, query)
+	if err != nil {
+		if err == context.DeadlineExceeded {
+			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
+			return
+		}
+
+		if err == sql.ErrNoRows {
+			err = nil
+			return
+		}
+
+		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
+		return
+	}
+
+	for rows.Next() {
+		err := rows.StructScan(&data)
+		if err != nil {
+			if err == context.DeadlineExceeded {
+				err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
+				break
+			}
+
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, err)
+			break
+		}
+	}
+
+	lastNumber := helper.LastDocNumber(data.LastNumber, data.FromNumber, data.ToNumber, data.SkipNumber)
+	if lastNumber == 0 {
+		logger.LogInfo(constant.QUERY, "skip transaction: "+data.LastNumber)
+		return
+	}
 
 	tx, err := lr.Database.Begin()
 	if err != nil {
@@ -192,7 +212,7 @@ func (lr logistikRepository) UpdateLastNumber(ctx context.Context, number string
 		return
 	}
 
-	err = stmt.QueryRowContext(ctx, &number).Err()
+	err = stmt.QueryRowContext(ctx, &lastNumber).Err()
 	if err != nil {
 		if err == context.DeadlineExceeded {
 			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
@@ -228,6 +248,8 @@ func (lr logistikRepository) UpdateLastNumber(ctx context.Context, number string
 		err = Error.New(constant.ErrDatabase, constant.ErrWhenCommitDB, err)
 		return
 	}
+
+	number = strconv.Itoa(lastNumber)
 
 	return
 }

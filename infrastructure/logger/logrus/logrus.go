@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -17,21 +16,33 @@ func InitializeLogrusLogger() {
 
 	log.SetFormatter(&log.JSONFormatter{})
 
-	if strings.ToLower(os.Getenv("ENV")) == "dev" {
-		log.SetOutput(os.Stdout)
-	} else {
-		err := os.MkdirAll(filepath.Dir(path), 0770)
-		if err == nil {
-			file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-			if err != nil {
-				log.SetOutput(os.Stdout)
-				return
-			}
-			log.SetOutput(file)
-		} else {
+	err := os.MkdirAll(filepath.Dir(path), 0770)
+	if err == nil {
+		file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		if err != nil {
 			log.SetOutput(os.Stdout)
+			return
 		}
+		log.SetOutput(file)
+	} else {
+		log.SetOutput(os.Stdout)
 	}
+
+	// if strings.ToLower(os.Getenv("ENV")) == "dev" {
+	// 	// log.SetOutput(os.Stdout)
+	// } else {
+	// 	err := os.MkdirAll(filepath.Dir(path), 0770)
+	// 	if err == nil {
+	// 		file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	// 		if err != nil {
+	// 			log.SetOutput(os.Stdout)
+	// 			return
+	// 		}
+	// 		log.SetOutput(file)
+	// 	} else {
+	// 		log.SetOutput(os.Stdout)
+	// 	}
+	// }
 
 }
 

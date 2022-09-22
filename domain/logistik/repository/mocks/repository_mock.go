@@ -93,6 +93,21 @@ func (mr *MockLogistikRepositoryMockRecorder) DeleteProductRepository(ctx, id in
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteProductRepository", reflect.TypeOf((*MockLogistikRepository)(nil).DeleteProductRepository), ctx, id)
 }
 
+// GetAndUpdateNumberNext mocks base method.
+func (m *MockLogistikRepository) GetAndUpdateNumberNext(ctx context.Context) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAndUpdateNumberNext", ctx)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAndUpdateNumberNext indicates an expected call of GetAndUpdateNumberNext.
+func (mr *MockLogistikRepositoryMockRecorder) GetAndUpdateNumberNext(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAndUpdateNumberNext", reflect.TypeOf((*MockLogistikRepository)(nil).GetAndUpdateNumberNext), ctx)
+}
+
 // GetDocNumberRange mocks base method.
 func (m *MockLogistikRepository) GetDocNumberRange(ctx context.Context) (model.NumberRange, error) {
 	m.ctrl.T.Helper()
@@ -211,20 +226,6 @@ func (m *MockLogistikRepository) InsertProductRepository(ctx context.Context, pr
 func (mr *MockLogistikRepositoryMockRecorder) InsertProductRepository(ctx, product interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertProductRepository", reflect.TypeOf((*MockLogistikRepository)(nil).InsertProductRepository), ctx, product)
-}
-
-// UpdateLastNumber mocks base method.
-func (m *MockLogistikRepository) UpdateLastNumber(ctx context.Context, number string) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateLastNumber", ctx, number)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// UpdateLastNumber indicates an expected call of UpdateLastNumber.
-func (mr *MockLogistikRepositoryMockRecorder) UpdateLastNumber(ctx, number interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLastNumber", reflect.TypeOf((*MockLogistikRepository)(nil).UpdateLastNumber), ctx, number)
 }
 
 // UpdateProductRepository mocks base method.
