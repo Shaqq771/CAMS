@@ -8,7 +8,7 @@ import (
 	"backend-nabati/infrastructure/logger"
 	"context"
 	"database/sql"
-	"strconv"
+	"fmt"
 	"sync"
 
 	"github.com/jmoiron/sqlx"
@@ -20,12 +20,6 @@ func (lr logistikRepository) BulkInsertCounterRepository(ctx context.Context, li
 		wg.Add(1)
 		go func(wg *sync.WaitGroup, ctx context.Context, db *sqlx.DB) {
 
-			lastNumber, err := lr.GetAndUpdateNumberNextRepository(ctx)
-			if err != nil {
-				wg.Done()
-				return
-			}
-
 			tx, err := db.Begin()
 			if err != nil {
 				err = Error.New(constant.ErrDatabase, constant.ErrWhenBeginTX, err)
@@ -33,17 +27,35 @@ func (lr logistikRepository) BulkInsertCounterRepository(ctx context.Context, li
 				return
 			}
 
-			stmt, err := tx.PrepareContext(ctx, "INSERT INTO counter (number) VALUES ($1)")
-			defer stmt.Close()
+			lastNumber, err := lr.GetAndUpdateNumberNextRepository(ctx, tx)
 			if err != nil {
-				err = Error.New(constant.ErrDatabase, constant.ErrWhenPrepareStatementDB, err)
 				wg.Done()
 				return
 			}
 
-			err = stmt.QueryRowContext(ctx, &lastNumber).Err()
+			_, err = tx.ExecContext(ctx, fmt.Sprintf("UPDATE nds_number_range SET last_number = %d WHERE doc_type = '1001'", lastNumber))
 			if err != nil {
+				if err == context.DeadlineExceeded {
+					err = Error.New(constant.ErrTimeout, constant.ErrWhenPrepareStatementDB, err)
+					err = tx.Rollback()
+					if err != nil {
+						err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+						return
+					}
+					return
+				}
 
+				err = Error.New(constant.ErrDatabase, constant.ErrWhenPrepareStatementDB, err)
+				err = tx.Rollback()
+				if err != nil {
+					err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+					return
+				}
+				return
+			}
+
+			_, err = tx.ExecContext(ctx, fmt.Sprintf("INSERT INTO counter (number) VALUES (%d)", lastNumber))
+			if err != nil {
 				err = tx.Rollback()
 				if err != nil {
 					err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
@@ -144,12 +156,11 @@ func (lr logistikRepository) GetDocNumberRangeRepository(ctx context.Context) (d
 	return
 }
 
-func (lr logistikRepository) GetAndUpdateNumberNextRepository(ctx context.Context) (number string, err error) {
+func (lr logistikRepository) GetAndUpdateNumberNextRepository(ctx context.Context, tx *sql.Tx) (number int, err error) {
 	data := model.NumberRange{}
 
 	query := "SELECT doc_type, plant_id, from_number, to_number, last_number, skip FROM nds_number_range WHERE doc_type = '1001' limit 1 FOR UPDATE;"
-	rows, err := lr.Database.Queryx(query)
-	defer rows.Close()
+	rows, err := tx.QueryContext(ctx, query)
 	logger.LogInfo(constant.QUERY, query)
 	if err != nil {
 		if err == context.DeadlineExceeded {
@@ -167,7 +178,7 @@ func (lr logistikRepository) GetAndUpdateNumberNextRepository(ctx context.Contex
 	}
 
 	for rows.Next() {
-		err := rows.StructScan(&data)
+		err := rows.Scan(&data.DocType, &data.PlantId, &data.FromNumber, &data.ToNumber, &data.LastNumber, &data.SkipNumber)
 		if err != nil {
 			if err == context.DeadlineExceeded {
 				err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
@@ -179,78 +190,11 @@ func (lr logistikRepository) GetAndUpdateNumberNextRepository(ctx context.Contex
 		}
 	}
 
-	lastNumber := helper.LastDocNumber(data.LastNumber, data.FromNumber, data.ToNumber, data.SkipNumber)
-	if lastNumber == 0 {
+	number = helper.LastDocNumber(data.LastNumber, data.FromNumber, data.ToNumber, data.SkipNumber)
+	if number == 0 {
 		logger.LogInfo(constant.QUERY, "skip transaction: "+data.LastNumber)
 		return
 	}
-
-	tx, err := lr.Database.Begin()
-	if err != nil {
-		err = Error.New(constant.ErrDatabase, constant.ErrWhenBeginTX, err)
-		return
-	}
-
-	stmt, err := tx.PrepareContext(ctx, "UPDATE nds_number_range SET last_number = $1 WHERE doc_type = '1001'")
-	defer stmt.Close()
-	if err != nil {
-		if err == context.DeadlineExceeded {
-			err = Error.New(constant.ErrTimeout, constant.ErrWhenPrepareStatementDB, err)
-			err = tx.Rollback()
-			if err != nil {
-				err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
-				return
-			}
-			return
-		}
-
-		err = Error.New(constant.ErrDatabase, constant.ErrWhenPrepareStatementDB, err)
-		err = tx.Rollback()
-		if err != nil {
-			err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
-			return
-		}
-		return
-	}
-
-	err = stmt.QueryRowContext(ctx, &lastNumber).Err()
-	if err != nil {
-		if err == context.DeadlineExceeded {
-			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
-			err = tx.Rollback()
-			if err != nil {
-				err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
-				return
-			}
-			return
-		}
-
-		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
-		err = tx.Rollback()
-		if err != nil {
-			err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
-			return
-		}
-		return
-	}
-
-	err = tx.Commit()
-	if err != nil {
-		if err == context.DeadlineExceeded {
-			err = Error.New(constant.ErrTimeout, constant.ErrWhenCommitDB, err)
-			err = tx.Rollback()
-			if err != nil {
-				err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
-				return
-			}
-			return
-		}
-
-		err = Error.New(constant.ErrDatabase, constant.ErrWhenCommitDB, err)
-		return
-	}
-
-	number = strconv.Itoa(lastNumber)
 
 	return
 }

@@ -81,18 +81,18 @@ func (mr *MockLogistikFeatureMockRecorder) DeleteProductFeature(ctx, id interfac
 }
 
 // GetListsProductWithFilters mocks base method.
-func (m *MockLogistikFeature) GetListsProductWithFilters(ctx context.Context, filter *model0.Filter, id string) (model.ProductListsByFilter, error) {
+func (m *MockLogistikFeature) GetListsProductWithFilters(ctx context.Context, filter *model0.Filter) (model.ProductListsByFilter, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetListsProductWithFilters", ctx, filter, id)
+	ret := m.ctrl.Call(m, "GetListsProductWithFilters", ctx, filter)
 	ret0, _ := ret[0].(model.ProductListsByFilter)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetListsProductWithFilters indicates an expected call of GetListsProductWithFilters.
-func (mr *MockLogistikFeatureMockRecorder) GetListsProductWithFilters(ctx, filter, id interface{}) *gomock.Call {
+func (mr *MockLogistikFeatureMockRecorder) GetListsProductWithFilters(ctx, filter interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetListsProductWithFilters", reflect.TypeOf((*MockLogistikFeature)(nil).GetListsProductWithFilters), ctx, filter, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetListsProductWithFilters", reflect.TypeOf((*MockLogistikFeature)(nil).GetListsProductWithFilters), ctx, filter)
 }
 
 // GetProductFeature mocks base method.

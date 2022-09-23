@@ -5,6 +5,7 @@ import (
 	shared_model "backend-nabati/domain/shared/model"
 	"backend-nabati/infrastructure/database"
 	"context"
+	"database/sql"
 )
 
 type LogistikRepository interface {
@@ -21,7 +22,7 @@ type LogistikRepository interface {
 	BulkInsertCounterRepository(ctx context.Context, size int) (err error)
 	GetLastCounterRepository(ctx context.Context) (number string, err error)
 	GetDocNumberRangeRepository(ctx context.Context) (data model.NumberRange, err error)
-	GetAndUpdateNumberNextRepository(ctx context.Context) (number string, err error)
+	GetAndUpdateNumberNextRepository(ctx context.Context, tx *sql.Tx) (number int, err error)
 	GetTotalProductWithFiltersRepository(ctx context.Context, filter *shared_model.Filter) (count int, err error)
 	GetProductListsWithFiltersRepository(ctx context.Context, filter *shared_model.Filter, offset int) (products []model.Product, err error)
 }

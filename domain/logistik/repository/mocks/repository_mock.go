@@ -8,6 +8,7 @@ import (
 	model "backend-nabati/domain/logistik/model"
 	model0 "backend-nabati/domain/shared/model"
 	context "context"
+	sql "database/sql"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -95,18 +96,18 @@ func (mr *MockLogistikRepositoryMockRecorder) DeleteProductRepository(ctx, id in
 }
 
 // GetAndUpdateNumberNextRepository mocks base method.
-func (m *MockLogistikRepository) GetAndUpdateNumberNextRepository(ctx context.Context) (string, error) {
+func (m *MockLogistikRepository) GetAndUpdateNumberNextRepository(ctx context.Context, tx *sql.Tx) (int, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAndUpdateNumberNextRepository", ctx)
-	ret0, _ := ret[0].(string)
+	ret := m.ctrl.Call(m, "GetAndUpdateNumberNextRepository", ctx, tx)
+	ret0, _ := ret[0].(int)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetAndUpdateNumberNextRepository indicates an expected call of GetAndUpdateNumberNextRepository.
-func (mr *MockLogistikRepositoryMockRecorder) GetAndUpdateNumberNextRepository(ctx interface{}) *gomock.Call {
+func (mr *MockLogistikRepositoryMockRecorder) GetAndUpdateNumberNextRepository(ctx, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAndUpdateNumberNextRepository", reflect.TypeOf((*MockLogistikRepository)(nil).GetAndUpdateNumberNextRepository), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAndUpdateNumberNextRepository", reflect.TypeOf((*MockLogistikRepository)(nil).GetAndUpdateNumberNextRepository), ctx, tx)
 }
 
 // GetDocNumberRangeRepository mocks base method.
