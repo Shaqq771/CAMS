@@ -33,10 +33,23 @@ func SearchQueryBuilder(conditions string) string {
 }
 
 func ConditionsBuilder(condition *model.Filter) (query string) {
-	conditionLen := len(condition.Filters)
-	for i, field := range condition.Filters {
+
+	var (
+		sortedFields          = SortByFieldName(condition.Filters)
+		counterFields         = FindCounterField(sortedFields)
+		conditionLen          = len(sortedFields)
+		beforeField, newQuery string
+		listsValue            []string
+	)
+
+	for i, field := range sortedFields {
 		if field.Option == constant.EQUAL {
-			query += FieldValueBuilder(field, "=", i, conditionLen)
+			if counterFields[field.FieldName] > 1 {
+				newQuery, beforeField, listsValue = FieldINValueBuilder(field, beforeField, i, conditionLen, counterFields[field.FieldName], listsValue)
+				query += newQuery
+			} else {
+				query += FieldValueBuilder(field, "=", i, conditionLen)
+			}
 		} else if field.Option == constant.BETWEEN {
 			query += FieldValueBuilder(field, "BETWEEN", i, conditionLen)
 		} else if field.Option == constant.NOT_BETWEEN {
@@ -81,6 +94,33 @@ func FieldValueBuilder(field model.Fields, operations string, idx, fieldsLen int
 	} else {
 		query += " "
 	}
+
+	return
+}
+
+func FieldINValueBuilder(field model.Fields, beforeField string, idx, fieldsLen, counterFields int, listsValue []string) (query, afterField string, afterList []string) {
+
+	if beforeField == "" || beforeField != field.FieldName {
+		beforeField = field.FieldName
+		listsValue = []string{}
+	}
+
+	if beforeField == field.FieldName {
+		if field.DataType == constant.NUMBER {
+			listsValue = append(listsValue, CastToString(field.FromValue))
+		} else if field.DataType == constant.STRING || field.DataType == constant.TIME || field.DataType == constant.DATE || field.DataType == constant.DECIMAL {
+			listsValue = append(listsValue, ValueStrBuilder(CastToString(field.FromValue)))
+		}
+
+		if len(listsValue) == counterFields && idx < fieldsLen-1 {
+			query += fmt.Sprintf(" (%s IN(%s)) AND ", field.FieldName, strings.Join(listsValue, ", "))
+		} else if len(listsValue) == counterFields {
+			query += fmt.Sprintf(" (%s IN(%s)) ", field.FieldName, strings.Join(listsValue, ", "))
+		}
+	}
+
+	afterField = beforeField
+	afterList = listsValue
 
 	return
 }
