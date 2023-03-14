@@ -1,10 +1,13 @@
 package http
 
 import (
+	"backend-nabati/delivery/container"
+
 	"github.com/gofiber/fiber/v2"
 )
 
-func ServeHttp(handler handler) *fiber.App {
+func ServeHttp(container container.Container) *fiber.App {
+	handler := SetupHandler(container)
 
 	app := fiber.New()
 

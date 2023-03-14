@@ -6,12 +6,12 @@ import (
 	health_repository "backend-nabati/domain/health/repository"
 	logistik_feature "backend-nabati/domain/logistik/feature"
 	logistik_repository "backend-nabati/domain/logistik/repository"
-	"backend-nabati/domain/sales/consumer"
 	sales_feature "backend-nabati/domain/sales/feature"
 	sales_repository "backend-nabati/domain/sales/repository"
 	"backend-nabati/infrastructure/broker/rabbitmq"
 	"backend-nabati/infrastructure/database"
 	"backend-nabati/infrastructure/logger"
+	"backend-nabati/infrastructure/service/queue"
 	"backend-nabati/infrastructure/shared/constant"
 	"fmt"
 	"log"
@@ -23,6 +23,7 @@ type Container struct {
 	HealthFeature     health_feature.HealthFeature
 	LogistikFeature   logistik_feature.LogistikFeature
 	SalesFeature      sales_feature.SalesFeature
+	QueueServices     queue.QueueService
 }
 
 func SetupContainer() Container {
@@ -43,12 +44,15 @@ func SetupContainer() Container {
 	}
 
 	fmt.Println("Loading message broker...")
-	rmq := rabbitmq.NewConnection(config.RabbitMq.ConsumerName, config.RabbitMq)
+	rmq := rabbitmq.NewConnection(config.RabbitMq)
 	// Connect RabbitMQ
 	err = rmq.Connect()
 	if err != nil {
 		log.Panic(err)
 	}
+
+	fmt.Println("Loading service's...")
+	queueService := queue.NewQueueService(rmq, config.RabbitMq)
 
 	fmt.Println("Loading repository's...")
 	healthRepository := health_repository.NewHealthFeature(db)
@@ -57,12 +61,8 @@ func SetupContainer() Container {
 
 	fmt.Println("Loading feature's...")
 	healthFeature := health_feature.NewHealthFeature(config, healthRepository, rmq)
-	logistikFeature := logistik_feature.NewLogistikFeature(logistikRepository, rmq)
+	logistikFeature := logistik_feature.NewLogistikFeature(logistikRepository, queueService)
 	salesFeature := sales_feature.NewSalesFeature(salesRepository)
-
-	fmt.Println("Loading consumer's...")
-	SalesConsumer := consumer.NewSalesConsumer(rmq, salesFeature)
-	SalesConsumer.Consumer()
 
 	return Container{
 		EnvironmentConfig: config,
@@ -70,5 +70,6 @@ func SetupContainer() Container {
 		HealthFeature:     healthFeature,
 		LogistikFeature:   logistikFeature,
 		SalesFeature:      salesFeature,
+		QueueServices:     queueService,
 	}
 }

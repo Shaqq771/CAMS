@@ -14,17 +14,21 @@ const (
 )
 
 const (
-	ErrConnectToBroker       = "failed connect to broker: %w"
-	ErrCreateChannelToBroker = "failed create channel to broker: %w"
-	ErrCreateTopicToBroker   = "failed create topic to broker: %w"
-	ErrSetupQueueToBroker    = "failed setup queue to broker: %w"
-	ErrCreateQueueToBroker   = "failed create queue to broker: %w"
-	ErrBindingQueueToBroker  = "failed binding queue to broker: %w"
-	ErrPublishQueueToBroker  = "failed publish queue to broker: %w"
-	ErrConsumeQueueToBroker  = "failed consume queue to broker: %w"
-)
-
-const (
 	ErrInvalidRequest = "invalid request"
 	ErrGeneral        = "general error"
+)
+
+// RabbitMQ
+const (
+	ErrConnectToBroker       = "failed connect to broker: %w"
+	ErrCreateChannelToBroker = "failed create channel to broker: %w"
+	ErrSetupQueueToBroker    = "failed setup queue to broker: %w"
+
+	ErrDefineChannelToBroker  = "failed create channel to broker"
+	ErrDeclareExhangeToBroker = "failed declare exchange to broker"
+	ErrCreateTopicToBroker    = "failed create topic to broker"
+	ErrCreateQueueToBroker    = "failed create queue to broker"
+	ErrBindingQueueToBroker   = "failed binding queue to broker"
+	ErrPublishQueueToBroker   = "failed publish queue to broker"
+	ErrConsumeQueueToBroker   = "failed consume queue from broker"
 )

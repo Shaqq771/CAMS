@@ -38,7 +38,7 @@ func (lf logistikFeature) AddProductFeature(ctx context.Context, request *model.
 
 	userId := 1
 	// Check Health sales
-	lf.rabbitmq.Publish(ctx, constant.SalesTopic, userId)
+	lf.queueService.PublishData(ctx, constant.CONSUMER_PRODUCT_INSERT_RABBITMQ, userId)
 
 	return
 }

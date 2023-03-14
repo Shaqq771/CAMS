@@ -16,7 +16,7 @@ import (
 	"backend-nabati/domain/logistik/model"
 	mock_repository "backend-nabati/domain/logistik/repository/mocks"
 	Error "backend-nabati/domain/shared/error"
-	mock_rabbitmq "backend-nabati/infrastructure/broker/rabbitmq/mocks"
+	mock_queue "backend-nabati/infrastructure/service/queue/mocks"
 )
 
 func Test_GetProductFeature(t *testing.T) {
@@ -26,8 +26,8 @@ func Test_GetProductFeature(t *testing.T) {
 	ctx := context.Background()
 
 	mockRepository := mock_repository.NewMockLogistikRepository(ctl)
-	mockRabbitMQ := mock_rabbitmq.NewMockRabbitMQ(ctl)
-	w := feature.NewLogistikFeature(mockRepository, mockRabbitMQ)
+	mockQueueService := mock_queue.NewMockQueueService(ctl)
+	w := feature.NewLogistikFeature(mockRepository, mockQueueService)
 
 	t.Run("Error invalid id from request", func(t *testing.T) {
 		errId := "x"

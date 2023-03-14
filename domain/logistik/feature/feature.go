@@ -4,7 +4,7 @@ import (
 	"backend-nabati/domain/logistik/model"
 	repository "backend-nabati/domain/logistik/repository"
 	shared_model "backend-nabati/domain/shared/model"
-	"backend-nabati/infrastructure/broker/rabbitmq"
+	"backend-nabati/infrastructure/service/queue"
 	"context"
 )
 
@@ -20,12 +20,12 @@ type LogistikFeature interface {
 
 type logistikFeature struct {
 	logistikRepo repository.LogistikRepository
-	rabbitmq     rabbitmq.RabbitMQ
+	queueService queue.QueueService
 }
 
-func NewLogistikFeature(logistikRepo repository.LogistikRepository, rabbitmq rabbitmq.RabbitMQ) LogistikFeature {
+func NewLogistikFeature(logistikRepo repository.LogistikRepository, queueService queue.QueueService) LogistikFeature {
 	return &logistikFeature{
 		logistikRepo: logistikRepo,
-		rabbitmq:     rabbitmq,
+		queueService: queueService,
 	}
 }

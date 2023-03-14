@@ -8,7 +8,7 @@ import (
 	"context"
 	"testing"
 
-	mock_rabbitmq "backend-nabati/infrastructure/broker/rabbitmq/mocks"
+	mock_queue "backend-nabati/infrastructure/service/queue/mocks"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -21,8 +21,8 @@ func Test_AddProductFeature(t *testing.T) {
 	ctx := context.Background()
 
 	mockRepository := mock_repository.NewMockLogistikRepository(ctl)
-	mockRabbitMQ := mock_rabbitmq.NewMockRabbitMQ(ctl)
-	w := feature.NewLogistikFeature(mockRepository, mockRabbitMQ)
+	mockQueueService := mock_queue.NewMockQueueService(ctl)
+	w := feature.NewLogistikFeature(mockRepository, mockQueueService)
 
 	request := model.AddProductRequest{
 		Name:  "Wafer 100gram",
@@ -61,7 +61,7 @@ func Test_AddProductFeature(t *testing.T) {
 
 		mockRepository.EXPECT().InsertProductRepository(ctx, mockInsertProduct).Return(mockInsertId, nil) // id, error
 
-		mockRabbitMQ.EXPECT().Publish(ctx, constant.SalesTopic, 1)
+		mockQueueService.EXPECT().PublishData(ctx, constant.CONSUMER_PRODUCT_INSERT_RABBITMQ, 1)
 
 		resp, err := w.AddProductFeature(ctx, &request)
 		assert.Nil(t, err)

@@ -6,7 +6,7 @@ import (
 	mock_repository "backend-nabati/domain/logistik/repository/mocks"
 	"backend-nabati/domain/shared/helper"
 	shared_model "backend-nabati/domain/shared/model"
-	mock_rabbitmq "backend-nabati/infrastructure/broker/rabbitmq/mocks"
+	mock_queue "backend-nabati/infrastructure/service/queue/mocks"
 	"context"
 	"testing"
 	"time"
@@ -20,8 +20,8 @@ func Test_GetProductListsFeature(t *testing.T) {
 	defer ctl.Finish()
 
 	mockRepository := mock_repository.NewMockLogistikRepository(ctl)
-	mockRabbitMQ := mock_rabbitmq.NewMockRabbitMQ(ctl)
-	w := feature.NewLogistikFeature(mockRepository, mockRabbitMQ)
+	mockQueueService := mock_queue.NewMockQueueService(ctl)
+	w := feature.NewLogistikFeature(mockRepository, mockQueueService)
 
 	t.Run("Get Lists Product Success", func(t *testing.T) {
 		ctx := context.Background()

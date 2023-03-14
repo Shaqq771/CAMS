@@ -4,12 +4,13 @@ import (
 	"backend-nabati/domain/logistik/feature"
 	"backend-nabati/domain/logistik/model"
 	mock_repository "backend-nabati/domain/logistik/repository/mocks"
-	mock_rabbitmq "backend-nabati/infrastructure/broker/rabbitmq/mocks"
 	"context"
 	"database/sql"
 	"strconv"
 	"testing"
 	"time"
+
+	mock_queue "backend-nabati/infrastructure/service/queue/mocks"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -20,8 +21,8 @@ func Test_UpdateProductFeature(t *testing.T) {
 	defer ctl.Finish()
 
 	mockRepository := mock_repository.NewMockLogistikRepository(ctl)
-	mockRabbitMQ := mock_rabbitmq.NewMockRabbitMQ(ctl)
-	w := feature.NewLogistikFeature(mockRepository, mockRabbitMQ)
+	mockQueueService := mock_queue.NewMockQueueService(ctl)
+	w := feature.NewLogistikFeature(mockRepository, mockQueueService)
 
 	request := model.UpdateProductRequest{
 		Name:  "Wafer 100gram",

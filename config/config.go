@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -61,11 +62,14 @@ func LoadENVConfig() (config EnvironmentConfig, err error) {
 			Password: os.Getenv("DB_PASSWORD"),
 		},
 		RabbitMq: rabbitmq.RabbitmqConfig{
-			Host:         os.Getenv("RABBITMQ_HOST"),
-			Username:     os.Getenv("RABBITMQ_USERNAME"),
-			Password:     os.Getenv("RABBITMQ_PASSWORD"),
-			Port:         rmqPort,
-			ConsumerName: os.Getenv("RABBITMQ_CONSUMER_NAME"),
+			Host:                      strings.TrimPrefix(os.Getenv("RABBITMQ_HOST"), "http://"),
+			Username:                  os.Getenv("RABBITMQ_USERNAME"),
+			Password:                  os.Getenv("RABBITMQ_PASSWORD"),
+			Port:                      rmqPort,
+			BillingProducerName:       os.Getenv("RABBITMQ_BILLING_PRODUCER_NAME"),
+			BillingConsumerName:       os.Getenv("RABBITMQ_BILLING_CONSUMER_NAME"),
+			ProductInsertConsumerName: os.Getenv("RABBITMQ_INSERT_PRODUCT_CONSUMER_NAME"),
+			ProductUpdateConsumerName: os.Getenv("RABBITMQ_UPDATE_PRODUCT_CONSUMER_NAME"),
 		},
 	}
 
