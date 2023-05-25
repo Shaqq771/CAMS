@@ -43,32 +43,60 @@ func ConditionsBuilder(condition *model.Filter) (query string) {
 	)
 
 	for i, field := range sortedFields {
-		if field.Option == constant.EQUAL {
+		switch field.Option {
+		case constant.EQUAL:
 			if counterFields[field.FieldName] > 1 {
 				newQuery, beforeField, listsValue = FieldINValueBuilder(field, beforeField, i, conditionLen, counterFields[field.FieldName], listsValue)
 				query += newQuery
 			} else {
 				query += FieldValueBuilder(field, "=", i, conditionLen)
 			}
-		} else if field.Option == constant.BETWEEN {
+		case constant.BETWEEN:
 			query += FieldValueBuilder(field, "BETWEEN", i, conditionLen)
-		} else if field.Option == constant.NOT_BETWEEN {
+		case constant.NOT_BETWEEN:
 			query += FieldValueBuilder(field, "NOT BETWEEN", i, conditionLen)
-		} else if field.Option == constant.LESS_THAN {
+		case constant.LESS_THAN:
 			query += FieldValueBuilder(field, "<", i, conditionLen)
-		} else if field.Option == constant.GREATER_THAN {
+		case constant.GREATER_THAN:
 			query += FieldValueBuilder(field, ">", i, conditionLen)
-		} else if field.Option == constant.LESS_THAN_EQUAL {
+		case constant.LESS_THAN_EQUAL:
 			query += FieldValueBuilder(field, "<=", i, conditionLen)
-		} else if field.Option == constant.GREATER_THAN_EQUAL {
+		case constant.GREATER_THAN_EQUAL:
 			query += FieldValueBuilder(field, ">=", i, conditionLen)
-		} else if field.Option == constant.NOT_EQUAL {
+		case constant.NOT_EQUAL:
 			query += FieldValueBuilder(field, "<>", i, conditionLen)
-		} else if field.Option == constant.CONTAINS_PATTERN {
+		case constant.CONTAINS_PATTERN:
 			query += FieldValueBuilder(field, "LIKE", i, conditionLen)
-		} else if field.Option == constant.CONTAINS_NO_PATTERN {
+		case constant.CONTAINS_NO_PATTERN:
 			query += FieldValueBuilder(field, "NOT LIKE", i, conditionLen)
 		}
+
+		// if field.Option == constant.EQUAL {
+		// 	if counterFields[field.FieldName] > 1 {
+		// 		newQuery, beforeField, listsValue = FieldINValueBuilder(field, beforeField, i, conditionLen, counterFields[field.FieldName], listsValue)
+		// 		query += newQuery
+		// 	} else {
+		// 		query += FieldValueBuilder(field, "=", i, conditionLen)
+		// 	}
+		// } else if field.Option == constant.BETWEEN {
+		// 	query += FieldValueBuilder(field, "BETWEEN", i, conditionLen)
+		// } else if field.Option == constant.NOT_BETWEEN {
+		// 	query += FieldValueBuilder(field, "NOT BETWEEN", i, conditionLen)
+		// } else if field.Option == constant.LESS_THAN {
+		// 	query += FieldValueBuilder(field, "<", i, conditionLen)
+		// } else if field.Option == constant.GREATER_THAN {
+		// 	query += FieldValueBuilder(field, ">", i, conditionLen)
+		// } else if field.Option == constant.LESS_THAN_EQUAL {
+		// 	query += FieldValueBuilder(field, "<=", i, conditionLen)
+		// } else if field.Option == constant.GREATER_THAN_EQUAL {
+		// 	query += FieldValueBuilder(field, ">=", i, conditionLen)
+		// } else if field.Option == constant.NOT_EQUAL {
+		// 	query += FieldValueBuilder(field, "<>", i, conditionLen)
+		// } else if field.Option == constant.CONTAINS_PATTERN {
+		// 	query += FieldValueBuilder(field, "LIKE", i, conditionLen)
+		// } else if field.Option == constant.CONTAINS_NO_PATTERN {
+		// 	query += FieldValueBuilder(field, "NOT LIKE", i, conditionLen)
+		// }
 	}
 
 	return
