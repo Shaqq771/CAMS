@@ -17,7 +17,7 @@ func AuthValidations() fiber.Handler {
 		ctx = context.SetValueToContext(ctx, c)
 
 		authToken := c.Get(constant.AUTHORIZATION)
-		tokenString := strings.Replace(authToken, constant.BEARER, "", -1)
+		tokenString := strings.ReplaceAll(authToken, constant.BEARER, "")
 		_, err := jwt.JWTChecking(tokenString)
 		if err != nil {
 			err = Error.New(constant.ErrAuth, constant.ErrAuth, err)
