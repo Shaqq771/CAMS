@@ -13,7 +13,7 @@ import (
 func (q queueService) ConsumeData(ctx context.Context, topic string) (err error) {
 
 	cfg := q.rabbitmq.GetConfig()
-	notify := cfg.Conn.NotifyClose(make(chan *amqp.Error)) //error channel
+	notify := cfg.Conn.NotifyClose(make(chan *amqp.Error)) // error channel
 
 	ch, err := cfg.Conn.Channel()
 	if err != nil {

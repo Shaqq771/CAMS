@@ -83,7 +83,7 @@ func Test_UpdateProductFeature(t *testing.T) {
 
 		mockRepository.EXPECT().CheckProductIdRepository(ctx, id).Return(true, nil)            // exists, error
 		mockRepository.EXPECT().CheckProductSKURepository(ctx, request.SKU).Return(false, nil) // exists, error
-		mockRepository.EXPECT().UpdateProductRepository(ctx, id, &request).Return(nil)         //error
+		mockRepository.EXPECT().UpdateProductRepository(ctx, id, &request).Return(nil)         // error
 
 		mockResultDB := model.Product{}
 
@@ -102,7 +102,7 @@ func Test_UpdateProductFeature(t *testing.T) {
 
 		mockRepository.EXPECT().CheckProductIdRepository(ctx, id).Return(true, nil)            // exists, error
 		mockRepository.EXPECT().CheckProductSKURepository(ctx, request.SKU).Return(false, nil) // exists, error
-		mockRepository.EXPECT().UpdateProductRepository(ctx, id, &request).Return(nil)         //error
+		mockRepository.EXPECT().UpdateProductRepository(ctx, id, &request).Return(nil)         // error
 
 		mockCreatedAt := time.Now()
 		mockUpdatedAt := time.Now()
