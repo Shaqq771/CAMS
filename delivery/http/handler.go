@@ -14,7 +14,7 @@ type handler struct {
 }
 
 func SetupHandler(container container.Container) handler {
-	return *&handler{
+	return handler{
 		healthHandler:   health.NewHealthHandler(container.HealthFeature),
 		logistikHandler: logistik.NewLogistikHandler(container.LogistikFeature),
 		salesHandler:    sales.NewSalesHandler(),
