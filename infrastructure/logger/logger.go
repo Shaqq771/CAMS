@@ -9,16 +9,28 @@ import (
 var useLog string
 
 func InitializeLogger(log string) {
-	if log == constant.LOGRUS {
+	switch log {
+	case constant.LOGRUS:
 		logrus.InitializeLogrusLogger()
 		useLog = constant.LOGRUS
-	} else if log == constant.ZAP {
+	case constant.ZAP:
 		zap.InitializeZapLogger()
 		useLog = constant.ZAP
-	} else {
+	default:
 		logrus.InitializeLogrusLogger()
 		useLog = constant.LOGRUS
 	}
+
+	// if log == constant.LOGRUS {
+	// 	logrus.InitializeLogrusLogger()
+	// 	useLog = constant.LOGRUS
+	// } else if log == constant.ZAP {
+	// 	zap.InitializeZapLogger()
+	// 	useLog = constant.ZAP
+	// } else {
+	// 	logrus.InitializeLogrusLogger()
+	// 	useLog = constant.LOGRUS
+	// }
 }
 
 func LogInfo(logtype, message string) {
