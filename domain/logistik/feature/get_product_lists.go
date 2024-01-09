@@ -27,6 +27,7 @@ func (lf logistikFeature) GetProductListsFeature(ctx context.Context, queryReque
 		sortby, qsortList, err = helper.SortBy(sortby)
 		if err != nil {
 			err = Error.New(constant.ErrGeneral, constant.ErrInvalidSortBy, err)
+			return
 		}
 	}
 
@@ -35,6 +36,7 @@ func (lf logistikFeature) GetProductListsFeature(ctx context.Context, queryReque
 		search, qFilterList, err = helper.FilterBy(search)
 		if err != nil {
 			err = Error.New(constant.ErrGeneral, constant.ErrInvalidFilterBy, err)
+			return
 		}
 
 		// Get Total Product Now

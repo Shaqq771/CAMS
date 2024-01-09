@@ -32,21 +32,33 @@ func (lr logistikRepository) UpdateProductRepository(ctx context.Context, id int
 	_, err = tx.QueryContext(ctx, query, &id)
 	if err != nil {
 		if err == context.DeadlineExceeded {
+			err = tx.Rollback()
+			if err != nil {
+				err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+				return
+			}
 			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
-			tx.Rollback()
 			return
 		}
 
+		err = tx.Rollback()
+		if err != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+			return
+		}
 		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
-		tx.Rollback()
 		return
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		if err == context.DeadlineExceeded {
+			err = tx.Rollback()
+			if err != nil {
+				err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+				return
+			}
 			err = Error.New(constant.ErrTimeout, constant.ErrWhenCommitDB, err)
-			tx.Rollback()
 			return
 		}
 

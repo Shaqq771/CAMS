@@ -43,9 +43,8 @@ func FilterBy(filterBy string) (filter string, filterList []string, err error) {
 	return
 }
 
-func LastDocNumber(number, start, end, skip string) (lastNumber int) {
+func LastDocNumber(number, start, end, skip string) (lastNumber int, err error) {
 	var (
-		err                                  error
 		intNumber, intStart, intEnd, intSkip int
 	)
 
@@ -69,7 +68,7 @@ func LastDocNumber(number, start, end, skip string) (lastNumber int) {
 
 	if strings.TrimSpace(number) == "" || number == "0" {
 		intNumber = intStart
-		return intNumber
+		return intNumber, nil
 	} else {
 		intNumber, err = strconv.Atoi(number)
 		if err != nil {
@@ -79,7 +78,7 @@ func LastDocNumber(number, start, end, skip string) (lastNumber int) {
 	}
 	if intNumber < intStart {
 		intNumber = intStart
-		return intNumber
+		return intNumber, nil
 	}
 
 	if intNumber > intEnd {

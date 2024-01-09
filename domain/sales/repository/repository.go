@@ -8,7 +8,6 @@ import (
 	"backend-nabati/infrastructure/logger"
 	"context"
 	"database/sql"
-	"fmt"
 )
 
 type SalesRepository interface {
@@ -51,7 +50,11 @@ func (sf salesRepository) InsertUserProductRepository(ctx context.Context, userI
 			return
 		}
 
-		tx.Rollback()
+		err = tx.Rollback()
+		if err != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+			return
+		}
 		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
 		return
 	}
@@ -59,8 +62,12 @@ func (sf salesRepository) InsertUserProductRepository(ctx context.Context, userI
 	err = tx.Commit()
 	if err != nil {
 		if err == context.DeadlineExceeded {
+			err = tx.Rollback()
+			if err != nil {
+				err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+				return
+			}
 			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
-			tx.Rollback()
 			return
 		}
 
@@ -92,9 +99,9 @@ func (sf salesRepository) ReadSalesProductRepository(ctx context.Context, userId
 	}
 
 	for rows.Next() {
-		err := rows.StructScan(&userProduct)
-		if err != nil {
-			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, err)
+		errScan := rows.StructScan(&userProduct)
+		if errScan != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, errScan)
 			break
 		}
 	}
@@ -104,28 +111,40 @@ func (sf salesRepository) ReadSalesProductRepository(ctx context.Context, userId
 
 func (sf salesRepository) UpdateSalesProductRepository(ctx context.Context, userId int, count int) (err error) {
 
-	query := fmt.Sprintf("UPDATE user_product SET product_count = $1, updated_at = now() WHERE userId = $2")
+	query := "UPDATE user_product SET product_count = $1, updated_at = now() WHERE userId = $2"
 	logger.LogInfo(constant.QUERY, query)
 
 	tx := sf.Database.DB.MustBegin()
 	_, err = tx.QueryContext(ctx, query, &count, &userId)
 	if err != nil {
 		if err == context.DeadlineExceeded {
+			err = tx.Rollback()
+			if err != nil {
+				err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+				return
+			}
 			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
-			tx.Rollback()
 			return
 		}
 
+		err = tx.Rollback()
+		if err != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+			return
+		}
 		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
-		tx.Rollback()
 		return
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		if err == context.DeadlineExceeded {
+			err = tx.Rollback()
+			if err != nil {
+				err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+				return
+			}
 			err = Error.New(constant.ErrTimeout, constant.ErrWhenCommitDB, err)
-			tx.Rollback()
 			return
 		}
 

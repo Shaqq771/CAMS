@@ -1,7 +1,9 @@
 package constant
 
+type ContextKey string
+
 const (
-	FiberContext = "fiberCtx"
+	FiberContext ContextKey = "fiberCtx"
 )
 
 const (

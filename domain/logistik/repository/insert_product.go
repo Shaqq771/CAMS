@@ -28,7 +28,11 @@ func (lr *logistikRepository) InsertProductRepository(ctx context.Context, produ
 			return
 		}
 
-		tx.Rollback()
+		err = tx.Rollback()
+		if err != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+			return
+		}
 		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
 		return
 	}
@@ -36,8 +40,12 @@ func (lr *logistikRepository) InsertProductRepository(ctx context.Context, produ
 	err = tx.Commit()
 	if err != nil {
 		if err == context.DeadlineExceeded {
+			err = tx.Rollback()
+			if err != nil {
+				err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+				return
+			}
 			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
-			tx.Rollback()
 			return
 		}
 

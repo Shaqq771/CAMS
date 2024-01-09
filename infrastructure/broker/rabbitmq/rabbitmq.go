@@ -63,8 +63,6 @@ func (c *rabbitMQ) Connect() (err error) {
 			c.config.Password,
 			c.config.Host,
 		)
-	} else if c.config.Username == "" {
-		connPattern = "amqp://%s%s%v:%v"
 	}
 
 	c.Conn, err = amqp.Dial(clientUrl)
@@ -72,6 +70,7 @@ func (c *rabbitMQ) Connect() (err error) {
 		fmt.Println(err)
 		if err = c.Retry(); err != nil {
 			err = fmt.Errorf(constant.ErrConnectToBroker, err)
+			return
 		}
 	}
 
@@ -115,8 +114,6 @@ func (c *rabbitMQ) Retry() (err error) {
 			c.config.Password,
 			c.config.Host,
 		)
-	} else if c.config.Username == "" {
-		connPattern = "amqp://%s%s%v:%v"
 	}
 
 	conn, err := amqp.Dial(clientUrl)

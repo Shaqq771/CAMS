@@ -20,3 +20,7 @@ test:
 	@echo "Do Testing.."
 	make mock
 	go test -cover ./domain/logistik/feature
+lint:
+	staticcheck ./...
+	gocritic check ./... 
+	golangci-lint run

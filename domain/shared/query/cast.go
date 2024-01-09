@@ -16,11 +16,11 @@ func ValueStrBuilder(str string) (builder string) {
 	return
 }
 
-func CastToNumber(value interface{}) (out int) {
+func CastToNumber(value interface{}) (out int, err error) {
 	v := fmt.Sprintf("%v", value)
-	out, err := strconv.Atoi(v)
+	out, err = strconv.Atoi(v)
 	if err != nil {
-		Error.New(constant.ErrGeneral, fmt.Sprintf("can't cast value: %v to decimal", value), err)
+		err = Error.New(constant.ErrGeneral, fmt.Sprintf("can't cast value: %v to decimal", value), err)
 	}
 
 	return
@@ -30,11 +30,11 @@ func CastToString(value interface{}) string {
 	return fmt.Sprintf("%v", value)
 }
 
-func CastToDecimal(value interface{}) (out float64) {
+func CastToDecimal(value interface{}) (out float64, err error) {
 	v := fmt.Sprintf("%v", value)
-	out, err := strconv.ParseFloat(v, 64)
+	out, err = strconv.ParseFloat(v, 64)
 	if err != nil {
-		Error.New(constant.ErrGeneral, fmt.Sprintf("can't cast value: %v to decimal", value), err)
+		err = Error.New(constant.ErrGeneral, fmt.Sprintf("can't cast value: %v to decimal", value), err)
 	}
 
 	return

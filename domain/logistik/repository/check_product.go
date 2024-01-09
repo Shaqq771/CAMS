@@ -25,9 +25,9 @@ func (lr logistikRepository) CheckProductIdRepository(ctx context.Context, id in
 
 	for rows.Next() {
 		var count int
-		err := rows.Scan(&count)
-		if err != nil {
-			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, err)
+		scanErr := rows.Scan(&count)
+		if scanErr != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, scanErr)
 			break
 		}
 
@@ -58,19 +58,19 @@ func (lr logistikRepository) CheckProductSKURepository(ctx context.Context, sku 
 
 	for rows.Next() {
 		var count int
-		err := rows.Scan(&count)
-		if err != nil {
-			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, err)
+		scanErr := rows.Scan(&count)
+		if scanErr != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, scanErr)
 			break
 		}
 
 		if count == 1 {
 			exist = true
+			break
 		} else {
 			exist = false
+			break
 		}
-
-		break
 	}
 
 	return

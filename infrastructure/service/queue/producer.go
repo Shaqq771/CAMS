@@ -19,7 +19,10 @@ func (q queueService) PublishData(ctx context.Context, topic string, msg interfa
 	select {
 	case err := <-cfg.Err:
 		if err != nil {
-			q.rabbitmq.Reconnect()
+			// Check and handle the error returned by Reconnect
+			if reconnectErr := q.rabbitmq.Reconnect(); reconnectErr != nil {
+				return Error.New(constant.PUBLISHER_RABBITMQ, constant.ErrConnectToBroker, reconnectErr)
+			}
 		}
 	default:
 	}
