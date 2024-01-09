@@ -11,7 +11,12 @@ var log *zap.SugaredLogger
 
 func InitializeZapLogger() {
 	logger := zap.NewExample()
-	defer logger.Sync() // flushes buffer, if any
+	defer func() {
+		if err := logger.Sync(); err != nil {
+			// Handle the error, e.g., log it or panic
+			panic(err)
+		}
+	}()
 	log = logger.Sugar()
 }
 

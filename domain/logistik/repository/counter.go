@@ -20,37 +20,38 @@ func (lr logistikRepository) BulkInsertCounterRepository(ctx context.Context, li
 		wg.Add(1)
 		go func(wg *sync.WaitGroup, ctx context.Context, db *sqlx.DB) {
 
-			tx, err := db.Begin()
-			if err != nil {
-				err = Error.New(constant.ErrDatabase, constant.ErrWhenBeginTX, err)
+			tx, errBegin := db.Begin()
+			if errBegin != nil {
+				err = Error.New(constant.ErrDatabase, constant.ErrWhenBeginTX, errBegin)
 				wg.Done()
 				return
 			}
 
-			lastNumber, err := lr.GetAndUpdateNumberNextRepository(ctx, tx)
+			lastNumber, errGetAndUPdate := lr.GetAndUpdateNumberNextRepository(ctx, tx)
 			if err != nil {
 				wg.Done()
+				err = Error.New(constant.ErrDatabase, constant.ErrWhenBeginTX, errGetAndUPdate)
 				return
 			}
 
-			_, err = tx.ExecContext(ctx, fmt.Sprintf("UPDATE nds_number_range SET last_number = %d WHERE doc_type = '1001'", lastNumber))
-			if err != nil {
-				if err == context.DeadlineExceeded {
-					err = Error.New(constant.ErrTimeout, constant.ErrWhenPrepareStatementDB, err)
-					err = tx.Rollback()
-					if err != nil {
-						err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+			_, errContext := tx.ExecContext(ctx, fmt.Sprintf("UPDATE nds_number_range SET last_number = %d WHERE doc_type = '1001'", lastNumber))
+			if errContext != nil {
+				if errContext == context.DeadlineExceeded {
+					errRollback := tx.Rollback()
+					if errRollback != nil {
+						err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, errRollback)
 						return
 					}
+					err = Error.New(constant.ErrTimeout, constant.ErrWhenPrepareStatementDB, errContext)
 					return
 				}
 
-				err = Error.New(constant.ErrDatabase, constant.ErrWhenPrepareStatementDB, err)
-				err = tx.Rollback()
-				if err != nil {
-					err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, err)
+				errRollback := tx.Rollback()
+				if errRollback != nil {
+					err = Error.New(constant.ErrDatabase, constant.ErrWhenRollBackDataToDB, errRollback)
 					return
 				}
+				err = Error.New(constant.ErrDatabase, constant.ErrWhenPrepareStatementDB, errContext)
 				return
 			}
 
@@ -109,9 +110,9 @@ func (lr logistikRepository) GetLastCounterRepository(ctx context.Context) (numb
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&number)
-		if err != nil {
-			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, err)
+		errScan := rows.Scan(&number)
+		if errScan != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, errScan)
 			break
 		}
 	}
@@ -122,26 +123,30 @@ func (lr logistikRepository) GetLastCounterRepository(ctx context.Context) (numb
 func (lr logistikRepository) GetDocNumberRangeRepository(ctx context.Context) (data model.NumberRange, err error) {
 
 	query := "SELECT doc_type, plant_id, from_number, to_number, last_number, skip FROM nds_number_range WHERE doc_type = '1001' limit 1 FOR UPDATE;"
-	rows, err := lr.Database.Queryx(query)
-	defer rows.Close()
+	rows, errQuery := lr.Database.Queryx(query)
+	defer func() {
+		if closeErr := rows.Close(); closeErr != nil && err == nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, closeErr)
+		}
+	}()
 	logger.LogInfo(constant.QUERY, query)
-	if err != nil {
-		if err == context.DeadlineExceeded {
-			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
+	if errQuery != nil {
+		if errQuery == context.DeadlineExceeded {
+			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, errQuery)
 			return
 		}
 
-		if err == sql.ErrNoRows {
+		if errQuery == sql.ErrNoRows {
 			err = nil
 			return
 		}
 
-		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
+		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, errQuery)
 		return
 	}
 
 	for rows.Next() {
-		err := rows.StructScan(&data)
+		err = rows.StructScan(&data)
 		if err != nil {
 			if err == context.DeadlineExceeded {
 				err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
@@ -160,25 +165,25 @@ func (lr logistikRepository) GetAndUpdateNumberNextRepository(ctx context.Contex
 	data := model.NumberRange{}
 
 	query := "SELECT doc_type, plant_id, from_number, to_number, last_number, skip FROM nds_number_range WHERE doc_type = '1001' limit 1 FOR UPDATE;"
-	rows, err := tx.QueryContext(ctx, query)
+	rows, errQuery := tx.QueryContext(ctx, query)
 	logger.LogInfo(constant.QUERY, query)
-	if err != nil {
-		if err == context.DeadlineExceeded {
-			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
+	if errQuery != nil {
+		if errQuery == context.DeadlineExceeded {
+			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, errQuery)
 			return
 		}
 
-		if err == sql.ErrNoRows {
+		if errQuery == sql.ErrNoRows {
 			err = nil
 			return
 		}
 
-		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
+		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, errQuery)
 		return
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&data.DocType, &data.PlantId, &data.FromNumber, &data.ToNumber, &data.LastNumber, &data.SkipNumber)
+		err = rows.Scan(&data.DocType, &data.PlantId, &data.FromNumber, &data.ToNumber, &data.LastNumber, &data.SkipNumber)
 		if err != nil {
 			if err == context.DeadlineExceeded {
 				err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
@@ -190,7 +195,11 @@ func (lr logistikRepository) GetAndUpdateNumberNextRepository(ctx context.Contex
 		}
 	}
 
-	number = helper.LastDocNumber(data.LastNumber, data.FromNumber, data.ToNumber, data.SkipNumber)
+	number, errLastDoc := helper.LastDocNumber(data.LastNumber, data.FromNumber, data.ToNumber, data.SkipNumber)
+	if errLastDoc != nil {
+		err = Error.New(constant.ErrGeneral, constant.ErrGeneral, errLastDoc)
+		return
+	}
 	if number == 0 {
 		logger.LogInfo(constant.QUERY, "skip transaction: "+data.LastNumber)
 		return

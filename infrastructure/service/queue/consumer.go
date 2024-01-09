@@ -80,9 +80,12 @@ func (q queueService) ConsumeData(ctx context.Context, topic string) (err error)
 
 	for {
 		select {
-		case err = <-notify:
-			if err != nil {
-				err = Error.New(constant.CONSUMER_BILLING_RABBITMQ, constant.ErrConsumeQueueToBroker, err)
+		case notifyErr := <-notify:
+			if notifyErr != nil {
+				// Log the error
+				logger.LogError(constant.CONSUMER_BILLING_RABBITMQ, constant.ErrConsumeQueueToBroker, notifyErr.Error())
+
+				// Try to reconnect
 				for {
 					err = q.rabbitmq.Reconnect()
 					if err == nil {
@@ -93,18 +96,18 @@ func (q queueService) ConsumeData(ctx context.Context, topic string) (err error)
 		case msg := <-msgs:
 
 			fmt.Println(q.cfg.ProductInsertConsumerName)
-			if msg.RoutingKey == q.cfg.ProductInsertConsumerName || msg.Exchange == q.cfg.ProductInsertConsumerName {
+
+			switch {
+			case msg.RoutingKey == q.cfg.ProductInsertConsumerName || msg.Exchange == q.cfg.ProductInsertConsumerName:
 				logger.LogInfo(constant.CONSUMER_PRODUCT_INSERT_RABBITMQ, fmt.Sprintf(constant.SUCCESS_CONSUME_FROM_BROKER, topic, string(msg.Body)))
-
 				fmt.Println(fmt.Sprintf(constant.SUCCESS_CONSUME_FROM_BROKER, topic, string(msg.Body)))
-			} else if msg.RoutingKey == q.cfg.ProductUpdateConsumerName || msg.Exchange == q.cfg.ProductUpdateConsumerName {
+
+			case msg.RoutingKey == q.cfg.ProductUpdateConsumerName || msg.Exchange == q.cfg.ProductUpdateConsumerName:
 				logger.LogInfo(constant.CONSUMER_PRODUCT_UPDATE_RABBITMQ, fmt.Sprintf(constant.SUCCESS_CONSUME_FROM_BROKER, topic, string(msg.Body)))
-
 				fmt.Println(fmt.Sprintf(constant.SUCCESS_CONSUME_FROM_BROKER, topic, string(msg.Body)))
 
-			} else if msg.RoutingKey == q.cfg.BillingConsumerName || msg.Exchange == q.cfg.BillingConsumerName {
+			case msg.RoutingKey == q.cfg.BillingConsumerName || msg.Exchange == q.cfg.BillingConsumerName:
 				logger.LogInfo(constant.CONSUMER_BILLING_RABBITMQ, fmt.Sprintf(constant.SUCCESS_CONSUME_FROM_BROKER, topic, string(msg.Body)))
-
 				fmt.Println(fmt.Sprintf(constant.SUCCESS_CONSUME_FROM_BROKER, topic, string(msg.Body)))
 
 			}

@@ -30,7 +30,7 @@ func (sf salesFeature) UpdateSalesProductFromBroker(data string) (err error) {
 	ctx := Context.CreateContext()
 	userId, err := strconv.Atoi(data)
 	if err != nil {
-		err = Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, errors.New(fmt.Sprintf("data from broker: %s", data)))
+		err = Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, fmt.Errorf("data from broker: %s", data))
 		return
 	}
 

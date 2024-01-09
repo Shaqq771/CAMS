@@ -9,7 +9,10 @@ func (lf logistikFeature) BulkCounterFeature(ctx context.Context) (err error) {
 		size = 1000
 	)
 
-	go lf.logistikRepo.BulkInsertCounterRepository(ctx, size)
+	go func() {
+		// Ignore the error using the underscore (_) if you don't need to handle it explicitly
+		_ = lf.logistikRepo.BulkInsertCounterRepository(ctx, size)
+	}()
 
 	return
 }

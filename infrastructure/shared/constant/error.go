@@ -31,4 +31,5 @@ const (
 	ErrBindingQueueToBroker   = "failed binding queue to broker"
 	ErrPublishQueueToBroker   = "failed publish queue to broker"
 	ErrConsumeQueueToBroker   = "failed consume queue from broker"
+	ErrHttpServer             = "failed create http server"
 )

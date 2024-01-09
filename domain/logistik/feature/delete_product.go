@@ -11,7 +11,7 @@ import (
 func (lf logistikFeature) DeleteProductFeature(ctx context.Context, id string) (response model.DeletedProductResponse, err error) {
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
-		Error.New(constant.ErrGeneral, constant.ErrFailedConvertStringToInt, err)
+		err = Error.New(constant.ErrGeneral, constant.ErrFailedConvertStringToInt, err)
 		return
 	}
 

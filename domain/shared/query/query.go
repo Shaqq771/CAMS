@@ -20,14 +20,14 @@ func BulkInsert(ctx context.Context, db *sqlx.DB, query string, lastCounter, lim
 				data = fmt.Sprintf("%09d", number)
 			)
 			tx := db.MustBegin()
-			stmt, err := tx.PrepareContext(ctx, query)
-			if err != nil {
-				if err == context.DeadlineExceeded {
-					err = Error.New(constant.ErrTimeout, constant.ErrWhenPrepareStatementDB, err)
+			stmt, errPrepare := tx.PrepareContext(ctx, query)
+			if errPrepare != nil {
+				if errPrepare == context.DeadlineExceeded {
+					err = Error.New(constant.ErrTimeout, constant.ErrWhenPrepareStatementDB, errPrepare)
 					return
 				}
 
-				err = Error.New(constant.ErrDatabase, constant.ErrWhenPrepareStatementDB, err)
+				err = Error.New(constant.ErrDatabase, constant.ErrWhenPrepareStatementDB, errPrepare)
 				return
 			}
 
@@ -38,7 +38,11 @@ func BulkInsert(ctx context.Context, db *sqlx.DB, query string, lastCounter, lim
 					return
 				}
 
-				tx.Rollback()
+				err = tx.Rollback()
+				if err != nil {
+					err = Error.New(constant.ErrTimeout, constant.ErrWhenRollBackDataToDB, err)
+					return
+				}
 				err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
 				return
 			}
@@ -46,8 +50,12 @@ func BulkInsert(ctx context.Context, db *sqlx.DB, query string, lastCounter, lim
 			err = tx.Commit()
 			if err != nil {
 				if err == context.DeadlineExceeded {
+					err = tx.Rollback()
+					if err != nil {
+						err = Error.New(constant.ErrTimeout, constant.ErrWhenRollBackDataToDB, err)
+						return
+					}
 					err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
-					tx.Rollback()
 					return
 				}
 
@@ -55,7 +63,7 @@ func BulkInsert(ctx context.Context, db *sqlx.DB, query string, lastCounter, lim
 				return
 			}
 
-			fmt.Println(fmt.Sprintf("number %d created: %s", number, data))
+			fmt.Println(fmt.Printf("number %d created: %s", number, data))
 		}(db, i)
 	}
 

@@ -24,7 +24,11 @@ func AuthValidations() fiber.Handler {
 			return response.ResponseErrorWithContext(ctx, err)
 		}
 
-		c.Next()
+		if err := c.Next(); err != nil {
+			// Handle the error from c.Next() here
+			err = Error.New(constant.ErrAuth, constant.ErrAuth, err)
+			return response.ResponseErrorWithContext(ctx, err)
+		}
 		return nil
 	}
 }

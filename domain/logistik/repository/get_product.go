@@ -33,9 +33,9 @@ func (lr logistikRepository) GetProductBySKURepository(ctx context.Context, sku 
 	}
 
 	for rows.Next() {
-		err := rows.StructScan(&product)
-		if err != nil {
-			err = Error.New(constant.ErrTimeout, constant.ErrWhenScanResultDB, err)
+		errScan := rows.StructScan(&product)
+		if errScan != nil {
+			err = Error.New(constant.ErrTimeout, constant.ErrWhenScanResultDB, errScan)
 			break
 		}
 	}
@@ -64,9 +64,9 @@ func (lr logistikRepository) GetProductByIdRepository(ctx context.Context, id in
 	}
 
 	for rows.Next() {
-		err := rows.StructScan(&product)
-		if err != nil {
-			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, err)
+		errScan := rows.StructScan(&product)
+		if errScan != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, errScan)
 			break
 		}
 	}
@@ -94,9 +94,9 @@ func (lr logistikRepository) GetTotalProductRepository(ctx context.Context) (cou
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&count)
-		if err != nil {
-			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, err)
+		errScan := rows.Scan(&count)
+		if errScan != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, errScan)
 			break
 		}
 	}
@@ -129,9 +129,9 @@ func (lr logistikRepository) GetTotalProductWithConditionsRepository(ctx context
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&count)
-		if err != nil {
-			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, err)
+		errScan := rows.Scan(&count)
+		if errScan != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, errScan)
 			break
 		}
 	}
@@ -149,7 +149,7 @@ func (lr logistikRepository) GetTotalProductWithFiltersRepository(ctx context.Co
 		conditions = query.ConditionsBuilder(filter)
 	}
 
-	query := fmt.Sprintf("SELECT COUNT(*) FROM product WHERE deleted_at IS NULL")
+	query := "SELECT COUNT(*) FROM product WHERE deleted_at IS NULL"
 	if len(filter.Filters) > 0 {
 		query = fmt.Sprintf("SELECT COUNT(*) FROM product WHERE deleted_at IS NULL AND %s", conditions)
 	}
@@ -171,9 +171,9 @@ func (lr logistikRepository) GetTotalProductWithFiltersRepository(ctx context.Co
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&count)
-		if err != nil {
-			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, err)
+		errScan := rows.Scan(&count)
+		if errScan != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, errScan)
 			break
 		}
 	}
