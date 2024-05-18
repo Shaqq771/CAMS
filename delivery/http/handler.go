@@ -25,5 +25,7 @@ func SetupHandler(container container.Container) handler {
 		healthHandler:   health.NewHealthHandler(container.HealthFeature),
 		logistikHandler: logistik.NewLogistikHandler(container.LogistikFeature),
 		salesHandler:    sales.NewSalesHandler(),
+		userHandler: user.NewUserHandler(container.UserFeature),
+		requestHandler: request.NewRequestHandler(container.RequestFeature),
 	}
 }

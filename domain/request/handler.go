@@ -7,14 +7,15 @@ import (
 	Error "backend-nabati/domain/shared/error"
 	shared_model "backend-nabati/domain/shared/model"
 	"backend-nabati/domain/shared/response"
-	"strconv"
-	"strings"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 type RequestHandler interface {
 	GetApprovalListsHandler(c *fiber.Ctx) error
+	GetApprovalHandler(c *fiber.Ctx) error
+	GetApprovalListsWithFilterHandler(c *fiber.Ctx) error
 }
 
 type requestHandler struct {
@@ -28,37 +29,27 @@ func NewRequestHandler(feature feature.RequestFeature) RequestHandler {
 }
 
 func (lh requestHandler) GetApprovalListsHandler(c *fiber.Ctx) error {
+	nil
+}
+
+func (lh requestHandler) GetApprovalHandler(c *fiber.Ctx) error {
 
 	ctx, cancel := context.CreateContextWithTimeout()
 	defer cancel()
 	ctx = context.SetValueToContext(ctx, c)
 
-	page, err := strconv.Atoi(strings.TrimSpace(c.Query(constant.PAGE)))
-	if err != nil || page == 0 {
-		page = constant.DefaultPage
+	id := c.Params("id")
+	if id == "" || id == "0" {
+		err := Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, fmt.Errorf(constant.ErrApprovalIdNil))
+		return response.ResponseErrorWithContext(ctx, err)
 	}
 
-	limit, err := strconv.Atoi(strings.TrimSpace(c.Query(constant.LIMIT)))
-	if err != nil || limit == 0 {
-		limit = constant.DefaultLimitPerPage
-	}
-
-	sortBy := strings.TrimSpace(c.Query(constant.SORT_BY))
-	search := strings.TrimSpace(c.Query(constant.SEARCH))
-
-	queryRequest := shared_model.QueryRequest{
-		Page:   page,
-		Limit:  limit,
-		SortBy: sortBy,
-		Search: search,
-	}
-
-	resp, err := lh.feature.GetApprovalListsFeature(ctx, queryRequest)
+	results, err := lh.feature.GetApprovalFeature(ctx, id)
 	if err != nil {
 		return response.ResponseErrorWithContext(ctx, err)
 	}
 
-	return response.ResponseOK(c, constant.MsgGetListsDataSuccess, resp)
+	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
 }
 
 func (lh requestHandler) GetApprovalListsWithFilterHandler(c *fiber.Ctx) error {
