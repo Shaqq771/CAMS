@@ -3,26 +3,35 @@ package feature
 import (
 	"backend-nabati/domain/request/model"
 	repository "backend-nabati/domain/request/repository"
-	shared_model "backend-nabati/domain/shared/model"
-	"backend-nabati/infrastructure/service/queue"
+	"backend-nabati/domain/sales/constant"
+	Error "backend-nabati/domain/shared/error"
 	"context"
+	"errors"
+	"fmt"
 )
 
 type RequestFeature interface {
-	GetApprovalListsFeature(ctx context.Context, queryRequest shared_model.QueryRequest) (approvalList model.ApprovalLists, err error)
-	GetListsApprovalWithFilters(ctx context.Context, filter *shared_model.Filter) (approvalList model.ApprovalListsByFilter, err error)
-	GetApprovalFeature(ctx context.Context, id string) (response model.Approval, err error)
-	
+	GetListOfRequestFeature(ctx context.Context) (requestList model.RequestListNoFilter, err error)
 }
 
 type requestFeature struct {
 	requestRepo repository.RequestRepository
-	queueService queue.QueueService
 }
 
-func NewRequestFeature(requestRepo repository.RequestRepository, queueService queue.QueueService) RequestFeature {
+func NewRequestFeature(requestRepo repository.RequestRepository) RequestFeature {
 	return &requestFeature{
 		requestRepo: requestRepo,
-		queueService: queueService,
 	}
+}
+
+func (rf requestFeature) GetListOfRequestFeature(ctx context.Context) (response model.RequestListNoFilter, err error) {
+
+	listRequest, err := rf.requestRepo.GetListOfRequestRepository(ctx)
+	fmt.Println(listRequest)
+	if err != nil {
+		err = Error.New(constant.ErrGeneral, constant.ErrUserProductIdNotFound, errors.New(""))
+		return
+	}
+
+	return
 }

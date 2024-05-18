@@ -26,11 +26,11 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 		pubProduct.Get("/lists", handler.logistikHandler.GetProductListsHandler)
 	}
 
-	approval := v1.Group("/request")
-	{
-		approval.Get("/get/:id", handler.requestHandler.GetApprovalHandler)
-		approval.Get("/lists", handler.requestHandler.GetApprovalListsHandler)
-	}
+	// approval := v1.Group("/request")
+	// {
+	// 	approval.Get("/get/:id", handler.requestHandler.GetApprovalHandler)
+	// 	approval.Get("/lists", handler.requestHandler.GetApprovalListsHandler)
+	// }
 
 	authProduct := v1.Group("/product")
 	{
@@ -47,7 +47,7 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 
 	request := v1.Group("/request")
 	{
-		request.Get("/", handler.requestHandler.GetApprovalHandler)
+		request.Get("", handler.requestHandler.GetApprovalListsHandler)
 	}
 
 	//route > http handler > feature > repository
