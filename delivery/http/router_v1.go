@@ -26,6 +26,12 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 		pubProduct.Get("/lists", handler.logistikHandler.GetProductListsHandler)
 	}
 
+	approval := v1.Group("/request")
+	{
+		approval.Get("/get/:id", handler.requestHandler.GetApprovalHandler)
+		approval.Get("/lists", handler.requestHandler.GetApprovalListsHandler)
+	}
+
 	authProduct := v1.Group("/product")
 	{
 		authProduct.Use(middleware.AuthValidations())

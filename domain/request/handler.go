@@ -7,6 +7,7 @@ import (
 	Error "backend-nabati/domain/shared/error"
 	shared_model "backend-nabati/domain/shared/model"
 	"backend-nabati/domain/shared/response"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -15,6 +16,8 @@ import (
 
 type RequestHandler interface {
 	GetApprovalListsHandler(c *fiber.Ctx) error
+	GetApprovalHandler(c *fiber.Ctx) error
+	GetApprovalListsWithFilterHandler(c *fiber.Ctx) error
 }
 
 type requestHandler struct {
@@ -59,6 +62,26 @@ func (lh requestHandler) GetApprovalListsHandler(c *fiber.Ctx) error {
 	}
 
 	return response.ResponseOK(c, constant.MsgGetListsDataSuccess, resp)
+}
+
+func (lh requestHandler) GetApprovalHandler(c *fiber.Ctx) error {
+
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+
+	id := c.Params("id")
+	if id == "" || id == "0" {
+		err := Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, fmt.Errorf(constant.ErrApprovalIdNil))
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	results, err := lh.feature.GetApprovalFeature(ctx, id)
+	if err != nil {
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
 }
 
 func (lh requestHandler) GetApprovalListsWithFilterHandler(c *fiber.Ctx) error {

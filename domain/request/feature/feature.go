@@ -11,6 +11,8 @@ import (
 type RequestFeature interface {
 	GetApprovalListsFeature(ctx context.Context, queryRequest shared_model.QueryRequest) (approvalList model.ApprovalLists, err error)
 	GetListsApprovalWithFilters(ctx context.Context, filter *shared_model.Filter) (approvalList model.ApprovalListsByFilter, err error)
+	GetApprovalFeature(ctx context.Context, id string) (response model.Approval, err error)
+	
 }
 
 type requestFeature struct {
