@@ -22,15 +22,12 @@ import (
 
 type Container struct {
 	EnvironmentConfig config.EnvironmentConfig
-	// RabbitMQ          rabbitmq.RabbitMQ
 	HealthFeature     health_feature.HealthFeature
 	LogistikFeature   logistik_feature.LogistikFeature
 	SalesFeature      sales_feature.SalesFeature
 	QueueServices     queue.QueueService
-	//new added
-	RequestFeature      request_feature.RequestFeature
-	UserFeature      user_feature.UserFeature
-	// ModuleFeature      module_feature.ModuleFeature
+	RequestFeature    request_feature.RequestFeature
+	UserFeature       user_feature.UserFeature
 }
 
 func SetupContainer() Container {
@@ -50,33 +47,13 @@ func SetupContainer() Container {
 		log.Panic(err)
 	}
 
-	// fmt.Println("Loading message broker...")
-	// rmq := rabbitmq.NewConnection(config.RabbitMq)
-	// // Connect RabbitMQ
-	// err = rmq.Connect()
-	// if err != nil {
-	// 	log.Panic(err)
-	// }
-
-	// fmt.Println("Loading service's...")
-	// queueService := queue.NewQueueService(rmq, config.RabbitMq)
-
 	fmt.Println("Loading repository's...")
-	// healthRepository := health_repository.NewHealthFeature(db)
-	// logistikRepository := logistik_repository.NewLogistikRepository(db)
 	salesRepository := sales_repository.NewSalesRepository(db)
 
-// 	fmt.Println("Loading feature's...")
-	// healthFeature := health_feature.NewHealthFeature(config, healthRepository, rmq)
-	// logistikFeature := logistik_feature.NewLogistikFeature(logistikRepository, queueService)
 	salesFeature := sales_feature.NewSalesFeature(salesRepository)
 
 	return Container{
 		EnvironmentConfig: config,
-		// RabbitMQ:          rmq,
-		// HealthFeature:     healthFeature,
-		// LogistikFeature:   logistikFeature,
 		SalesFeature:      salesFeature,
-		// QueueServices:     queueService,
 	}
 }

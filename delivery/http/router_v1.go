@@ -39,4 +39,6 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 		sales.Get("/health", handler.salesHandler.HealthCheck)
 	}
 
+	//route > http handler > feature > repository
+
 }

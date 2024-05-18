@@ -1,7 +1,6 @@
 package feature_test
 
 import (
-	"backend-nabati/domain/logistik/constant"
 	"backend-nabati/domain/logistik/feature"
 	"backend-nabati/domain/logistik/model"
 	mock_repository "backend-nabati/domain/logistik/repository/mocks"
@@ -61,7 +60,7 @@ func Test_AddProductFeature(t *testing.T) {
 
 		mockRepository.EXPECT().InsertProductRepository(ctx, mockInsertProduct).Return(mockInsertId, nil) // id, error
 
-		mockQueueService.EXPECT().PublishData(ctx, constant.CONSUMER_PRODUCT_INSERT_RABBITMQ, 1)
+		// mockQueueService.EXPECT().PublishData(ctx, constant.CONSUMER_PRODUCT_INSERT_RABBITMQ, 1)
 
 		resp, err := w.AddProductFeature(ctx, &request)
 		assert.Nil(t, err)

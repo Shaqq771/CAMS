@@ -4,7 +4,6 @@ import (
 	"backend-nabati/domain/logistik/constant"
 	"backend-nabati/domain/logistik/model"
 	Error "backend-nabati/domain/shared/error"
-	shared_constant "backend-nabati/infrastructure/shared/constant"
 	"context"
 	"errors"
 )
@@ -37,13 +36,13 @@ func (lf logistikFeature) AddProductFeature(ctx context.Context, request *model.
 		Name: product.Name,
 	}
 
-	userId := 1
+	// userId := 1
 	// Check Health sales
-	err = lf.queueService.PublishData(ctx, constant.CONSUMER_PRODUCT_INSERT_RABBITMQ, userId)
-	if err != nil {
-		err = Error.New(constant.ErrGeneral, shared_constant.ErrPublishQueueToBroker, err)
-		return
-	}
+	// err = lf.queueService.PublishData(ctx, constant.CONSUMER_PRODUCT_INSERT_RABBITMQ, userId)
+	// if err != nil {
+	// 	err = Error.New(constant.ErrGeneral, shared_constant.ErrPublishQueueToBroker, err)
+	// 	return
+	// }
 
 	return
 }
