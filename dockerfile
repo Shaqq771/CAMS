@@ -1,4 +1,4 @@
-FROM golang:1.18
+FROM golang:1.19
 
 WORKDIR /backend
 
@@ -10,9 +10,7 @@ RUN go mod download
 COPY . ./
 COPY .env.docker.example .env
 
-RUN go mod tidy
-
-RUN go build -o ./backend
+RUN go build -o backend
 RUN chmod +x ./backend
 
 EXPOSE 9000

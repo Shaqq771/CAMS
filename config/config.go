@@ -1,13 +1,14 @@
 package config
 
 import (
-	"backend-nabati/infrastructure/broker/rabbitmq"
+	// "backend-nabati/infrastructure/broker/rabbitmq"
 	"backend-nabati/infrastructure/database"
 	"backend-nabati/infrastructure/shared/constant"
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
+
+	// "strings"
 
 	"github.com/joho/godotenv"
 )
@@ -16,7 +17,7 @@ type EnvironmentConfig struct {
 	Env      string
 	App      App
 	Database database.DatabaseConfig
-	RabbitMq rabbitmq.RabbitmqConfig
+	// RabbitMq rabbitmq.RabbitmqConfig
 }
 
 type App struct {
@@ -38,14 +39,14 @@ func LoadENVConfig() (config EnvironmentConfig, err error) {
 		return
 	}
 
-	rmqPort := 0
-	if os.Getenv("RABBITMQ_PORT") != "" {
-		rmqPort, err = strconv.Atoi(os.Getenv("RABBITMQ_PORT"))
-		if err != nil {
-			err = fmt.Errorf(constant.ErrConvertStringToInt, err)
-			return
-		}
-	}
+	// rmqPort := 0
+	// if os.Getenv("RABBITMQ_PORT") != "" {
+	// 	rmqPort, err = strconv.Atoi(os.Getenv("RABBITMQ_PORT"))
+	// 	if err != nil {
+	// 		err = fmt.Errorf(constant.ErrConvertStringToInt, err)
+	// 		return
+	// 	}
+	// }
 
 	config = EnvironmentConfig{
 		Env: os.Getenv("ENV"),
@@ -61,16 +62,16 @@ func LoadENVConfig() (config EnvironmentConfig, err error) {
 			Username: os.Getenv("DB_USERNAME"),
 			Password: os.Getenv("DB_PASSWORD"),
 		},
-		RabbitMq: rabbitmq.RabbitmqConfig{
-			Host:                      strings.TrimPrefix(os.Getenv("RABBITMQ_HOST"), "http://"),
-			Username:                  os.Getenv("RABBITMQ_USERNAME"),
-			Password:                  os.Getenv("RABBITMQ_PASSWORD"),
-			Port:                      rmqPort,
-			BillingProducerName:       os.Getenv("RABBITMQ_BILLING_PRODUCER_NAME"),
-			BillingConsumerName:       os.Getenv("RABBITMQ_BILLING_CONSUMER_NAME"),
-			ProductInsertConsumerName: os.Getenv("RABBITMQ_INSERT_PRODUCT_CONSUMER_NAME"),
-			ProductUpdateConsumerName: os.Getenv("RABBITMQ_UPDATE_PRODUCT_CONSUMER_NAME"),
-		},
+		// RabbitMq: rabbitmq.RabbitmqConfig{
+		// 	Host:                      strings.TrimPrefix(os.Getenv("RABBITMQ_HOST"), "http://"),
+		// 	Username:                  os.Getenv("RABBITMQ_USERNAME"),
+		// 	Password:                  os.Getenv("RABBITMQ_PASSWORD"),
+		// 	Port:                      rmqPort,
+		// 	BillingProducerName:       os.Getenv("RABBITMQ_BILLING_PRODUCER_NAME"),
+		// 	BillingConsumerName:       os.Getenv("RABBITMQ_BILLING_CONSUMER_NAME"),
+		// 	ProductInsertConsumerName: os.Getenv("RABBITMQ_INSERT_PRODUCT_CONSUMER_NAME"),
+		// 	ProductUpdateConsumerName: os.Getenv("RABBITMQ_UPDATE_PRODUCT_CONSUMER_NAME"),
+		// },
 	}
 
 	return

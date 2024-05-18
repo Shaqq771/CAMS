@@ -1,62 +1,64 @@
-version: '3'
+version: "3"
 services:
-  postgres:
-    container_name: postgres
-    image: postgres
-    ports:
-      - 5432:5432
-    networks:
-      - nabati
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=12345AA
-      - POSTGRES_DB=postgres
-    volumes:
-      - ./migration/0_init_db.sql:/docker-entrypoint-initdb.d/0_init_db.sql
-      - ./migration/1_create_table_product.sql:/docker-entrypoint-initdb.d/1_create_table_product.sql
-      - ./migration/2_create_table_user_product.sql:/docker-entrypoint-initdb.d/2_create_table_user_product.sql
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 20s
-      retries: 5
-    restart: on-failure
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    container_name: rabbitmq
-    ports:
-      - 5672:5672
-      - 15672:15672
-    networks:
-      - nabati
-    volumes:
-      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:15672"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    restart: on-failure
-  backend:
-    container_name: backend
-    build: .
-    depends_on:
-      postgres:
-        condition: service_healthy
-    links:
-      - postgres
-      - rabbitmq
-    ports:
-      - 9000:9000
-    networks:
-      - nabati
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://backend:9000/v1/ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    restart: on-failure
+   mysql:
+      container_name: mysql
+      image: mysql
+      ports:
+         - 5432:5432
+      networks:
+         - nabati
+      environment:
+         - NYSQL_USER=root
+         - MYSQL_PASSWORD=root
+         - MYSQL_DB=mysql
+      volumes:
+         - ./migration/0_init_db.sql:/docker-entrypoint-initdb.d/0_init_db.sql
+         - ./migration/1_create_table_approver.sql:/docker-entrypoint-initdb.d/1_create_table_approver.sql
+         - ./migration/2_create_table_request.sql:/docker-entrypoint-initdb.d/2_create_table_request.sql
+         - ./migration/3_create_table_reques_history.sql:/docker-entrypoint-initdb.d/3_create_table_request_history.sql
+         - ./migration/4_create_table_rule.sql:/docker-entrypoint-initdb.d/4_create_table_rule.sql
+         - ./migration/5_create_table_rule_history.sql:/docker-entrypoint-initdb.d/5_create_table_rule_history.sql
+      healthcheck:
+         test: ["CMD-SHELL", "pg_isready -U mysql"]
+         interval: 10s
+         timeout: 20s
+         retries: 5
+      restart: on-failure
+   #  rabbitmq:
+   #     image: rabbitmq:3-management-alpine
+   #     container_name: rabbitmq
+   #     ports:
+   #        - 5672:5672
+   #        - 15672:15672
+   #     networks:
+   #        - nabati
+   #     volumes:
+   #        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+   #        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+   #     healthcheck:
+   #        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+   #        interval: 30s
+   #        timeout: 10s
+   #        retries: 5
+   #     restart: on-failure
+   backend:
+      container_name: backend
+      build: .
+      depends_on:
+         mysql:
+            condition: service_healthy
+      links:
+         - mysql
+      ports:
+         - 9000:9000
+      networks:
+         - nabati
+      healthcheck:
+         test: ["CMD", "curl", "-f", "http://backend:9000/v1/ping"]
+         interval: 30s
+         timeout: 10s
+         retries: 5
+      restart: on-failure
 networks:
-  nabati:
-    external: true
+   nabati:
+      external: true

@@ -4,8 +4,8 @@ import (
 	"backend-nabati/infrastructure/shared/constant"
 	"fmt"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 )
 
 type DatabaseConfig struct {
@@ -22,13 +22,13 @@ type Database struct {
 
 func LoadDatabase(config DatabaseConfig) (database *Database, err error) {
 
-	datasource := fmt.Sprintf("%s://%s:%s@%s/%s?sslmode=disable",
-		config.Dialect,
-		config.Username,
-		config.Password,
-		config.Host,
-		config.Name)
-	db, err := sqlx.Connect(config.Dialect, datasource)
+	// datasource := fmt.Sprintf("%s://%s:%s@%s/%s?sslmode=disable",
+	// 	config.Dialect,
+	// 	config.Username,
+	// 	config.Password,
+	// 	config.Host,
+	// 	config.Name)
+	db, err := sqlx.Connect(config.Dialect, "root:root@(localhost:3306)/cams")
 	if err != nil {
 		err = fmt.Errorf(constant.ErrConnectToDB, err)
 		return

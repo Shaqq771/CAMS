@@ -1,4 +1,4 @@
 -- migrate:up
-CREATE DATABASE nabati with owner postgres;
+CREATE DATABASE CAMS with owner root;
 
 -- migrate:down

@@ -3,7 +3,6 @@ package cmd
 import (
 	"backend-nabati/delivery/container"
 	"backend-nabati/delivery/http"
-	"backend-nabati/delivery/queue"
 	"backend-nabati/infrastructure/logger"
 	"backend-nabati/infrastructure/shared/constant"
 	"fmt"
@@ -14,7 +13,7 @@ func Execute() {
 	container := container.SetupContainer()
 
 	// start queue service
-	queue.StartQueueServices(container)
+	// queue.StartQueueServices(container)
 
 	// start http service
 	http := http.ServeHttp(container)
