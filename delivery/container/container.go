@@ -7,6 +7,8 @@ import (
 
 	// module_feature "backend-nabati/domain/module/feature"
 	request_feature "backend-nabati/domain/request/feature"
+	request_repository "backend-nabati/domain/request/repository"
+
 	sales_feature "backend-nabati/domain/sales/feature"
 	sales_repository "backend-nabati/domain/sales/repository"
 	user_feature "backend-nabati/domain/user/feature"
@@ -49,11 +51,14 @@ func SetupContainer() Container {
 
 	fmt.Println("Loading repository's...")
 	salesRepository := sales_repository.NewSalesRepository(db)
+	requestRepository := request_repository.NewRequestRepository(db)
 
 	salesFeature := sales_feature.NewSalesFeature(salesRepository)
+	requestFeature := request_feature.NewRequestFeature(requestRepository)
 
 	return Container{
 		EnvironmentConfig: config,
 		SalesFeature:      salesFeature,
+		RequestFeature:    requestFeature,
 	}
 }

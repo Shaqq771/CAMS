@@ -27,10 +27,12 @@ func NewRequestRepository(db *database.Database) RequestRepository {
 
 func (rr requestRepository) GetListOfRequestRepository(ctx context.Context) (requests []model.Request, err error) {
 
-	query := fmt.Sprintf("SELECT * FROM Request")
+	query := fmt.Sprintf("SELECT * FROM request")
 	logger.LogInfo(constant.QUERY, query)
-
+	fmt.Println(query, "query")
 	err = rr.Database.DB.SelectContext(ctx, &requests, query)
+	fmt.Println(err, "err")
+
 	if err != nil {
 		if err == context.DeadlineExceeded {
 			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
