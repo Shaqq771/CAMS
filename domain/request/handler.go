@@ -10,7 +10,7 @@ import (
 )
 
 type RequestHandler interface {
-	GetApprovalListsHandler(c *fiber.Ctx) error
+	GetRequestListsHandler(c *fiber.Ctx) error
 }
 
 type requestHandler struct {
@@ -23,15 +23,14 @@ func NewRequestHandler(feature feature.RequestFeature) RequestHandler {
 	}
 }
 
-func (rh requestHandler) GetApprovalListsHandler(c *fiber.Ctx) error {
+func (rh requestHandler) GetRequestListsHandler(c *fiber.Ctx) error {
 	ctx, cancel := context.CreateContextWithTimeout()
 	defer cancel()
 	ctx = context.SetValueToContext(ctx, c)
-
-	resp, err := rh.feature.GetListOfRequestFeature(ctx)
+	results, err := rh.feature.GetListOfRequestFeature(ctx)
 	if err != nil {
 		return response.ResponseErrorWithContext(ctx, err)
 	}
 
-	return response.ResponseOK(c, constant.MsgGetListsDataSuccess, resp)
+	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
 }

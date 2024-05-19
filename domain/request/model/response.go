@@ -4,18 +4,18 @@ import "backend-nabati/domain/shared/model"
 
 type RequestLists struct {
 	Pagination model.Pagination `json:"pagination"`
-	Approval   []Approval       `json:"approvals"`
+	Request    []Request        `json:"requests"`
 	Sort       []string         `json:"sort,omitempty"`
 	Filter     []string         `json:"filter,omitempty"`
 }
 
 //please create request model
 type RequestListNoFilter struct {
-	Approval []Approval `json:"approvals"`
+	Request []Request `json:"requests"`
 }
 
-type ApprovalListsByFilter struct {
+type RequestListsByFilter struct {
 	Pagination model.Pagination `json:"pagination"`
-	Approval   []Approval       `json:"approvals"`
+	Request    []Request        `json:"requests"`
 	Filters    []model.Fields   `json:"filters,omitempty"`
 }

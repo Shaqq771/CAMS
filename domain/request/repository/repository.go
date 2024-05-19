@@ -12,7 +12,7 @@ import (
 )
 
 type RequestRepository interface {
-	GetListOfRequestRepository(ctx context.Context) (requests []model.RequestListNoFilter, err error)
+	GetListOfRequestRepository(ctx context.Context) (requests []model.Request, err error)
 }
 
 type requestRepository struct {
@@ -25,7 +25,7 @@ func NewRequestRepository(db *database.Database) RequestRepository {
 	}
 }
 
-func (rr requestRepository) GetListOfRequestRepository(ctx context.Context) (requests []model.RequestListNoFilter, err error) {
+func (rr requestRepository) GetListOfRequestRepository(ctx context.Context) (requests []model.Request, err error) {
 
 	query := fmt.Sprintf("SELECT * FROM Request")
 	logger.LogInfo(constant.QUERY, query)

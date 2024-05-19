@@ -12,37 +12,6 @@ import (
 	"fmt"
 )
 
-// func (lr requestRepository) GetProductBySKURepository(ctx context.Context, sku string) (product model.Approval, err error) {
-
-// 	query := "SELECT * FROM product where SKU = $1 AND deleted_at IS NULL LIMIT 1"
-// 	logger.LogInfo(constant.QUERY, query)
-
-// 	rows, err := lr.Database.Queryx(query, &sku)
-// 	if err != nil {
-// 		if err == context.DeadlineExceeded {
-// 			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
-// 			return
-// 		}
-
-// 		if err == sql.ErrNoRows {
-// 			return product, nil
-// 		}
-
-// 		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
-// 		return
-// 	}
-
-// 	for rows.Next() {
-// 		errScan := rows.StructScan(&product)
-// 		if errScan != nil {
-// 			err = Error.New(constant.ErrTimeout, constant.ErrWhenScanResultDB, errScan)
-// 			break
-// 		}
-// 	}
-
-// 	return
-// }
-
 func (lr requestRepository) GetApprovalByIdRepository(ctx context.Context, id int) (approval model.Approval, err error) {
 
 	query := "SELECT * FROM approval where id = $1 LIMIT 1"
