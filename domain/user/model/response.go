@@ -14,3 +14,7 @@ type ApproverListsByFilter struct {
 	Approver    []Approver        `json:"approvers"`
 	Filters    []model.Fields   `json:"filters,omitempty"`
 }
+
+type ApproverListNoFilter struct {
+	Approver []Approver `json:"approvers"`
+}

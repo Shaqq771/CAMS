@@ -28,7 +28,7 @@ func LoadDatabase(config DatabaseConfig) (database *Database, err error) {
 	// 	config.Password,
 	// 	config.Host,
 	// 	config.Name)
-	db, err := sqlx.Connect(config.Dialect, "najibalyasyfi:A!s3d4f5g6h7j8k9l0@(localhost:3306)/CAMS")
+	db, err := sqlx.Connect(config.Dialect, "root:root@(localhost:3306)/CAMS")
 	if err != nil {
 		err = fmt.Errorf(constant.ErrConnectToDB, err)
 		return

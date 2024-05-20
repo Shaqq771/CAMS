@@ -1,5 +1,5 @@
 -- migrate:up
-CREATE TABLE IF NOT EXISTS request_history (
+CREATE TABLE IF NOT EXISTS rule_history (
   id serial PRIMARY KEY,
   type varchar(50) NOT NULL,
   old_value varchar(100) NOT NULL,
