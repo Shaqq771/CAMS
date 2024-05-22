@@ -13,6 +13,7 @@ import (
 
 type RequestRepository interface {
 	GetListOfRequestRepository(ctx context.Context) (requests []model.Request, err error)
+	GetRequestByIdRepository(ctx context.Context, id int) (request []model.Request, err error)
 }
 
 type requestRepository struct {
@@ -40,6 +41,30 @@ func (rr requestRepository) GetListOfRequestRepository(ctx context.Context) (req
 
 		if err == sql.ErrNoRows {
 			return requests, nil
+		}
+
+		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
+		return
+	}
+
+	return
+}
+
+func (rr requestRepository) GetRequestByIdRepository(ctx context.Context, id int) (request []model.Request, err error) {
+
+	query := fmt.Sprintf("SELECT * FROM request where id = %d", id)
+	logger.LogInfo(constant.QUERY, query)
+	fmt.Println(query, "query")
+	err = rr.Database.DB.SelectContext(ctx, &request, query)
+	fmt.Println(err, "err")
+
+	if err != nil {
+		if err == context.DeadlineExceeded {
+			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
+		}
+
+		if err == sql.ErrNoRows {
+			return request, nil
 		}
 
 		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
