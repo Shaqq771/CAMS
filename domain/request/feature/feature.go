@@ -5,6 +5,7 @@ import (
 	"backend-nabati/domain/request/model"
 	repository "backend-nabati/domain/request/repository"
 	Error "backend-nabati/domain/shared/error"
+	shared_model "backend-nabati/domain/shared/model"
 	"context"
 	"strconv"
 )
@@ -12,6 +13,7 @@ import (
 type RequestFeature interface {
 	GetListOfRequestFeature(ctx context.Context) (response model.RequestListNoFilter, err error)
 	GetRequestFeature(ctx context.Context, id string) (response model.RequestListNoFilter, err error)
+	GetRequestFilterFeature(ctx context.Context, queryRequest shared_model.QueryRequest) (requestList model.RequestLists, err error)
 }
 
 type requestFeature struct {
@@ -25,7 +27,7 @@ func NewRequestFeature(requestRepo repository.RequestRepository) RequestFeature 
 }
 
 func (rf requestFeature) GetListOfRequestFeature(ctx context.Context) (response model.RequestListNoFilter, err error) {
-	
+
 	listRequest, err := rf.requestRepo.GetListOfRequestRepository(ctx)
 	if err != nil {
 		return
@@ -55,9 +57,9 @@ func (uf requestFeature) GetRequestFeature(ctx context.Context, id string) (resp
 	// }
 
 	var requestIds []int
-  		for _, request := range result {
-    	requestIds = append(requestIds, request.Id)
- 	 }
+	for _, request := range result {
+		requestIds = append(requestIds, request.Id)
+	}
 
 	response = model.RequestListNoFilter{
 		Request: result,

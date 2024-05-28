@@ -3,6 +3,7 @@ package database
 import (
 	"backend-nabati/infrastructure/shared/constant"
 	"fmt"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -27,8 +28,11 @@ func LoadDatabase(config DatabaseConfig) (database *Database, err error) {
 	// 	config.Username,
 	// 	config.Password,
 	// 	config.Host,
-	// 	config.Name)
-	db, err := sqlx.Connect(config.Dialect, "root:root@(localhost:3306)/CAMS")
+	// 	config.Name) "root:root@(localhost:3306)/CAMS"
+	db, err := sqlx.Connect(config.Dialect,
+		os.Getenv("DB_USERNAME")+":"+
+			os.Getenv("DB_PASSWORD")+"@"+
+			"("+os.Getenv("DB_HOST")+":"+os.Getenv("DB_PORT")+")"+"/"+os.Getenv("DB_NAME"))
 	if err != nil {
 		err = fmt.Errorf(constant.ErrConnectToDB, err)
 		return
