@@ -63,6 +63,7 @@ func (rh requestHandler) GetRequestHandler(c *fiber.Ctx) error {
 }
 
 func (rh requestHandler) GetRequestFilterHandler(c *fiber.Ctx) error {
+	fmt.Println(c)
 
 	ctx, cancel := context.CreateContextWithTimeout()
 	defer cancel()
@@ -70,11 +71,12 @@ func (rh requestHandler) GetRequestFilterHandler(c *fiber.Ctx) error {
 
 	page, err := strconv.Atoi(strings.TrimSpace(c.Query(constant.PAGE)))
 	if err != nil || page == 0 {
+		fmt.Println(err)
 		page = constant.DefaultPage
 	}
-
 	limit, err := strconv.Atoi(strings.TrimSpace(c.Query(constant.LIMIT)))
 	if err != nil || limit == 0 {
+		fmt.Println(err)
 		limit = constant.DefaultLimitPerPage
 	}
 
@@ -90,6 +92,7 @@ func (rh requestHandler) GetRequestFilterHandler(c *fiber.Ctx) error {
 
 	resp, err := rh.feature.GetRequestFilterFeature(ctx, queryRequest)
 	if err != nil {
+		fmt.Println(err)
 		return response.ResponseErrorWithContext(ctx, err)
 	}
 

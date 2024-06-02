@@ -13,7 +13,6 @@ import (
 )
 
 func (rr requestRepository) GetRequestListsRepository(ctx context.Context, limit, offset int, sortby, search string) (requests []model.Request, err error) {
-
 	if sortby == "" {
 		sortby = "id asc"
 	}
@@ -21,11 +20,10 @@ func (rr requestRepository) GetRequestListsRepository(ctx context.Context, limit
 	if search != "" {
 		search = query.SearchQueryBuilder(search)
 	}
+	query := fmt.Sprintf("SELECT * FROM request %s ORDER BY %s", search, sortby)
 
-	query := fmt.Sprintf("SELECT * FROM Product WHERE deleted_at IS NULL %s  ORDER BY %s LIMIT $1 OFFSET $2", search, sortby)
 	logger.LogInfo(constant.QUERY, query)
-
-	err = rr.Database.DB.SelectContext(ctx, &requests, query, limit, offset)
+	err = rr.Database.DB.SelectContext(ctx, &requests, query)
 	if err != nil {
 		if err == context.DeadlineExceeded {
 			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)

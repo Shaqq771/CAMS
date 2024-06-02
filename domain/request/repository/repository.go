@@ -60,9 +60,7 @@ func (rr requestRepository) GetRequestByIdRepository(ctx context.Context, id int
 
 	query := fmt.Sprintf("SELECT * FROM request where id = %d", id)
 	logger.LogInfo(constant.QUERY, query)
-	fmt.Println(query, "query")
 	err = rr.Database.DB.SelectContext(ctx, &request, query)
-	fmt.Println(err, "err")
 
 	if err != nil {
 		if err == context.DeadlineExceeded {

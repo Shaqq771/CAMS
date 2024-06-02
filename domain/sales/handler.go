@@ -1,6 +1,8 @@
 package sales
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -16,6 +18,6 @@ func NewSalesHandler() SalesHandler {
 }
 
 func (sh salesHandler) HealthCheck(c *fiber.Ctx) error {
-
+	fmt.Println("masuk sini")
 	return nil
 }

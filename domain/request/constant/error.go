@@ -7,8 +7,8 @@ const (
 
 const (
 	ErrSKUAlreadyExist    = "sku already exist"
-	ErrApprovalIdNil      = "approval id nil"
-	ErrApprovalIdNotFound = "approval id not found"
+	ErrApprovalIdNil      = "request id nil"
+	ErrApprovalIdNotFound = "request id not found"
 )
 
 const (

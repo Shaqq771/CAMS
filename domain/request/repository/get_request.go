@@ -44,7 +44,7 @@ import (
 
 func (rr requestRepository) GetTotalRequestRepository(ctx context.Context) (count int, err error) {
 
-	query := "SELECT COUNT(*) FROM request WHERE deleted_at IS NULL"
+	query := "SELECT COUNT(*) FROM request WHERE created_by IS NOT NULL"
 	rows, err := rr.Database.Query(query)
 	logger.LogInfo(constant.QUERY, query)
 	if err != nil {
@@ -78,7 +78,7 @@ func (rr requestRepository) GetTotalRequestWithConditionsRepository(ctx context.
 		conditions = query.SearchQueryBuilder(conditions)
 	}
 
-	query := fmt.Sprintf("SELECT COUNT(*) FROM request WHERE deleted_at IS NULL %s", conditions)
+	query := fmt.Sprintf("SELECT COUNT(*) FROM request WHERE created_by IS NOT NULL %s", conditions)
 	logger.LogInfo(constant.QUERY, query)
 
 	rows, err := rr.Database.Query(query)
@@ -117,9 +117,9 @@ func (rr requestRepository) GetTotalRequestWithFiltersRepository(ctx context.Con
 		conditions = query.ConditionsBuilder(filter)
 	}
 
-	query := "SELECT COUNT(*) FROM request WHERE deleted_at IS NULL"
+	query := "SELECT COUNT(*) FROM request WHERE created_by IS NOT NULL"
 	if len(filter.Filters) > 0 {
-		query = fmt.Sprintf("SELECT COUNT(*) FROM request WHERE deleted_at IS NULL AND %s", conditions)
+		query = fmt.Sprintf("SELECT COUNT(*) FROM request WHERE created_by IS NOT NULL AND %s", conditions)
 	}
 
 	logger.LogInfo(constant.QUERY, query)

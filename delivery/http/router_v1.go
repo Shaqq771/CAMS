@@ -42,8 +42,8 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 	request := v1.Group("/request")
 	{
 		request.Get("/", handler.requestHandler.GetRequestListsHandler)
-		request.Get("/:id", handler.requestHandler.GetRequestHandler)
-		request.Get("/filter", handler.requestHandler.GetRequestFilterHandler)
+		request.Get("/get/:id", handler.requestHandler.GetRequestHandler)
+		request.Get("/lists", handler.requestHandler.GetRequestFilterHandler)
 
 	}
 

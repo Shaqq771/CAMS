@@ -18,7 +18,7 @@ func (rf requestFeature) GetRequestFilterFeature(ctx context.Context, queryReque
 		qFilterList   []string
 		sortby        = queryRequest.SortBy
 		search        = queryRequest.Search
-		totalProducts int
+		totalRequests int
 	)
 
 	// Sort
@@ -39,21 +39,21 @@ func (rf requestFeature) GetRequestFilterFeature(ctx context.Context, queryReque
 			return
 		}
 
-		// Get Total Product Now
-		totalProducts, err = rf.requestRepo.GetTotalRequestWithConditionsRepository(ctx, search)
+		// Get Total Request Now
+		totalRequests, err = rf.requestRepo.GetTotalRequestWithConditionsRepository(ctx, search)
 		if err != nil {
 			return
 		}
 	} else {
-		// Get Total Product Now
-		totalProducts, err = rf.requestRepo.GetTotalRequestRepository(ctx)
+		// Get Total Request Now
+		totalRequests, err = rf.requestRepo.GetTotalRequestRepository(ctx)
 		if err != nil {
 			return
 		}
 	}
 
-	// Set Paginations for product lists
-	offset, total_page := helper.GetPaginations(totalProducts, queryRequest.Limit, queryRequest.Page)
+	// Set Paginations for request lists
+	offset, total_page := helper.GetPaginations(totalRequests, queryRequest.Limit, queryRequest.Page)
 
 	// Get Lists Product
 	request, err := rf.requestRepo.GetRequestListsRepository(ctx, queryRequest.Limit, offset, sortby, search)
@@ -65,7 +65,7 @@ func (rf requestFeature) GetRequestFilterFeature(ctx context.Context, queryReque
 		Pagination: shared_model.Pagination{
 			Limit:     queryRequest.Limit,
 			TotalPage: total_page,
-			TotalRows: totalProducts,
+			TotalRows: totalRequests,
 			Page:      queryRequest.Page,
 		},
 		Request: request,
