@@ -1,6 +1,6 @@
 -- migrate:up
 CREATE TABLE IF NOT EXISTS rule (
-  id serial PRIMARY KEY,
+  id integer PRIMARY KEY,
   module varchar(30) NOT NULL,
   type varchar(50) NOT NULL,
   description varchar(100) NULL DEFAULT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS rule (
   count_levelling integer NULL,
   approver varchar(60) NOT NULL,
   reject_permission boolean NOT NULL,
-  require integer NOT NULL,
+  req integer NOT NULL,
   email_approver boolean NOT NULL,
   due_time integer NULL,
   case_overdue varchar(50) NULL,

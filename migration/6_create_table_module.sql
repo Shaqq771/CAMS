@@ -1,10 +1,9 @@
 -- migrate:up
-CREATE TABLE IF NOT EXISTS rule_history (
-  id integer PRIMARY KEY,
-  rule_id integer NOT NULL,
-  type varchar(50) NOT NULL,
-  old_value varchar(100) NOT NULL,
-  new_value varchar(100) NOT NULL,
+CREATE TABLE IF NOT EXISTS module (
+  id serial PRIMARY KEY,
+  module_name varchar(30) NOT NULL,
+  type_count integer NOT NULL,
+  description varchar(100) NOT NULL,
   created_at datetime NOT NULL DEFAULT now(),
   modified_at datetime NULL DEFAULT NULL,
   created_by varchar(60) NOT NULL,
