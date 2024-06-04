@@ -59,6 +59,12 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 		// businessUnit.Get("/get/:id", handler.businessUnitHandler.GetBusinessUnitHandler)
 	}
 
+	module := v1.Group("/module")
+	{
+		module.Get("/", handler.moduleHandler.GetModuleListsHandler)
+		// businessUnit.Get("/get/:id", handler.businessUnitHandler.GetBusinessUnitHandler)
+	}
+
 	//route > http handler > feature > repository
 
 }
