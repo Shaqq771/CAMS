@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"backend-nabati/domain/request/model"
 	"backend-nabati/domain/shared/constant"
 	Error "backend-nabati/domain/shared/error"
 	shared_model "backend-nabati/domain/shared/model"
@@ -11,36 +12,27 @@ import (
 	"fmt"
 )
 
-// func (rr requestRepository) GetRequestByIdRepository(ctx context.Context, id int) (request model.Request, err error) {
+func (rr requestRepository) GetRequestByIdRepository(ctx context.Context, id int) (request []model.Request, err error) {
 
-// 	query := "SELECT * FROM request where id = $1 AND deleted_at IS NULL LIMIT 1"
-// 	logger.LogInfo(constant.QUERY, query)
+	query := fmt.Sprintf("SELECT * FROM request where id = %d", id)
+	logger.LogInfo(constant.QUERY, query)
+	err = rr.Database.DB.SelectContext(ctx, &request, query)
 
-// 	rows, err := rr.Database.Queryx(query, &id)
-// 	if err != nil {
-// 		if err == context.DeadlineExceeded {
-// 			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
-// 			return
-// 		}
+	if err != nil {
+		if err == context.DeadlineExceeded {
+			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
+		}
 
-// 		if err == sql.ErrNoRows {
-// 			return request, nil
-// 		}
+		if err == sql.ErrNoRows {
+			return request, nil
+		}
 
-// 		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
-// 		return
-// 	}
+		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
+		return
+	}
 
-// 	for rows.Next() {
-// 		errScan := rows.StructScan(&request)
-// 		if errScan != nil {
-// 			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, errScan)
-// 			break
-// 		}
-// 	}
-
-// 	return
-// }
+	return
+}
 
 func (rr requestRepository) GetTotalRequestRepository(ctx context.Context) (count int, err error) {
 

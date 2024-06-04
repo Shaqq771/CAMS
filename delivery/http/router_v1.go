@@ -49,8 +49,14 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 
 	approver := v1.Group("/approver")
 	{
-		approver.Get("/lists", handler.userHandler.GetApproverListsHandler)
-		approver.Get("/:id", handler.userHandler.GetApproverHandler)
+		approver.Get("/", handler.userHandler.GetApproverListsHandler)
+		approver.Get("/get/:id", handler.userHandler.GetApproverHandler)
+	}
+
+	business := v1.Group("/businessunit")
+	{
+		business.Get("/", handler.businessHandler.GetBusinessListsHandler)
+		// businessUnit.Get("/get/:id", handler.businessUnitHandler.GetBusinessUnitHandler)
 	}
 
 	//route > http handler > feature > repository

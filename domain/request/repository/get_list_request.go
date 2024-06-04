@@ -1,21 +1,21 @@
 package repository
 
 import (
+	"backend-nabati/domain/request/model"
 	"backend-nabati/domain/shared/constant"
 	Error "backend-nabati/domain/shared/error"
-	"backend-nabati/domain/user/model"
 	"backend-nabati/infrastructure/logger"
 	"context"
 	"database/sql"
 	"fmt"
 )
 
-func (ur userRepository) GetApproverByIdRepository(ctx context.Context, id int) (approver []model.Approver, err error) {
+func (rr requestRepository) GetListOfRequestRepository(ctx context.Context) (requests []model.Request, err error) {
 
-	query := fmt.Sprintf("SELECT * FROM approver where id = %d", id)
+	query := fmt.Sprintf("SELECT * FROM request")
 	logger.LogInfo(constant.QUERY, query)
 	fmt.Println(query, "query")
-	err = ur.Database.DB.SelectContext(ctx, &approver, query)
+	err = rr.Database.DB.SelectContext(ctx, &requests, query)
 	fmt.Println(err, "err")
 
 	if err != nil {
@@ -24,7 +24,7 @@ func (ur userRepository) GetApproverByIdRepository(ctx context.Context, id int) 
 		}
 
 		if err == sql.ErrNoRows {
-			return approver, nil
+			return requests, nil
 		}
 
 		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)

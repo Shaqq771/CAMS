@@ -2,14 +2,9 @@ package repository
 
 import (
 	"backend-nabati/domain/request/model"
-	"backend-nabati/domain/shared/constant"
-	Error "backend-nabati/domain/shared/error"
 	shared_model "backend-nabati/domain/shared/model"
 	"backend-nabati/infrastructure/database"
-	"backend-nabati/infrastructure/logger"
 	"context"
-	"database/sql"
-	"fmt"
 )
 
 type RequestRepository interface {
@@ -30,50 +25,4 @@ func NewRequestRepository(db *database.Database) RequestRepository {
 	return &requestRepository{
 		Database: db,
 	}
-}
-
-func (rr requestRepository) GetListOfRequestRepository(ctx context.Context) (requests []model.Request, err error) {
-
-	query := fmt.Sprintf("SELECT * FROM request")
-	logger.LogInfo(constant.QUERY, query)
-	fmt.Println(query, "query")
-	err = rr.Database.DB.SelectContext(ctx, &requests, query)
-	fmt.Println(err, "err")
-
-	if err != nil {
-		if err == context.DeadlineExceeded {
-			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
-		}
-
-		if err == sql.ErrNoRows {
-			return requests, nil
-		}
-
-		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
-		return
-	}
-
-	return
-}
-
-func (rr requestRepository) GetRequestByIdRepository(ctx context.Context, id int) (request []model.Request, err error) {
-
-	query := fmt.Sprintf("SELECT * FROM request where id = %d", id)
-	logger.LogInfo(constant.QUERY, query)
-	err = rr.Database.DB.SelectContext(ctx, &request, query)
-
-	if err != nil {
-		if err == context.DeadlineExceeded {
-			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
-		}
-
-		if err == sql.ErrNoRows {
-			return request, nil
-		}
-
-		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
-		return
-	}
-
-	return
 }
