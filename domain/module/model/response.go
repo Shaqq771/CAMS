@@ -15,6 +15,6 @@ type ModuleLists struct {
 
 type ModuleListsByFilter struct {
 	Pagination model.Pagination `json:"pagination"`
-	Module    []Module        `json:"products"`
+	Module    []Module        `json:"modules"`
 	Filters    []model.Fields   `json:"filters,omitempty"`
 }

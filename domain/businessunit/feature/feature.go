@@ -8,6 +8,7 @@ import (
 
 type BusinessFeature interface {
 	GetListOfBusinessFeature(ctx context.Context) (response model.BusinessListNoFilter, err error)
+	GetBusinessFeature(ctx context.Context, id string) (response model.BusinessListNoFilter, err error)
 }
 
 type businessFeature struct {

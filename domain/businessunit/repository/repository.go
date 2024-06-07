@@ -8,7 +8,7 @@ import (
 
 type BusinessRepository interface {
 	GetListOfBusinessRepository(ctx context.Context) (business []model.Business, err error)
-	// GetRequestByIdRepository(ctx context.Context, id int) (request []model.Request, err error)
+	GetBusinessByIdRepository(ctx context.Context, id int) (business []model.Business, err error)
 	// GetRequestListsWithFiltersRepository(ctx context.Context, filter *shared_model.Filter, offset int) (requests []model.Request, err error)
 	// GetTotalRequestWithFiltersRepository(ctx context.Context, filter *shared_model.Filter) (count int, err error)
 	// GetTotalRequestWithConditionsRepository(ctx context.Context, conditions string) (count int, err error)

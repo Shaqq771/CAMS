@@ -11,6 +11,10 @@ type RequestFeature interface {
 	GetListOfRequestFeature(ctx context.Context) (response model.RequestListNoFilter, err error)
 	GetRequestFeature(ctx context.Context, id string) (response model.RequestListNoFilter, err error)
 	GetRequestFilterFeature(ctx context.Context, queryRequest shared_model.QueryRequest) (requestList model.RequestLists, err error)
+	GetRequestListsWaitingFeature(ctx context.Context) (response model.RequestListNoFilter, err error)
+	GetRequestListsApprovedFeature(ctx context.Context) (response model.RequestListNoFilter, err error)
+	GetRequestListsRejectedFeature(ctx context.Context) (response model.RequestListNoFilter, err error)
+	GetRequestListsRevisedFeature(ctx context.Context) (response model.RequestListNoFilter, err error)
 }
 
 type requestFeature struct {

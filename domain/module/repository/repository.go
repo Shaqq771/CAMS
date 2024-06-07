@@ -8,7 +8,7 @@ import (
 
 type ModuleRepository interface {
 	GetListOfModuleRepository(ctx context.Context) (modules []model.Module, err error)
-	// GetRequestByIdRepository(ctx context.Context, id int) (request []model.Request, err error)
+	GetModuleByIdRepository(ctx context.Context, id int) (module []model.Module, err error)
 	// GetRequestListsWithFiltersRepository(ctx context.Context, filter *shared_model.Filter, offset int) (requests []model.Request, err error)
 	// GetTotalRequestWithFiltersRepository(ctx context.Context, filter *shared_model.Filter) (count int, err error)
 	// GetTotalRequestWithConditionsRepository(ctx context.Context, conditions string) (count int, err error)

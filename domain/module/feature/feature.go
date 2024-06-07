@@ -8,7 +8,7 @@ import (
 
 type ModuleFeature interface {
 	GetListOfModuleFeature(ctx context.Context) (response model.ModuleListNoFilter, err error)
-	// GetRequestFeature(ctx context.Context, id string) (response model.RequestListNoFilter, err error)
+	GetModuleFeature(ctx context.Context, id string) (response model.ModuleListNoFilter, err error)
 	// GetRequestFilterFeature(ctx context.Context, queryRequest shared_model.QueryRequest) (requestList model.RequestLists, err error)
 }
 

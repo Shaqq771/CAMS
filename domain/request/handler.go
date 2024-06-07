@@ -18,6 +18,10 @@ type RequestHandler interface {
 	GetRequestListsHandler(c *fiber.Ctx) error
 	GetRequestHandler(c *fiber.Ctx) error
 	GetRequestFilterHandler(c *fiber.Ctx) error
+	GetRequestListsWaitingHandler(c *fiber.Ctx) error
+	GetRequestListsApprovedHandler(c *fiber.Ctx) error
+	GetRequestListsRejectedHandler(c *fiber.Ctx) error
+	GetRequestListsRevisedHandler(c *fiber.Ctx) error
 }
 
 type requestHandler struct {
@@ -55,6 +59,54 @@ func (rh requestHandler) GetRequestHandler(c *fiber.Ctx) error {
 	}
 
 	results, err := rh.feature.GetRequestFeature(ctx, id)
+	if err != nil {
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
+}
+
+func (rh requestHandler) GetRequestListsWaitingHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+	results, err := rh.feature.GetRequestListsWaitingFeature(ctx)
+	if err != nil {
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
+}
+
+func (rh requestHandler) GetRequestListsApprovedHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+	results, err := rh.feature.GetRequestListsApprovedFeature(ctx)
+	if err != nil {
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
+}
+
+func (rh requestHandler) GetRequestListsRejectedHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+	results, err := rh.feature.GetRequestListsRejectedFeature(ctx)
+	if err != nil {
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
+}
+
+func (rh requestHandler) GetRequestListsRevisedHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+	results, err := rh.feature.GetRequestListsRevisedFeature(ctx)
 	if err != nil {
 		return response.ResponseErrorWithContext(ctx, err)
 	}
