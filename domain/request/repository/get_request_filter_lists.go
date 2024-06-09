@@ -20,6 +20,7 @@ func (rr requestRepository) GetRequestListsRepository(ctx context.Context, limit
 	if search != "" {
 		search = query.SearchQueryBuilder(search)
 	}
+	fmt.Println(search, "search")
 	query := fmt.Sprintf("SELECT * FROM request %s ORDER BY %s", search, sortby)
 
 	logger.LogInfo(constant.QUERY, query)

@@ -116,7 +116,7 @@ func (rr requestRepository) GetTotalRequestWithFiltersRepository(ctx context.Con
 	if filter != nil {
 		conditions = query.ConditionsBuilder(filter)
 	}
-
+	fmt.Println(conditions, "conditions")
 	query := "SELECT COUNT(*) FROM request WHERE created_by IS NOT NULL"
 	if len(filter.Filters) > 0 {
 		query = fmt.Sprintf("SELECT COUNT(*) FROM request WHERE created_by IS NOT NULL AND %s", conditions)
