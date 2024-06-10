@@ -4,12 +4,14 @@ import (
 	"backend-nabati/config"
 	health_feature "backend-nabati/domain/health/feature"
 	logistik_feature "backend-nabati/domain/logistik/feature"
-
-	// module_feature "backend-nabati/domain/module/feature"
 	request_feature "backend-nabati/domain/request/feature"
 	request_repository "backend-nabati/domain/request/repository"
 	user_repository "backend-nabati/domain/user/repository"
 
+	business_feature "backend-nabati/domain/businessunit/feature"
+	business_repository "backend-nabati/domain/businessunit/repository"
+	module_feature "backend-nabati/domain/module/feature"
+	module_repository "backend-nabati/domain/module/repository"
 	sales_feature "backend-nabati/domain/sales/feature"
 	sales_repository "backend-nabati/domain/sales/repository"
 	user_feature "backend-nabati/domain/user/feature"
@@ -31,6 +33,8 @@ type Container struct {
 	QueueServices     queue.QueueService
 	RequestFeature    request_feature.RequestFeature
 	UserFeature       user_feature.UserFeature
+	BusinessFeature       business_feature.BusinessFeature
+	ModuleFeature       module_feature.ModuleFeature
 }
 
 func SetupContainer() Container {
@@ -54,16 +58,21 @@ func SetupContainer() Container {
 	salesRepository := sales_repository.NewSalesRepository(db)
 	requestRepository := request_repository.NewRequestRepository(db)
 	userRepository := user_repository.NewUserRepository(db)
-
+	businessRepository := business_repository.NewBusinessRepository(db)
+	moduleRepository := module_repository.NewModuleRepository(db)
 
 	salesFeature := sales_feature.NewSalesFeature(salesRepository)
 	requestFeature := request_feature.NewRequestFeature(requestRepository)
 	userFeature := user_feature.NewUserFeature(userRepository)
+	businessFeature := business_feature.NewBusinessFeature(businessRepository)
+	moduleFeature := module_feature.NewModuleFeature(moduleRepository)
 
 	return Container{
 		EnvironmentConfig: config,
 		SalesFeature:      salesFeature,
 		RequestFeature:    requestFeature,
 		UserFeature:    userFeature,
+		BusinessFeature:    businessFeature,
+		ModuleFeature:    moduleFeature,
 	}
 }

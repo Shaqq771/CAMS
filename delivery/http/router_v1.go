@@ -44,14 +44,31 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 		request.Get("/", handler.requestHandler.GetRequestListsHandler)
 		request.Get("/get/:id", handler.requestHandler.GetRequestHandler)
 		request.Get("/lists", handler.requestHandler.GetRequestFilterHandler)
-
+		request.Get("/waiting", handler.requestHandler.GetRequestListsWaitingHandler)
+		request.Get("/approved", handler.requestHandler.GetRequestListsApprovedHandler)
+		request.Get("/rejected", handler.requestHandler.GetRequestListsRejectedHandler)
+		request.Get("/revised", handler.requestHandler.GetRequestListsRevisedHandler)
+		request.Put("/update/:id", handler.requestHandler.UpdateRequestHandler)
 	}
 
 	approver := v1.Group("/approver")
 	{
-		approver.Get("/lists", handler.userHandler.GetApproverListsHandler)
-		approver.Get("/:id", handler.userHandler.GetApproverHandler)
+		approver.Get("/", handler.userHandler.GetApproverListsHandler)
+		approver.Get("/get/:id", handler.userHandler.GetApproverHandler)
 	}
+
+	business := v1.Group("/businessunit")
+	{
+		business.Get("/", handler.businessHandler.GetBusinessListsHandler)
+		business.Get("/get/:id", handler.businessHandler.GetBusinessHandler)
+	}
+
+	module := v1.Group("/module")
+	{
+		module.Get("/", handler.moduleHandler.GetModuleListsHandler)
+		module.Get("/get/:id", handler.moduleHandler.GetModuleHandler)
+	}
+	
 
 	//route > http handler > feature > repository
 

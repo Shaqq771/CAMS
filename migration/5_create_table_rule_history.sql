@@ -1,6 +1,7 @@
 -- migrate:up
 CREATE TABLE IF NOT EXISTS rule_history (
-  id serial PRIMARY KEY,
+  id integer PRIMARY KEY,
+  rule_id integer NOT NULL,
   type varchar(50) NOT NULL,
   old_value varchar(100) NOT NULL,
   new_value varchar(100) NOT NULL,

@@ -2,10 +2,10 @@ package http
 
 import (
 	"backend-nabati/delivery/container"
+	business "backend-nabati/domain/businessunit"
 	"backend-nabati/domain/health"
 	"backend-nabati/domain/logistik"
-
-	// "backend-nabati/domain/module"
+	"backend-nabati/domain/module"
 	"backend-nabati/domain/request"
 	"backend-nabati/domain/sales"
 	"backend-nabati/domain/user"
@@ -17,7 +17,8 @@ type handler struct {
 	salesHandler    sales.SalesHandler
 	userHandler    user.UserHandler
 	requestHandler    request.RequestHandler
-	// moduleHandler    module.ModuleHandler
+	businessHandler business.BusinessHandler
+	moduleHandler    module.ModuleHandler
 }
 
 func SetupHandler(container container.Container) handler {
@@ -27,5 +28,7 @@ func SetupHandler(container container.Container) handler {
 		salesHandler:    sales.NewSalesHandler(),
 		userHandler: user.NewUserHandler(container.UserFeature),
 		requestHandler: request.NewRequestHandler(container.RequestFeature),
+		businessHandler: business.NewBusinessHandler(container.BusinessFeature),
+		moduleHandler: module.NewModuleHandler(container.ModuleFeature),
 	}
 }

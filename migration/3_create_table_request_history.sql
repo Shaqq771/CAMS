@@ -1,6 +1,7 @@
 -- migrate:up
 CREATE TABLE IF NOT EXISTS request_history (
-  id serial PRIMARY KEY,
+  id integer PRIMARY KEY,
+  request_id integer NOT NULL,
   type varchar(50) NOT NULL,
   old_value varchar(100) NOT NULL,
   new_value varchar(100) NOT NULL,

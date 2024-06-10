@@ -2,6 +2,8 @@ package model
 
 type Request struct {
 	Id              int    `json:"id" db:"id"`
+	RuleID          int    `json:"rule_id" db:"rule_id"`
+	ApproverID      int    `json:"approver_id" db:"approver_id"`
 	UserID          int    `json:"user_id" db:"user_id"`
 	RequestModuleId int    `json:"request_module_id" db:"request_module_id"`
 	Name            string `json:"name" db:"name"`
@@ -9,7 +11,6 @@ type Request struct {
 	Role            string `json:"role" db:"role"`
 	JobTitle        string `json:"job_title" db:"job_title"`
 	Department      string `json:"department" db:"department"`
-	BusinessUnit    string `json:"business_unit" db:"business_unit"`
 	Description     string `json:"description" db:"description"`
 	Status          string `json:"status" db:"status"`
 	Module          string `json:"module" db:"module"`

@@ -8,6 +8,7 @@ type Approver struct {
 	Role           string `json:"role" db:"role"`
 	JobTitle       string `json:"job_title" db:"job_title"`
 	Department     string `json:"department" db:"department"`
+	Location       string `json:"location" db:"location"`
 	BusinessUnit   string `json:"business_unit" db:"business_unit"`
 	Description    string `json:"description" db:"description"`
 	CreatedAt      string `json:"created_at" db:"created_at"`

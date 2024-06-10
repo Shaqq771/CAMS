@@ -3,6 +3,7 @@ package request
 import (
 	"backend-nabati/domain/request/constant"
 	"backend-nabati/domain/request/feature"
+	"backend-nabati/domain/request/model"
 	"backend-nabati/domain/shared/context"
 	Error "backend-nabati/domain/shared/error"
 	shared_model "backend-nabati/domain/shared/model"
@@ -18,6 +19,11 @@ type RequestHandler interface {
 	GetRequestListsHandler(c *fiber.Ctx) error
 	GetRequestHandler(c *fiber.Ctx) error
 	GetRequestFilterHandler(c *fiber.Ctx) error
+	GetRequestListsWaitingHandler(c *fiber.Ctx) error
+	GetRequestListsApprovedHandler(c *fiber.Ctx) error
+	GetRequestListsRejectedHandler(c *fiber.Ctx) error
+	GetRequestListsRevisedHandler(c *fiber.Ctx) error
+	UpdateRequestHandler(c *fiber.Ctx) error
 }
 
 type requestHandler struct {
@@ -62,9 +68,55 @@ func (rh requestHandler) GetRequestHandler(c *fiber.Ctx) error {
 	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
 }
 
-func (rh requestHandler) GetRequestFilterHandler(c *fiber.Ctx) error {
-	fmt.Println(c)
+func (rh requestHandler) GetRequestListsWaitingHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+	results, err := rh.feature.GetRequestListsWaitingFeature(ctx)
+	if err != nil {
+		return response.ResponseErrorWithContext(ctx, err)
+	}
 
+	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
+}
+
+func (rh requestHandler) GetRequestListsApprovedHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+	results, err := rh.feature.GetRequestListsApprovedFeature(ctx)
+	if err != nil {
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
+}
+
+func (rh requestHandler) GetRequestListsRejectedHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+	results, err := rh.feature.GetRequestListsRejectedFeature(ctx)
+	if err != nil {
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
+}
+
+func (rh requestHandler) GetRequestListsRevisedHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+	results, err := rh.feature.GetRequestListsRevisedFeature(ctx)
+	if err != nil {
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	return response.ResponseOK(c, constant.MsgGetApprovalSuccess, results)
+}
+
+func (rh requestHandler) GetRequestFilterHandler(c *fiber.Ctx) error {
 	ctx, cancel := context.CreateContextWithTimeout()
 	defer cancel()
 	ctx = context.SetValueToContext(ctx, c)
@@ -97,4 +149,30 @@ func (rh requestHandler) GetRequestFilterHandler(c *fiber.Ctx) error {
 	}
 
 	return response.ResponseOK(c, constant.MsgGetListsDataSuccess, resp)
+}
+
+func (rh requestHandler) UpdateRequestHandler(c *fiber.Ctx) error {
+
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+
+	id := c.Params("id")
+	if id == "" || id == "0" {
+		err := Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, fmt.Errorf(constant.ErrApprovalIdNil))
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	request := new(model.UpdateApprovalRequest)
+	if err := c.BodyParser(request); err != nil {
+		err := Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, fmt.Errorf(constant.ErrApprovalIdNil))
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	results, err := rh.feature.UpdateRequestFeature(ctx, id, request)
+	if err != nil {
+		return response.ResponseErrorWithContext(ctx, err)
+	}
+
+	return response.ResponseOK(c, constant.MsgUpdateApprovalSuccess, results)
 }

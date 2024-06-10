@@ -10,6 +10,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strconv"
 )
 
 func (rr requestRepository) GetRequestListsRepository(ctx context.Context, limit, offset int, sortby, search string) (requests []model.Request, err error) {
@@ -18,11 +19,10 @@ func (rr requestRepository) GetRequestListsRepository(ctx context.Context, limit
 	}
 
 	if search != "" {
-		search = query.SearchQueryBuilder(search)
+		search = "WHERE created_at IS NOT NULL" + query.SearchQueryBuilder(search)
 	}
-	fmt.Println(search, "search")
-	query := fmt.Sprintf("SELECT * FROM request %s ORDER BY %s", search, sortby)
-
+	query := fmt.Sprintf("SELECT * FROM request %s ORDER BY %s LIMIT %s OFFSET %s",
+		search, sortby, strconv.Itoa(limit), strconv.Itoa(offset))
 	logger.LogInfo(constant.QUERY, query)
 	err = rr.Database.DB.SelectContext(ctx, &requests, query)
 	if err != nil {

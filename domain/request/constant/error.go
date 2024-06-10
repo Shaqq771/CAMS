@@ -6,7 +6,6 @@ const (
 )
 
 const (
-	ErrSKUAlreadyExist    = "sku already exist"
 	ErrApprovalIdNil      = "request id nil"
 	ErrApprovalIdNotFound = "request id not found"
 )
