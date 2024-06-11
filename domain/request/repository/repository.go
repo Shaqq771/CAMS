@@ -19,8 +19,8 @@ type RequestRepository interface {
 	GetTotalRequestWithConditionsRepository(ctx context.Context, conditions string) (count int, err error)
 	GetTotalRequestRepository(ctx context.Context) (count int, err error)
 	GetRequestListsRepository(ctx context.Context, limit, offset int, sortby, search string) (requests []model.Request, err error)
-	UpdateRequestRepository(ctx context.Context, id int, update *model.UpdateApprovalRequest) (err error)
-	CheckRequestIdRepository(ctx context.Context, id int) (exist bool, err error)
+	UpdateRequestRepository(ctx context.Context, id int) (err error)
+	CheckRequestByIdRepository(ctx context.Context, id int) (exist bool, err error)
 }
 
 type requestRepository struct {

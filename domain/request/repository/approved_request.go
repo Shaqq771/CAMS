@@ -1,23 +1,21 @@
 package repository
 
 import (
-	"backend-nabati/domain/request/model"
 	"backend-nabati/domain/shared/constant"
 	Error "backend-nabati/domain/shared/error"
 	"context"
 	"fmt"
-	"strings"
 )
 
-func (rr requestRepository) UpdateRequestRepository(ctx context.Context, id int, update *model.UpdateApprovalRequest) (err error) {
+func (rr requestRepository) UpdateRequestRepository(ctx context.Context, id int) (err error) {
 
-	buildQuery := []string{}
-	if update.Status != "" {
-		buildQuery = append(buildQuery, fmt.Sprintf("status = '%d'", update.Status))
-	}
+	// buildQuery := []string{}
+	// if update.Status != "" {
+	// 	buildQuery = append(buildQuery, fmt.Sprintf("status = '%d'", update.Status))
+	// }
 
-	updateQuery := strings.Join(buildQuery, ",")
-	query := fmt.Sprintf("UPDATE request SET %s , updated_at = now() WHERE id = $1", updateQuery)
+	// updateQuery := strings.Join(buildQuery, ",")
+	query := fmt.Sprintf("UPDATE request SET status = 'Approved', updated_at = now() WHERE id = %s", id)
 
 	tx := rr.Database.DB.MustBegin()
 	_, err = tx.QueryContext(ctx, query, &id)

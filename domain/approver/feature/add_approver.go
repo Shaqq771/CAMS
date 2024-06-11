@@ -15,21 +15,21 @@ func (af approverFeature) AddApproverFeature(ctx context.Context, request *model
 		return
 	}
 
-	product := model.Approver{
+	approver := model.Approver{
 		Name:  request.Name,
 		SKU:   request.SKU,
 		UOM:   request.UOM,
 		Price: request.Price,
 	}
 
-	id, err := lf.logistikRepo.InsertProductRepository(ctx, product)
+	id, err := af.approverRepo.InsertApproverRepository(ctx, approver)
 	if err != nil {
 		return
 	}
 
-	resp = model.AddedProductResponse{
+	resp = model.AddedApproverResponse{
 		Id:   id,
-		Name: product.Name,
+		Name: approver.Name,
 	}
 
 	// userId := 1

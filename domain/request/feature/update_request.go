@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-func (rf requestFeature) UpdateRequestFeature(ctx context.Context, id string, request *model.UpdateApprovalRequest) (response model.RequestListNoFilter, err error) {
+func (rf requestFeature) UpdateRequestFeature(ctx context.Context, id string) (response model.RequestListNoFilter, err error) {
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
 		err = Error.New(constant.ErrGeneral, constant.ErrFailedConvertStringToInt, err)
@@ -17,7 +17,7 @@ func (rf requestFeature) UpdateRequestFeature(ctx context.Context, id string, re
 	}
 
 	// Check Product Id
-	exist, err := rf.requestRepo.CheckRequestIdRepository(ctx, idInt)
+	exist, err := rf.requestRepo.CheckRequestByIdRepository(ctx, idInt)
 	if err != nil {
 		return
 	} else if !exist {
@@ -37,7 +37,7 @@ func (rf requestFeature) UpdateRequestFeature(ctx context.Context, id string, re
 	// }
 
 	// Update Product
-	err = rf.requestRepo.UpdateRequestRepository(ctx, idInt, request)
+	err = rf.requestRepo.UpdateRequestRepository(ctx, idInt)
 	if err != nil {
 		return
 	}
