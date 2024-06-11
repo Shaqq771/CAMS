@@ -38,7 +38,6 @@ func FilterBy(filterBy string) (filter string, filterList []string, err error) {
 	if err != nil {
 		return
 	}
-
 	filter = ArrStringToString(filterList, "|")
 	return
 }

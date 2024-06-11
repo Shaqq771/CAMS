@@ -116,8 +116,6 @@ func (rh requestHandler) GetRequestListsRevisedHandler(c *fiber.Ctx) error {
 }
 
 func (rh requestHandler) GetRequestFilterHandler(c *fiber.Ctx) error {
-	fmt.Println(c)
-
 	ctx, cancel := context.CreateContextWithTimeout()
 	defer cancel()
 	ctx = context.SetValueToContext(ctx, c)

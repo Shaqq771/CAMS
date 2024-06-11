@@ -1,0 +1,21 @@
+Usecase Rule:
+- Delegate someone (pick random employee) > 2 emp
+- Stage ()
+
+
+- Find a module > HR/HC
+- Type : "Pregnant leave"
+
+> create request > find match Rule
+Rule > 2 Stage
+- 1st stage > 2 approver (1,2,3)
+- 2nd stage > 3 approver (4,5)
+
+requestApproverMap
+id  requestId   approverId  stage 
+1   1               1          1                     
+2   1               2          1
+3   1               3          1
+4   1               4          2
+5   1               5          2
+

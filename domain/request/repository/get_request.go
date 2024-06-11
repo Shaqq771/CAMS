@@ -69,7 +69,6 @@ func (rr requestRepository) GetTotalRequestWithConditionsRepository(ctx context.
 	if conditions != "" {
 		conditions = query.SearchQueryBuilder(conditions)
 	}
-
 	query := fmt.Sprintf("SELECT COUNT(*) FROM request WHERE created_by IS NOT NULL %s", conditions)
 	logger.LogInfo(constant.QUERY, query)
 
@@ -108,7 +107,7 @@ func (rr requestRepository) GetTotalRequestWithFiltersRepository(ctx context.Con
 	if filter != nil {
 		conditions = query.ConditionsBuilder(filter)
 	}
-
+	fmt.Println(conditions, "conditions")
 	query := "SELECT COUNT(*) FROM request WHERE created_by IS NOT NULL"
 	if len(filter.Filters) > 0 {
 		query = fmt.Sprintf("SELECT COUNT(*) FROM request WHERE created_by IS NOT NULL AND %s", conditions)
@@ -134,6 +133,39 @@ func (rr requestRepository) GetTotalRequestWithFiltersRepository(ctx context.Con
 		errScan := rows.Scan(&count)
 		if errScan != nil {
 			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, errScan)
+			break
+		}
+	}
+
+	return
+}
+
+func (rr requestRepository) CheckRequestIdRepository(ctx context.Context, id int) (exist bool, err error) {
+	rows, err := rr.Database.QueryContext(ctx, "SELECT COUNT(*) FROM request WHERE id = %s", &id)
+	if err != nil {
+		if err == context.DeadlineExceeded {
+			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
+			return
+		}
+
+		if err == sql.ErrNoRows {
+			return false, nil
+		}
+
+		err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
+		return
+	}
+
+	for rows.Next() {
+		var count int
+		scanErr := rows.Scan(&count)
+		if scanErr != nil {
+			err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, scanErr)
+			break
+		}
+
+		if count == 1 {
+			exist = true
 			break
 		}
 	}

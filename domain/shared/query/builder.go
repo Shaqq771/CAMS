@@ -14,7 +14,15 @@ func SearchQueryBuilder(conditions string) string {
 
 	conds := strings.Split(conditions, "|")
 	for _, cond := range conds {
-		temps := strings.Split(cond, "=")
+		var temps []string // Declare temps as a slice of strings
+
+		if strings.Contains(cond, "<=") {
+			temps = strings.Split(cond, "<=")
+		} else if strings.Contains(cond, ">=") {
+			temps = strings.Split(cond, ">=")
+		} else {
+			temps = strings.Split(cond, "=")
+		}
 		for j, temp := range temps {
 			key := strings.ReplaceAll(temps[0], " ", "")
 			if j == 1 {
@@ -23,7 +31,13 @@ func SearchQueryBuilder(conditions string) string {
 				if len(arrs) > 1 {
 					tempConditions = append(tempConditions, key+" IN ('"+strings.Join(arrs, "','")+"')")
 				} else {
-					tempConditions = append(tempConditions, key+" = '"+temp+"'")
+					if strings.Contains(cond, "<=") {
+						tempConditions = append(tempConditions, key+" <= '"+temp+"'")
+					} else if strings.Contains(cond, ">=") {
+						tempConditions = append(tempConditions, key+" >= '"+temp+"'")
+					} else {
+						tempConditions = append(tempConditions, key+" = '"+temp+"'")
+					}
 				}
 			}
 		}
