@@ -15,7 +15,7 @@ type RequestFeature interface {
 	GetRequestListsApprovedFeature(ctx context.Context) (response model.RequestListNoFilter, err error)
 	GetRequestListsRejectedFeature(ctx context.Context) (response model.RequestListNoFilter, err error)
 	GetRequestListsRevisedFeature(ctx context.Context) (response model.RequestListNoFilter, err error)
-	UpdateRequestFeature(ctx context.Context, id string, request *model.UpdateApprovalRequest) (response model.RequestListNoFilter, err error)
+	UpdateRequestFeature(ctx context.Context, id string) (response model.RequestListNoFilter, err error)
 }
 
 type requestFeature struct {
