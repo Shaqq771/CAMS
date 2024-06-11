@@ -1,21 +1,21 @@
 package feature
 
 import (
+	"backend-nabati/domain/approver/constant"
+	"backend-nabati/domain/approver/model"
 	Error "backend-nabati/domain/shared/error"
-	"backend-nabati/domain/user/constant"
-	"backend-nabati/domain/user/model"
 	"context"
 	"strconv"
 )
 
-func (uf userFeature) GetApproverFeature(ctx context.Context, id string) (response model.ApproverListNoFilter, err error) {
+func (af approverFeature) GetApproverFeature(ctx context.Context, id string) (response model.ApproverListNoFilter, err error) {
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
 		err = Error.New(constant.ErrGeneral, constant.ErrFailedConvertStringToInt, err)
 		return
 	}
 
-	result, err := uf.userRepo.GetApproverByIdRepository(ctx, idInt)
+	result, err := af.approverRepository.GetApproverByIdRepository(ctx, idInt)
 	if err != nil {
 		return
 	}

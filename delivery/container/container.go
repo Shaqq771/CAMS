@@ -8,6 +8,8 @@ import (
 	request_repository "backend-nabati/domain/request/repository"
 	user_repository "backend-nabati/domain/user/repository"
 
+	approver_feature "backend-nabati/domain/approver/feature"
+	approver_repository "backend-nabati/domain/approver/repository"
 	business_feature "backend-nabati/domain/businessunit/feature"
 	business_repository "backend-nabati/domain/businessunit/repository"
 	module_feature "backend-nabati/domain/module/feature"
@@ -33,8 +35,9 @@ type Container struct {
 	QueueServices     queue.QueueService
 	RequestFeature    request_feature.RequestFeature
 	UserFeature       user_feature.UserFeature
-	BusinessFeature       business_feature.BusinessFeature
-	ModuleFeature       module_feature.ModuleFeature
+	BusinessFeature   business_feature.BusinessFeature
+	ModuleFeature     module_feature.ModuleFeature
+	ApproverFeature   approver_feature.ApproverFeature
 }
 
 func SetupContainer() Container {
@@ -60,19 +63,22 @@ func SetupContainer() Container {
 	userRepository := user_repository.NewUserRepository(db)
 	businessRepository := business_repository.NewBusinessRepository(db)
 	moduleRepository := module_repository.NewModuleRepository(db)
+	approverRepository := approver_repository.NewApproverRepository(db)
 
 	salesFeature := sales_feature.NewSalesFeature(salesRepository)
 	requestFeature := request_feature.NewRequestFeature(requestRepository)
 	userFeature := user_feature.NewUserFeature(userRepository)
 	businessFeature := business_feature.NewBusinessFeature(businessRepository)
 	moduleFeature := module_feature.NewModuleFeature(moduleRepository)
+	approverFeature := approver_feature.NewApproverFeature(approverRepository)
 
 	return Container{
 		EnvironmentConfig: config,
 		SalesFeature:      salesFeature,
 		RequestFeature:    requestFeature,
-		UserFeature:    userFeature,
-		BusinessFeature:    businessFeature,
-		ModuleFeature:    moduleFeature,
+		UserFeature:       userFeature,
+		BusinessFeature:   businessFeature,
+		ModuleFeature:     moduleFeature,
+		ApproverFeature:   approverFeature,
 	}
 }
