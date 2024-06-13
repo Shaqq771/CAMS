@@ -8,6 +8,7 @@ import (
 	"backend-nabati/domain/logistik"
 	"backend-nabati/domain/module"
 	"backend-nabati/domain/request"
+	"backend-nabati/domain/rule"
 	"backend-nabati/domain/sales"
 	"backend-nabati/domain/user"
 )
@@ -21,6 +22,7 @@ type handler struct {
 	businessHandler business.BusinessHandler
 	moduleHandler   module.ModuleHandler
 	approverHandler approver.ApproverHandler
+	ruleHandler rule.RuleHandler
 }
 
 func SetupHandler(container container.Container) handler {
@@ -33,5 +35,6 @@ func SetupHandler(container container.Container) handler {
 		businessHandler: business.NewBusinessHandler(container.BusinessFeature),
 		moduleHandler:   module.NewModuleHandler(container.ModuleFeature),
 		approverHandler: approver.NewApproverHandler(container.ApproverFeature),
+		ruleHandler: rule.NewRuleHandler(container.RuleFeature),
 	}
 }

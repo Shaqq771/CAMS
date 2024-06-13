@@ -2,21 +2,22 @@ package container
 
 import (
 	"backend-nabati/config"
-	health_feature "backend-nabati/domain/health/feature"
-	logistik_feature "backend-nabati/domain/logistik/feature"
-	request_feature "backend-nabati/domain/request/feature"
-	request_repository "backend-nabati/domain/request/repository"
-	user_repository "backend-nabati/domain/user/repository"
-
 	approver_feature "backend-nabati/domain/approver/feature"
 	approver_repository "backend-nabati/domain/approver/repository"
 	business_feature "backend-nabati/domain/businessunit/feature"
 	business_repository "backend-nabati/domain/businessunit/repository"
+	health_feature "backend-nabati/domain/health/feature"
+	logistik_feature "backend-nabati/domain/logistik/feature"
 	module_feature "backend-nabati/domain/module/feature"
 	module_repository "backend-nabati/domain/module/repository"
+	request_feature "backend-nabati/domain/request/feature"
+	request_repository "backend-nabati/domain/request/repository"
+	rule_feature "backend-nabati/domain/rule/feature"
+	rule_repository "backend-nabati/domain/rule/repository"
 	sales_feature "backend-nabati/domain/sales/feature"
 	sales_repository "backend-nabati/domain/sales/repository"
 	user_feature "backend-nabati/domain/user/feature"
+	user_repository "backend-nabati/domain/user/repository"
 
 	// "backend-nabati/infrastructure/broker/rabbitmq"
 	"backend-nabati/infrastructure/database"
@@ -38,6 +39,7 @@ type Container struct {
 	BusinessFeature   business_feature.BusinessFeature
 	ModuleFeature     module_feature.ModuleFeature
 	ApproverFeature   approver_feature.ApproverFeature
+	RuleFeature   	rule_feature.RuleFeature
 }
 
 func SetupContainer() Container {
@@ -64,6 +66,7 @@ func SetupContainer() Container {
 	businessRepository := business_repository.NewBusinessRepository(db)
 	moduleRepository := module_repository.NewModuleRepository(db)
 	approverRepository := approver_repository.NewApproverRepository(db)
+	ruleRepository := rule_repository.NewRuleRepository(db)
 
 	salesFeature := sales_feature.NewSalesFeature(salesRepository)
 	requestFeature := request_feature.NewRequestFeature(requestRepository)
@@ -71,6 +74,7 @@ func SetupContainer() Container {
 	businessFeature := business_feature.NewBusinessFeature(businessRepository)
 	moduleFeature := module_feature.NewModuleFeature(moduleRepository)
 	approverFeature := approver_feature.NewApproverFeature(approverRepository)
+	ruleFeature := rule_feature.NewRuleFeature(ruleRepository)
 
 	return Container{
 		EnvironmentConfig: config,
@@ -80,5 +84,6 @@ func SetupContainer() Container {
 		BusinessFeature:   businessFeature,
 		ModuleFeature:     moduleFeature,
 		ApproverFeature:   approverFeature,
+		RuleFeature:   ruleFeature,
 	}
 }

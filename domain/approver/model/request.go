@@ -1,25 +1,29 @@
 package model
 
 type AddApproverRequest struct {
-	Approver_user_id string `json:"approver_user_id"`
-	Name             string `json:"name"`
-	Email            string `json:"email"`
-	Role             string `json:"role"`
-	Job_title        string `json:"job_title"`
-	Department       string `json:"department"`
-	Location         string `json:"location"`
-	Business_unit    string `json:"business_unit"`
-	Description      string `json:"description"`
+	ApproverUserId int    `json:"approver_user_id"`
+	Name           string `json:"name"`
+	Email          string `json:"email"`
+	Role           string `json:"role"`
+	JobTitle       string `json:"job_title"`
+	Department     string `json:"department"`
+	Location       string `json:"location"`
+	BusinessUnit   string `json:"business_unit"`
+	Description    string `json:"description"`
+	DelegateStatus bool   `json:"delegate_status" db:"delegate_status"`
+	FlagSkipStatus bool   `json:"flag_skip_status" db:"flag_skip_status"`
 }
 
 type UpdateApproverRequest struct {
-	Approver_user_id string `json:"approver_user_id"`
-	Name             string `json:"name"`
-	Email            string `json:"email"`
-	Role             string `json:"role"`
-	Job_title        string `json:"job_title"`
-	Department       string `json:"department"`
-	Location         string `json:"location"`
-	Business_unit    string `json:"business_unit"`
-	Description      string `json:"description"`
+	ApproverUserId int    `json:"approver_user_id"`
+	Name           string `json:"name"`
+	Email          string `json:"email"`
+	Role           string `json:"role"`
+	JobTitle       string `json:"job_title"`
+	Department     string `json:"department"`
+	Location       string `json:"location"`
+	BusinessUnit   string `json:"business_unit"`
+	Description    string `json:"description"`
+	DelegateStatus bool   `json:"delegate_status" db:"delegate_status"`
+	FlagSkipStatus bool   `json:"flag_skip_status" db:"flag_skip_status"`
 }

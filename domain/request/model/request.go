@@ -21,3 +21,6 @@ type Request struct {
 	CreatedBy       string `json:"created_by" db:"created_by"`
 	ModifiedBy      string `json:"modified_by" db:"modified_by"`
 }
+
+type Request_Approver_map struct {
+}
