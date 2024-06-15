@@ -5,10 +5,10 @@ import (
 	"context"
 )
 
-func (af approverFeature) AddApproverFeature(ctx context.Context, request *model.AddApproverRequest) (resp model.AddedProductResponse, err error) {
+func (af approverFeature) AddApproverFeature(ctx context.Context, request *model.AddApproverRequest) (resp model.AddedApproverResponse, err error) {
 
 	// Added Bussiness logic here
-	exist, err := af.approverRepo.CheckApproverEmailRepository(ctx, request.Email)
+	exist, err := af.approverRepository.CheckApproverEmailRepository(ctx, request.Email)
 	if err != nil {
 		return
 	} else if exist {
@@ -16,13 +16,18 @@ func (af approverFeature) AddApproverFeature(ctx context.Context, request *model
 	}
 
 	approver := model.Approver{
+		ApproverUserId: request.ApproverUserId,
 		Name:  request.Name,
-		SKU:   request.SKU,
-		UOM:   request.UOM,
-		Price: request.Price,
+		Email:   request.Email,
+		Role:   request.Role,
+		JobTitle: request.JobTitle,
+		Department: request.Department,
+		Location: request.Location,
+		BusinessUnit: request.BusinessUnit,
+		Description: request.Description,
 	}
 
-	id, err := af.approverRepo.InsertApproverRepository(ctx, approver)
+	id, err := af.approverRepository.InsertApproverRepository(ctx, approver)
 	if err != nil {
 		return
 	}

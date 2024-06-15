@@ -71,6 +71,12 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 		module.Get("/get/:id", handler.moduleHandler.GetModuleHandler)
 	}
 
+	rule := v1.Group("/rule")
+	{
+		rule.Get("/", handler.ruleHandler.GetRuleListsHandler)
+		rule.Get("/get/:id", handler.ruleHandler.GetRuleHandler)
+	}
+
 	//route > http handler > feature > repository
 
 }
