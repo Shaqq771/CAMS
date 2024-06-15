@@ -48,14 +48,14 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 		request.Get("/approved", handler.requestHandler.GetRequestListsApprovedHandler)
 		request.Get("/rejected", handler.requestHandler.GetRequestListsRejectedHandler)
 		request.Get("/revised", handler.requestHandler.GetRequestListsRevisedHandler)
-		request.Put("/responseApproved/:id", handler.requestHandler.UpdateRequestHandler)
+		request.Put("/update/:id", handler.requestHandler.UpdateRequestHandler)
 	}
 
 	approver := v1.Group("/approver")
 	{
 		approver.Get("/", handler.approverHandler.GetApproverListsHandler)
 		approver.Get("/get/:id", handler.approverHandler.GetApproverHandler)
-		approver.Post("/add", handler.approverHandler.GetApproverHandler)
+		approver.Post("/add", handler.approverHandler.AddApproverHandler)
 
 	}
 
