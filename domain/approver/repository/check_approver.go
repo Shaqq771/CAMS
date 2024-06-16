@@ -5,10 +5,12 @@ import (
 	Error "backend-nabati/domain/shared/error"
 	"context"
 	"database/sql"
+	"fmt"
 )
 
 func (ar approverRepository) CheckApproverEmailRepository(ctx context.Context, email string) (exist bool, err error) {
-	rows, err := ar.Database.QueryContext(ctx, "SELECT COUNT(*) FROM approver WHERE email = %s", email)
+	query := fmt.Sprintf("SELECT COUNT(*) FROM approver WHERE email = '%s'", email)
+	rows, err := ar.Database.QueryContext(ctx, query)
 	if err != nil {
 		if err == context.DeadlineExceeded {
 			err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)

@@ -10,7 +10,7 @@ type ApproverRepository interface {
 	GetListOfApproverRepository(ctx context.Context) (approvers []model.Approver, err error)
 	GetApproverByIdRepository(ctx context.Context, id int) (approver []model.Approver, err error)
 	CheckApproverEmailRepository(ctx context.Context, email string) (exist bool, err error)
-	InsertApproverRepository(ctx context.Context, approver model.Approver) (id int, err error)
+	InsertApproverRepository(ctx context.Context, approver model.Approver) (id int64, err error)
 }
 
 type approverRepository struct {

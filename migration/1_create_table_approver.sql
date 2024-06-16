@@ -1,7 +1,7 @@
--- migrate:up
 CREATE TABLE IF NOT EXISTS approver (
-  id integer PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   approver_user_id integer NOT NULL,
+  business_unit_id integer NOT NULL,
   name varchar(60) NOT NULL,
   email varchar(100) NOT NULL,
   role varchar(50) NOT NULL,
@@ -14,8 +14,6 @@ CREATE TABLE IF NOT EXISTS approver (
   description varchar(100),
   created_at datetime NOT NULL DEFAULT now(),
   modified_at datetime NULL DEFAULT NULL,
-  created_by varchar(60) NOT NULL,
+  created_by varchar(60) NULL DEFAULT NULL,
   modified_by varchar(60) NULL DEFAULT NULL
 )
-
--- migrate:down

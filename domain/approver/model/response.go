@@ -3,7 +3,7 @@ package model
 import "backend-nabati/domain/shared/model"
 
 type AddedApproverResponse struct {
-	Id   int    `json:"id"`
+	Id   int64  `json:"id"`
 	Name string `json:"name"`
 }
 

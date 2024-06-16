@@ -17,7 +17,6 @@ type ApproverHandler interface {
 	GetApproverListsHandler(c *fiber.Ctx) error
 	GetApproverHandler(c *fiber.Ctx) error
 	AddApproverHandler(c *fiber.Ctx) error
-
 }
 
 type approverHandler struct {
@@ -65,13 +64,13 @@ func (ah approverHandler) GetApproverHandler(c *fiber.Ctx) error {
 }
 
 func (ah approverHandler) AddApproverHandler(c *fiber.Ctx) error {
-
 	ctx, cancel := context.CreateContextWithTimeout()
 	defer cancel()
 	ctx = context.SetValueToContext(ctx, c)
 
 	request := new(model.AddApproverRequest)
 	if err := c.BodyParser(request); err != nil {
+		fmt.Println(err, "err")
 		err = Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, err)
 		return response.ResponseErrorWithContext(ctx, err)
 	} else if request.Name == "" ||
@@ -82,7 +81,7 @@ func (ah approverHandler) AddApproverHandler(c *fiber.Ctx) error {
 		request.ApproverUserId == 0 ||
 		request.Role == "" ||
 		request.Location == "" ||
-		request.Description == ""{
+		request.Description == "" {
 		err = Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, err)
 		return response.ResponseErrorWithContext(ctx, err)
 	}
