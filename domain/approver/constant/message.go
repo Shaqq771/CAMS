@@ -6,6 +6,7 @@ const (
 	MsgGetApproverSuccess    = "get approver success"
 	MsgDeleteApproverSuccess = "delete approver success"
 	MsgUpdateApproverSuccess = "update approver success"
+	MsgUpdateSuccess         = "update success"
 )
 
 const (

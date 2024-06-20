@@ -20,11 +20,6 @@ func (uf requestFeature) GetRequestFeature(ctx context.Context, id string) (resp
 		return
 	}
 
-	// if result.Id == 0 {
-	// 	err = Error.New(constant.ErrGeneral, constant.ErrApproverIdNotFound, errors.New(strconv.Itoa(result.Id)))
-	// 	return
-	// }
-
 	var requestIds []int
 	for _, request := range result {
 		requestIds = append(requestIds, request.Id)

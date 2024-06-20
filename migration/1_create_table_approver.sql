@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS approver (
   location varchar(50) NOT NULL,
   business_unit varchar(30) NOT NULL,
   flag_skip_status boolean NOT NULL,
-  delegation_status boolean NOT NULL,
+  delegate_status boolean NOT NULL,
   description varchar(100),
   created_at datetime NOT NULL DEFAULT now(),
   modified_at datetime NULL DEFAULT NULL,

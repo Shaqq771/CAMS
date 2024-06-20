@@ -3,7 +3,6 @@ package model
 type Request struct {
 	Id              int    `json:"id" db:"id"`
 	RuleID          int    `json:"rule_id" db:"rule_id"`
-	ApproverID      int    `json:"approver_id" db:"approver_id"`
 	UserID          int    `json:"user_id" db:"user_id"`
 	RequestModuleId int    `json:"request_module_id" db:"request_module_id"`
 	Name            string `json:"name" db:"name"`

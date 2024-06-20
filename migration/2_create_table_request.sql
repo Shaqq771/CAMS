@@ -2,7 +2,6 @@
 CREATE TABLE IF NOT EXISTS request (
   id integer PRIMARY KEY,
   rule_id integer NOT NULL,
-  approver_id integer NOT NULL,
   user_id integer NOT NULL,
   request_module_id integer NOT NULL,
   name varchar(60) NOT NULL,

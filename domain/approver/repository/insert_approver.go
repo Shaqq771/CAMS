@@ -10,7 +10,7 @@ import (
 func (ar *approverRepository) InsertApproverRepository(ctx context.Context, approver model.Approver) (id int64, err error) {
 
 	tx := ar.Database.DB.MustBegin()
-	stmt, err := tx.PrepareContext(ctx, "INSERT INTO approver (approver_user_id, name, email, role, job_title, department, location, description, business_unit, business_unit_id, delegation_status, flag_skip_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := tx.PrepareContext(ctx, "INSERT INTO approver (approver_user_id, name, email, role, job_title, department, location, description, business_unit, business_unit_id, delegate_status, flag_skip_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 
 	if err != nil {
 		if err == context.DeadlineExceeded {

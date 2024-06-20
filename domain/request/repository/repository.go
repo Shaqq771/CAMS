@@ -9,10 +9,6 @@ import (
 
 type RequestRepository interface {
 	GetListOfRequestRepository(ctx context.Context) (requests []model.Request, err error)
-	GetRequestListsWaitingRepository(ctx context.Context) (requests []model.Request, err error)
-	GetRequestListsApprovedRepository(ctx context.Context) (requests []model.Request, err error)
-	GetRequestListsRejectedRepository(ctx context.Context) (requests []model.Request, err error)
-	GetRequestListsRevisedRepository(ctx context.Context) (requests []model.Request, err error)
 	GetRequestByIdRepository(ctx context.Context, id int) (request []model.Request, err error)
 	GetRequestListsWithFiltersRepository(ctx context.Context, filter *shared_model.Filter, offset int) (requests []model.Request, err error)
 	GetTotalRequestWithFiltersRepository(ctx context.Context, filter *shared_model.Filter) (count int, err error)
@@ -21,6 +17,7 @@ type RequestRepository interface {
 	GetRequestListsRepository(ctx context.Context, limit, offset int, sortby, search string) (requests []model.Request, err error)
 	UpdateRequestRepository(ctx context.Context, id int) (err error)
 	CheckRequestByIdRepository(ctx context.Context, id int) (exist bool, err error)
+	GetTotalRequestByStatusRepository(ctx context.Context, status string) (count int, err error)
 }
 
 type requestRepository struct {

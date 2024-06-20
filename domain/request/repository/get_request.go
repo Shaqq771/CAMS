@@ -172,3 +172,33 @@ func (rr requestRepository) CheckRequestIdRepository(ctx context.Context, id int
 
 	return
 }
+
+func (rr requestRepository) GetTotalRequestByStatusRepository(ctx context.Context, status string) (count int, err error) {
+	query := fmt.Sprintf("SELECT COUNT(*) FROM request WHERE status = '%s'", status)
+	logger.LogInfo(constant.QUERY, query)
+  
+	rows, err := rr.Database.QueryContext(ctx, query)
+	if err != nil {
+	  if err == context.DeadlineExceeded {
+		err = Error.New(constant.ErrTimeout, constant.ErrWhenExecuteQueryDB, err)
+		return
+	  }
+  
+	  if err == sql.ErrNoRows {
+		return 0, nil
+	  }
+  
+	  err = Error.New(constant.ErrDatabase, constant.ErrWhenExecuteQueryDB, err)
+	  return
+	}
+  
+	for rows.Next() {
+	  errScan := rows.Scan(&count)
+	  if errScan != nil {
+		err = Error.New(constant.ErrDatabase, constant.ErrWhenScanResultDB, errScan)
+		break
+	  }
+	}
+  
+	return
+  }

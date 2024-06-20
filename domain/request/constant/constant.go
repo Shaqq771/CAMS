@@ -21,3 +21,10 @@ const (
 const (
 	DefaultTimeout = 5 // detik
 )
+
+const (
+	ApprovalStatusWaiting  = "Waiting"
+	ApprovalStatusApproved = "Approved"
+	ApprovalStatusRevised  = "Revised"
+	ApprovalStatusRejected = "Rejected"
+)

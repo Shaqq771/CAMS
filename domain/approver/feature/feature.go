@@ -10,6 +10,8 @@ type ApproverFeature interface {
 	GetListOfApproverFeature(ctx context.Context) (response model.ApproverListNoFilter, err error)
 	GetApproverFeature(ctx context.Context, id string) (response model.ApproverListNoFilter, err error)
 	AddApproverFeature(ctx context.Context, request *model.AddApproverRequest) (response model.AddedApproverResponse, err error)
+	UpdateDelegateStatusFeature(ctx context.Context, id string, isDelegate bool) (err error)
+	UpdateSkipStatusFeature(ctx context.Context, id string, IsSkip bool) (err error)
 }
 
 type approverFeature struct {

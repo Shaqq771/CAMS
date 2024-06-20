@@ -17,6 +17,8 @@ type ApproverHandler interface {
 	GetApproverListsHandler(c *fiber.Ctx) error
 	GetApproverHandler(c *fiber.Ctx) error
 	AddApproverHandler(c *fiber.Ctx) error
+	UpdateDelegateStatusHandler(c *fiber.Ctx) error
+	UpdateSkipStatusHandler(c *fiber.Ctx) error
 }
 
 type approverHandler struct {
@@ -93,3 +95,65 @@ func (ah approverHandler) AddApproverHandler(c *fiber.Ctx) error {
 
 	return response.ResponseOK(c, constant.MsgInsertDataSuccess, results)
 }
+
+func (ah approverHandler) UpdateDelegateStatusHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+  
+	// Extract approver ID from request path
+	id := c.Params("id")
+	if id == "" || id == "0" {
+	  err := Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, fmt.Errorf(constant.ErrApproverIdNil))
+	  return response.ResponseErrorWithContext(ctx, err)
+	}
+  
+	// Parse request body for delegate status
+	var request struct {
+	  IsDelegate bool `json:"is_delegate"`
+	}
+	if err := c.BodyParser(&request); err != nil {
+	  err = Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, err)
+	  return response.ResponseErrorWithContext(ctx, err)
+	}
+  
+	// Call feature to update delegate status
+	err := ah.feature.UpdateDelegateStatusFeature(ctx, id, request.IsDelegate)
+	if err != nil {
+	  return response.ResponseErrorWithContext(ctx, err)
+	}
+  
+	// Success response
+	return response.ResponseOK(c, constant.MsgUpdateSuccess, nil)
+  }
+
+  func (ah approverHandler) UpdateSkipStatusHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+  
+	// Extract approver ID from request path
+	id := c.Params("id")
+	if id == "" || id == "0" {
+	  err := Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, fmt.Errorf(constant.ErrApproverIdNil))
+	  return response.ResponseErrorWithContext(ctx, err)
+	}
+  
+	// Parse request body for skip status
+	var request struct {
+	  IsSkip bool `json:"is_skip"`
+	}
+	if err := c.BodyParser(&request); err != nil {
+	  err = Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, err)
+	  return response.ResponseErrorWithContext(ctx, err)
+	}
+  
+	// Call feature to update delegate status
+	err := ah.feature.UpdateSkipStatusFeature(ctx, id, request.IsSkip)
+	if err != nil {
+	  return response.ResponseErrorWithContext(ctx, err)
+	}
+  
+	// Success response
+	return response.ResponseOK(c, constant.MsgUpdateSuccess, nil)
+  }

@@ -44,11 +44,8 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 		request.Get("/", handler.requestHandler.GetRequestListsHandler)
 		request.Get("/get/:id", handler.requestHandler.GetRequestHandler)
 		request.Get("/lists", handler.requestHandler.GetRequestFilterHandler)
-		request.Get("/waiting", handler.requestHandler.GetRequestListsWaitingHandler)
-		request.Get("/approved", handler.requestHandler.GetRequestListsApprovedHandler)
-		request.Get("/rejected", handler.requestHandler.GetRequestListsRejectedHandler)
-		request.Get("/revised", handler.requestHandler.GetRequestListsRevisedHandler)
 		request.Put("/update/:id", handler.requestHandler.UpdateRequestHandler)
+		request.Get("/stats", handler.requestHandler.GetApprovalRequestStats)
 	}
 
 	approver := v1.Group("/approver")
@@ -56,6 +53,8 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 		approver.Get("/", handler.approverHandler.GetApproverListsHandler)
 		approver.Get("/get/:id", handler.approverHandler.GetApproverHandler)
 		approver.Post("/add", handler.approverHandler.AddApproverHandler)
+		approver.Patch("/update/delegate/:id", handler.approverHandler.UpdateDelegateStatusHandler)
+		approver.Patch("/update/skip/:id", handler.approverHandler.UpdateSkipStatusHandler)
 
 	}
 

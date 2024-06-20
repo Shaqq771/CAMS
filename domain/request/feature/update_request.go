@@ -25,17 +25,6 @@ func (rf requestFeature) UpdateRequestFeature(ctx context.Context, id string) (r
 		return
 	}
 
-	// Check Product SKU
-	// if strings.TrimSpace(request.SKU) != "" {
-	// 	exist, err = lf.logistikRepo.CheckProductSKURepository(ctx, request.SKU)
-	// 	if err != nil {
-	// 		return
-	// 	} else if exist {
-	// 		err = Error.New(constant.ErrGeneral, constant.ErrSKUAlreadyExist, errors.New(request.SKU))
-	// 		return
-	// 	}
-	// }
-
 	// Update Product
 	err = rf.requestRepo.UpdateRequestRepository(ctx, idInt)
 	if err != nil {
