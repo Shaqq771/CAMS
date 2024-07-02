@@ -20,6 +20,7 @@ type RequestHandler interface {
 	GetRequestFilterHandler(c *fiber.Ctx) error
 	UpdateRequestHandler(c *fiber.Ctx) error
 	GetApprovalRequestStats(c *fiber.Ctx) error
+	HandleApprovalResponse(c *fiber.Ctx) error
 }
 
 type requestHandler struct {
@@ -133,3 +134,40 @@ func (rh requestHandler) GetApprovalRequestStats(c *fiber.Ctx) error {
 	// Return response with status counts in JSON format
 	return response.ResponseOK(c, constant.MsgGetApprovalStatsSuccess, stats)
   }
+
+  func (rh requestHandler) HandleApprovalResponse(c *fiber.Ctx) error {
+	ctx, cancel := context.CreateContextWithTimeout()
+	defer cancel()
+	ctx = context.SetValueToContext(ctx, c)
+  
+	id := c.Params("id")
+	if id == "" || id == "0" {
+	  err := Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, fmt.Errorf(constant.ErrApprovalIdNil))
+	  return response.ResponseErrorWithContext(ctx, err)
+	}
+  
+	status := c.Params("status")
+	if status != constant.StatusApproved && status != constant.StatusRejected && status != constant.StatusRevised {
+	  err := Error.New(constant.ErrInvalidRequest, constant.ErrInvalidRequest, fmt.Errorf("Invalid approval status: %s", status))
+	  return response.ResponseErrorWithContext(ctx, err)
+	}
+  
+	var reason string
+	if status == constant.StatusRejected {
+        var body map[string]string // Assuming reason is a key in the JSON body
+        err := c.BodyParser(body) // Parse request body
+        if err != nil {
+            return response.ResponseErrorWithContext(ctx, Error.New(constant.ErrGeneral, constant.ErrInvalidRequestBody, err))
+        }
+
+        reason = body["reason"] // Access reason from parsed JSON
+    }
+  
+	err := rh.feature.HandleApprovalRequestFeature(ctx, id, status, reason)
+	if err != nil {
+	  return response.ResponseErrorWithContext(ctx, err)
+	}
+  
+	return response.ResponseOK(c, fmt.Sprintf("Request %s successfully", status), nil)
+  }
+  

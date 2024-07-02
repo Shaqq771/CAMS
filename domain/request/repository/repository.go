@@ -18,6 +18,9 @@ type RequestRepository interface {
 	UpdateRequestRepository(ctx context.Context, id int) (err error)
 	CheckRequestByIdRepository(ctx context.Context, id int) (exist bool, err error)
 	GetTotalRequestByStatusRepository(ctx context.Context, status string) (count int, err error)
+	ApproveRequestRepository(ctx context.Context, id int) (err error)
+	RejectRequestRepository(ctx context.Context, id int, reason string) (err error)
+	ReviseRequestRepository(ctx context.Context, id int) (err error)
 }
 
 type requestRepository struct {

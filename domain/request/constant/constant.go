@@ -16,6 +16,7 @@ const (
 	LIMIT   = "limit"
 	SORT_BY = "sort_by"
 	SEARCH  = "search"
+	QUERY   = "query"
 )
 
 const (
@@ -27,4 +28,11 @@ const (
 	ApprovalStatusApproved = "Approved"
 	ApprovalStatusRevised  = "Revised"
 	ApprovalStatusRejected = "Rejected"
+)
+
+const (
+	// Request Status Constants
+	StatusApproved = "Approved"
+	StatusRejected = "Rejected"
+	StatusRevised  = "Revised"
 )

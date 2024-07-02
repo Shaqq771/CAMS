@@ -46,6 +46,7 @@ func RouterGroupV1(app *fiber.App, handler handler) {
 		request.Get("/lists", handler.requestHandler.GetRequestFilterHandler)
 		request.Put("/update/:id", handler.requestHandler.UpdateRequestHandler)
 		request.Get("/stats", handler.requestHandler.GetApprovalRequestStats)
+		request.Post("/approve/:id", handler.requestHandler.HandleApprovalResponse)
 	}
 
 	approver := v1.Group("/approver")

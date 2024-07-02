@@ -13,6 +13,7 @@ type RequestFeature interface {
 	GetRequestFilterFeature(ctx context.Context, queryRequest shared_model.QueryRequest) (requestList model.RequestLists, err error)
 	UpdateRequestFeature(ctx context.Context, id string) (response model.RequestListNoFilter, err error)
 	GetApprovalRequestStatsFeature(ctx context.Context) (map[string]int, error)
+	HandleApprovalRequestFeature(ctx context.Context, id string, status string, reason string) (err error)
 }
 
 type requestFeature struct {
